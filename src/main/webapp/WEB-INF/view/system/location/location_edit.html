@@ -1,0 +1,31 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="locationInfoForm">
+            <input id="id" name="" type="hidden" value="${item.id}"/>
+            <div class="row">
+                <div class="col-sm-12 b-r">
+                    <#input id="longitude" name="经度" value="${item.longitude}" underline="true" readonly="true"/>
+                    <#input id="latitude" name="纬度" value="${item.latitude}" underline="true" readonly="true"/>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">位置描述</label>
+                        <div class="col-sm-9">
+                            <input id="location" type="text" name="location" class="form-control ui-com"
+                                   placeholder="请输入关键字">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="LocationInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="LocationInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/system/location/location_info.js"></script>
+@}

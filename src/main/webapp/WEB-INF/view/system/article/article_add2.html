@@ -1,0 +1,199 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal" id="articleInfoForm">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">标题</label>
+                        <div class="col-sm-11">
+                            <input class="form-control" id="title" name="title" type="text">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">主题</label>
+                        <div class="col-sm-11">
+                            <select class="form-control" id="categoryId" name="categoryId">
+                                <option value="">---请选择---</option>
+                                @for(category in categories){
+                                <option value=${category.id}>${category.categoryName}</option>
+                                @}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">文章类别</label>
+                        <div class="col-sm-11">
+                            <select class="form-control" id="articleType" name="articleType" readonly="true">
+                                @for(articleType in articleTypes){
+                                <option value=${articleType.code}>${articleType.name}</option>
+                                @}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">公开与否</label>
+                        <div class="col-sm-1">
+                            <input class="form-control" id="privilege" name="privilege" type="checkbox">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">城市选择</label>
+                        <div class="col-sm-11 city-select" id="single-select-1">
+                            <div class="city-info">
+                                <div class="city-input">
+                                    <input type="text" class="input-search" value="" placeholder="请选择城市" />
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="latitude"/>
+                        <input type="hidden" id="longitude"/>
+                        <input type="hidden" id="cityDesc"/>
+                    </div>
+
+                    <div>
+                        <a id="upload-target" class="x-button">添加图片和文字说明</a>
+                    </div>
+                    <br/>
+                    <div id="upload-image-view" class="clearfix"></div>
+                    <div class="progress progress-striped" id="progressTipArea" style="margin-top: 20px;">
+                        <div id="progressBar" style="width: 0%" aria-valuemax="100" aria-valuemin="0"
+                             aria-valuenow="0" role="progressbar" class="progress-bar progress-bar-info">
+                        </div>
+                    </div>
+
+                    <div class="row btn-group-m-t">
+                        <div class="col-sm-10">
+                            <#button btnCss="info" name="提交" id="ensure" icon="fa-check"
+                            clickFun="ArticleInfoDlg.addSubmit()"/>
+                            <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser"
+                            clickFun="ArticleInfoDlg.close()"/>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="${ctxPath}/static/css/plugins/selectSearch/city-select.css" rel="stylesheet" type="text/css"/>
+<link href="${ctxPath}/static/css/demo.css" rel="stylesheet" type="text/css"/>
+<link href="${ctxPath}/static/css/uploadCss/uploader-image.css" rel="stylesheet" type="text/css"/>
+<style type="text/css">
+    .ui-image .u-close-bg,
+    .ui-image .u-close-text {
+        display: block;
+    }
+
+    .text-class {
+        width: 380px;
+        height: 140px;
+        position: absolute;
+        left: 150px;
+        top: 0px;
+    }
+</style>
+
+<script type="text/javascript" src="${ctxPath}/static/js/plugins/selectSearch/citydata.min.js"></script>
+<script type="text/javascript" src="${ctxPath}/static/js/plugins/selectSearch/citySelect-1.0.4.js"></script>
+<script type="text/javascript" src="${ctxPath}/static/js/demo.js"></script>
+<script src="${ctxPath}/static/js/plugins/QUploader/Q.js"></script>
+<script src="${ctxPath}/static/js/plugins/QUploader/Q.Uploader.js"></script>
+<script src="${ctxPath}/static/js/plugins/QUploader/Q.Uploader.UI.Image.js"></script>
+<script src="${ctxPath}/static/js/demo.js"></script>
+<script src="${ctxPath}/static/modular/system/article/article_info3.js"></script>
+<script type="text/javascript">
+
+    // 单选
+    var singleSelect1 = $('#single-select-1').citySelect({
+        dataJson: cityData,
+        multiSelect: false,
+        whole: true,
+        shorthand: true,
+        search: true,
+        onInit: function () {
+            console.log(this)
+        },
+        onTabsAfter: function (target) {
+            console.log(target)
+        },
+        onCallerAfter: function (target, values) {
+            console.log(values);
+            var location = values;
+            $("#latitude").val(location.lat);
+            $("#longitude").val(location.lng);
+            $("#cityDesc").val(location.name);
+        }
+    });
+
+    var Uploader = Q.Uploader,
+        formatSize = Q.formatSize,
+        boxView = document.getElementById("upload-image-view");
+
+    Q.Uploader.setup({
+        headers: {}, //ajax 消息头
+        data: {} //附加参数
+    });
+
+    var uploader = new Uploader({
+        url: Feng.ctxPath + '/article/upload',
+        target: document.getElementById("upload-target"),
+        view: boxView,
+        //将auto配置为false以手动上传
+        auto: true,
+        allows: ".jpg,.png,.gif,.bmp",
+        //图片缩放
+        scale: {
+            //要缩放的图片格式
+            types: ".jpg",
+            //最大图片大小(width|height)
+            maxWidth: 1024
+        },
+        on: {
+            //添加之前触发
+            add: function (task) {
+                if (task.disabled) {
+                    return alert("允许上传的文件格式为：" + this.ops.allows);
+                } else {
+
+                }
+            },
+            //图片预览后触发
+            preview: function (data) {
+                console.log(data);
+                // 添加一个输入框
+
+            },
+            //图片压缩后触发,如果图片或浏览器不支持压缩,则不触发
+            scale: function (data) {
+                console.log(data);
+            },
+            upload: function (task) {
+                console.log(task);
+            },
+            remove: function (task) {
+                console.log(task);
+            },
+            complete: function (task) {
+                $(".filename").eq($(".filename").size()-1).val(task.json);
+            }
+        },
+    });
+
+    $("#privilege").prop("checked", "true");
+    $("#privilege").val(true);
+    $("#privilege").click(function () {
+        if (this.checked) {
+            $("#privilege").val(true);
+        } else {
+            $("#privilege").val(false);
+        }
+    })
+</script>
+@}

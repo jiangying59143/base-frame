@@ -1,0 +1,2 @@
+INSERT INTO `test`.`sys_menu` (`code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('userCategory', 'system', '[0],[system],', '用户主题', '', '/userCategory', '99', '2', '1', NULL, '1', '0');
+INSERT INTO `test`.`sys_menu` (`code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('userCategory_list', 'userCategory', '[0],[system],[userCategory],', '用户主题操作', '', '/userCategory/list', '99', '3', '0', NULL, '1', '0');

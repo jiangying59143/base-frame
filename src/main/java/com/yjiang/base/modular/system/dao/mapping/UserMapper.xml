@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjiang.base.modular.system.dao.UserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yjiang.base.modular.system.model.User">
+        <id column="id" property="id"/>
+        <result column="avatar" property="avatar"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="nickname" property="name"/>
+        <result column="birth" property="birthday"/>
+        <result column="gender" property="sex"/>
+        <result column="email" property="email"/>
+        <result column="phone_number" property="phone"/>
+        <result column="role_ids" property="roleid"/>
+        <result column="deptid" property="deptid"/>
+        <result column="state" property="status"/>
+        <result column="create_date" property="createtime"/>
+        <result column="version" property="version"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, account, nickname, birth, gender, email, avatar,
+        phone_number, role_ids,
+        dept_id as deptid, state,
+        create_date, version
+    </sql>
+
+    <sql id="Base_Column_List_With_Pwd">
+        id, account, nickname, birth,password, gender, email, avatar,
+        phone_number, role_ids,salt,
+        dept_id as deptid, state,
+        create_date, version
+    </sql>
+
+    <select id="selectUsers" resultType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from user
+        where state != 3
+        <if test="name != null and name != ''">
+            and (phone_number like CONCAT('%',#{name},'%')
+            or account like CONCAT('%',#{name},'%')
+            or nickname like CONCAT('%',#{name},'%'))
+        </if>
+        <if test="deptid != null and deptid != 0">
+            and (dept_id = #{deptid} or dept_id in ( select id from sys_dept where pids like CONCAT('%[', #{deptid},
+            ']%') ))
+        </if>
+        <if test="beginTime != null and beginTime != '' and endTime != null and endTime != ''">
+            and (create_date between CONCAT(#{beginTime},' 00:00:00') and CONCAT(#{endTime},' 23:59:59'))
+        </if>
+    </select>
+
+    <update id="setStatus">
+        update user set state = #{status} where id =
+        #{userId}
+    </update>
+
+    <update id="changePwd">
+        update user set password = #{pwd} where id =
+        #{userId}
+    </update>
+
+    <update id="setRoles">
+        update user set role_ids = #{roleIds} where id =
+        #{userId}
+    </update>
+
+    <select id="getByAccount" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List_With_Pwd"/>
+        from user where account = #{account} and state != 3
+    </select>
+
+</mapper>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjiang.base.modular.system.dao.ArticleThumbsUpCountMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yjiang.base.modular.system.model.ArticleThumbsUpCount">
+        <id column="id" property="id" />
+        <result column="thumbs_up_count" property="thumbsUpCount" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, thumbs_up_count
+    </sql>
+
+</mapper>
