@@ -9,12 +9,12 @@
         <version>2.0.1.RELEASE</version>
     </parent>
 
-    <groupId>cn.stylefeng.guns</groupId>
-    <artifactId>guns</artifactId>
+    <groupId>com.yjiang.base</groupId>
+    <artifactId>base-frame</artifactId>
     <version>1.0.0</version>
 
-    <name>guns-admin</name>
-    <description>guns 的spring boot版本</description>
+    <name>yjiang-admin</name>
+    <description>My Base</description>
 
     <packaging>jar</packaging>
 
@@ -24,7 +24,7 @@
         <java.version>1.8</java.version>
 
         <jdbc.driver>com.mysql.cj.jdbc.Driver</jdbc.driver>
-        <jdbc.url>jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</jdbc.url>
+        <jdbc.url>jdbc:mysql://127.0.0.1:3306/mybase?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</jdbc.url>
         <jdbc.username>root</jdbc.username>
         <jdbc.password>jiangying</jdbc.password>
 
