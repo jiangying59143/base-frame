@@ -4,6 +4,8 @@ package com.yjiang.base.generator.engine;
 import cn.hutool.core.util.StrUtil;
 import com.yjiang.base.generator.engine.base.GunsTemplateEngine;
 
+import java.io.File;
+
 /**
  * 通用的模板生成引擎
  *
@@ -65,6 +67,13 @@ public class SimpleTemplateEngine extends GunsTemplateEngine {
         String path = StrUtil.format(super.getContextConfig().getProjectPath() + super.sqlConfig.getSqlPathTemplate(),
                 StrUtil.upperFirst(super.getContextConfig().getBizEnName()));
         generateFile(super.getContextConfig().getTemplatePrefixPath() + "/menu_sql.sql.btl", path);
+        try {
+            insertStringInFile(new File(super.getContextConfig().getProjectPath() + "/src/main/resources/liquibase/master.xml"), "</databaseChangeLog>",
+                    StrUtil.format("\t<include file=\"classpath:liquibase/changelog/{}.xml\"/>", StrUtil.upperFirst(super.getContextConfig().getBizEnName())));
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("插入master.xml报错");
+        }
         System.out.println("生成sql成功!");
     }
 }

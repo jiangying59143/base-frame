@@ -7,10 +7,7 @@ import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
 import org.beetl.core.resource.ClasspathResourceLoader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 /**
@@ -79,6 +76,39 @@ public abstract class GunsTemplateEngine extends AbstractTemplateEngine {
                 e.printStackTrace();
             }
         }
+    }
+
+    public void insertStringInFile(File inFile, String nextLineString, String lineToBeInserted)
+            throws Exception {
+        // 临时文件
+        File outFile = File.createTempFile("name", ".tmp");
+        // 输入
+        FileInputStream fis = new FileInputStream(inFile);
+        BufferedReader in = new BufferedReader(new InputStreamReader(fis));
+        // 输出
+        FileOutputStream fos = new FileOutputStream(outFile);
+        PrintWriter out = new PrintWriter(fos);
+        // 保存一行数据
+        String thisLine;
+        // 行号从1开始
+        int i = 1;
+        while ((thisLine = in.readLine()) != null) {
+            // 如果行号等于目标行，则输出要插入的数据
+            if (thisLine.equals(nextLineString)) {
+                out.println(lineToBeInserted);
+            }
+            // 输出读取到的数据
+            out.println(thisLine);
+            // 行号增加
+            i++;
+        }
+        out.flush();
+        out.close();
+        in.close();
+        // 删除原始文件
+        inFile.delete();
+        // 把临时文件改名为原文件名
+        outFile.renameTo(inFile);
     }
 
     public void start() {

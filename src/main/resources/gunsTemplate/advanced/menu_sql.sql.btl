@@ -16,7 +16,7 @@
             <column name="levels" valueNumeric="${menu.levels}"/>
             <column name="ismenu" valueNumeric="${menu.ismenu}"/>
             <column name="tips"/>
-            <column name="status" valueNumeric="${menu.status"/>
+            <column name="status" valueNumeric="${menu.status}"/>
             <column name="isopen" valueNumeric="${menu.isopen}"/>
         </insert>
     </changeSet>

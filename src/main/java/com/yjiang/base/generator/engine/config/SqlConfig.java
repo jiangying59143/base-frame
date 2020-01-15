@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 全局配置
@@ -54,8 +55,8 @@ public class SqlConfig {
         menu.setName(contextConfig.getBizChName());
         menu.setIcon("fa-user");
         menu.setUrl("/" + contextConfig.getBizEnName());
-        menu.setNum(new Date().getTime());
-        menu.setChangeSetId(String.valueOf(new Date().getTime()));
+        menu.setNum(getMaxOrder() + 10);
+        menu.setChangeSetId(UUID.randomUUID().toString());
 
         if (parentMenuName.equals("顶级")) {
             menu.setLevels(1);
@@ -109,11 +110,12 @@ public class SqlConfig {
         menu.setPcode(parentMenu.getCode());
         menu.setPcodes(parentMenu.getPcodes() + "[" + parentMenu.getCode() + "],");
         menu.setIcon("");
-        menu.setNum(new Date().getTime());
+        menu.setNum(1L);
         menu.setLevels(parentMenu.getLevels() + 1);
         menu.setIsmenu(YesOrNotEnum.N.getCode());
         menu.setStatus(1);
         menu.setIsopen(0);
+        menu.setChangeSetId(UUID.randomUUID().toString());
         return menu;
     }
 
@@ -144,6 +146,30 @@ public class SqlConfig {
                 if (preparedStatement != null) {
                     preparedStatement.close();
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public Long getMaxOrder() {
+
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = connection.prepareStatement("select max(num) from sys_menu");
+            ResultSet results = preparedStatement.executeQuery();
+            while (results.next()) {
+                return results.getLong(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // 释放资源
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
                 if (connection != null) {
                     connection.close();
                 }
@@ -151,7 +177,7 @@ public class SqlConfig {
                 e.printStackTrace();
             }
         }
-        return null;
+        return 0L;
     }
 
     public ContextConfig getContextConfig() {
