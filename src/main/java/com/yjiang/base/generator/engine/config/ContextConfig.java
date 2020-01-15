@@ -18,10 +18,10 @@ public class ContextConfig {
     private String bizEnBigName;//业务英文名称(大写)
     private String moduleName = "system";  //模块名称
 
-    private String proPackage = "cn.stylefeng.guns.admin";
-    private String coreBasePackage = "cn.stylefeng.guns.core";
-    private String modelPackageName = "cn.stylefeng.guns.modular.system.model";        //model的包名
-    private String modelMapperPackageName = "cn.stylefeng.guns.modular.system.dao";    //model的dao
+    private String proPackage = "com.yjiang.base.admin";
+    private String coreBasePackage = "com.yjiang.base.core";
+    private String modelPackageName = "com.yjiang.base.modular.system.model";        //model的包名
+    private String modelMapperPackageName = "com.yjiang.base.modular.system.dao";    //model的dao
     private String entityName;              //实体的名称
 
     private Boolean controllerSwitch = true;    //是否生成控制器代码开关

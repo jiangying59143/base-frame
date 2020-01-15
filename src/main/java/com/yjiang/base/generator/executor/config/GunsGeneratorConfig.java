@@ -36,14 +36,14 @@ public class GunsGeneratorConfig extends AbstractGeneratorConfig {
 
     protected void packageConfig() {
         packageConfig.setParent(null);
-        packageConfig.setEntity("cn.stylefeng.guns.admin.common.persistence.model");
-        packageConfig.setMapper("cn.stylefeng.guns.admin.common.persistence.dao");
-        packageConfig.setXml("cn.stylefeng.guns.admin.common.persistence.dao.mapping");
+        packageConfig.setEntity("com.yjiang.base.admin.common.persistence.model");
+        packageConfig.setMapper("com.yjiang.base.admin.common.persistence.dao");
+        packageConfig.setXml("com.yjiang.base.admin.common.persistence.dao.mapping");
     }
 
     protected void contextConfig() {
-        contextConfig.setProPackage("cn.stylefeng.guns.admin");
-        contextConfig.setCoreBasePackage("cn.stylefeng.guns.core");
+        contextConfig.setProPackage("com.yjiang.base.admin");
+        contextConfig.setCoreBasePackage("com.yjiang.base.core");
         contextConfig.setBizChName("字典管理");
         contextConfig.setBizEnName("sysDict");
         contextConfig.setModuleName("system");

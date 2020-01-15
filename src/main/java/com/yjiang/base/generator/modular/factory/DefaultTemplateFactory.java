@@ -42,8 +42,8 @@ public class DefaultTemplateFactory {
         GenQo genQo = new GenQo();
         genQo.setProjectPath(ToolUtil.getWebRootPath(null));
         genQo.setAuthor("jiangying");
-        genQo.setProjectPackage("cn.stylefeng.guns");
-        genQo.setCorePackage("cn.stylefeng.guns.core");
+        genQo.setProjectPackage("com.yjiang.base");
+        genQo.setCorePackage("com.yjiang.base.core");
         genQo.setIgnoreTabelPrefix("");
         genQo.setModuleName("system");
         genQo.setParentMenuName("系统管理");
