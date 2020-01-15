@@ -44,7 +44,7 @@ import java.util.HashMap;
 @Configuration
 @ConditionalOnProperty(prefix = "guns.muti-datasource", name = "open", havingValue = "true")
 @EnableTransactionManagement(order = 2, proxyTargetClass = true)
-@MapperScan(basePackages = {"cn.stylefeng.guns.modular.*.dao", "cn.stylefeng.guns.multi.mapper"})
+@MapperScan(basePackages = {"com.yjiang.base.modular.*.dao", "com.yjiang.base.multi.mapper"})
 public class MultiDataSourceConfig {
 
     /**
