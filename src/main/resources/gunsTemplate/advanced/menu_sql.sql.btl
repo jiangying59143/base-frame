@@ -1,3 +1,24 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 <% for(menu in sqls.menus!){ %>
-INSERT INTO `test`.`sys_menu` (`code`, `pcode`, `pcodes`, `name`, `icon`, `url`, `num`, `levels`, `ismenu`, `tips`, `status`, `isopen`) VALUES ('${menu.code}', '${menu.pcode}', '${menu.pcodes}', '${menu.name}', '${menu.icon}', '${menu.url}', '${menu.num}', '${menu.levels}', '${menu.ismenu}', NULL, '${menu.status}', '${menu.isopen}');
+    <changeSet author="generator" id="${menu.changeSetId}">
+        <insert tableName="sys_menu">
+            <column name="code" value="${menu.code}"/>
+            <column name="pcode" value="${menu.pcode}"/>
+            <column name="pcodes" value="${menu.pcodes}"/>
+            <column name="name" value="系统管理"/>
+            <column name="icon" value="${menu.icon}"/>
+            <column name="url" value="${menu.url}"/>
+            <column name="num" valueNumeric="${menu.num}"/>
+            <column name="levels" valueNumeric="${menu.levels}"/>
+            <column name="ismenu" valueNumeric="${menu.ismenu}"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="${menu.status"/>
+            <column name="isopen" valueNumeric="${menu.isopen}"/>
+        </insert>
+    </changeSet>
 <% } %>
+</databaseChangeLog>

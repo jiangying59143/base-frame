@@ -603,7 +603,7 @@
             <column name="name" remarks="菜单名称" type="VARCHAR(255)"/>
             <column name="icon" remarks="菜单图标" type="VARCHAR(255)"/>
             <column name="url" remarks="url地址" type="VARCHAR(255)"/>
-            <column name="num" remarks="菜单排序号" type="INT"/>
+            <column name="num" remarks="菜单排序号" type="BIGINT"/>
             <column name="levels" remarks="菜单层级" type="INT"/>
             <column name="ismenu" remarks="是否是菜单（1：是  0：不是）" type="INT"/>
             <column name="tips" remarks="备注" type="VARCHAR(255)"/>

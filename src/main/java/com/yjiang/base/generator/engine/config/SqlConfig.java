@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class SqlConfig {
 
     public void init() {
 
-        this.sqlPathTemplate = "/src/main/java/{}.sql";
+        this.sqlPathTemplate = "/src/main/resources/liquibase/changelog/{}.xml";
 
         if (parentMenuName == null) {
             return;
@@ -51,9 +52,10 @@ public class SqlConfig {
         menu.setPcode(pcodeAndPcodes[0]);
         menu.setPcodes(pcodeAndPcodes[1] + "[" + pcodeAndPcodes[0] + "],");
         menu.setName(contextConfig.getBizChName());
-        menu.setIcon("");
+        menu.setIcon("fa-user");
         menu.setUrl("/" + contextConfig.getBizEnName());
-        menu.setNum(99);
+        menu.setNum(new Date().getTime());
+        menu.setChangeSetId(String.valueOf(new Date().getTime()));
 
         if (parentMenuName.equals("顶级")) {
             menu.setLevels(1);
@@ -107,7 +109,7 @@ public class SqlConfig {
         menu.setPcode(parentMenu.getCode());
         menu.setPcodes(parentMenu.getPcodes() + "[" + parentMenu.getCode() + "],");
         menu.setIcon("");
-        menu.setNum(99);
+        menu.setNum(new Date().getTime());
         menu.setLevels(parentMenu.getLevels() + 1);
         menu.setIsmenu(YesOrNotEnum.N.getCode());
         menu.setStatus(1);

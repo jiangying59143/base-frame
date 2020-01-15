@@ -50,7 +50,7 @@ public class Menu extends Model<Menu> {
     /**
      * 菜单排序号
      */
-    private Integer num;
+    private Long num;
     /**
      * 菜单层级
      */
@@ -71,6 +71,8 @@ public class Menu extends Model<Menu> {
      * 是否打开:    1:打开   0:不打开
      */
     private Integer isopen;
+
+    private String changeSetId;
 
 
     public Long getId() {
@@ -129,11 +131,11 @@ public class Menu extends Model<Menu> {
         this.url = url;
     }
 
-    public Integer getNum() {
+    public Long getNum() {
         return num;
     }
 
-    public void setNum(Integer num) {
+    public void setNum(Long num) {
         this.num = num;
     }
 
@@ -175,6 +177,14 @@ public class Menu extends Model<Menu> {
 
     public void setIsopen(Integer isopen) {
         this.isopen = isopen;
+    }
+
+    public String getChangeSetId() {
+        return changeSetId;
+    }
+
+    public void setChangeSetId(String changeSetId) {
+        this.changeSetId = changeSetId;
     }
 
     @Override
