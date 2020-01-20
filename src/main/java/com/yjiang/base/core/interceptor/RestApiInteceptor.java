@@ -21,11 +21,11 @@ import com.yjiang.base.core.util.JwtTokenUtil;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.util.RenderUtil;
 import io.jsonwebtoken.JwtException;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 
 /**
@@ -41,15 +41,20 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
         if (handler instanceof org.springframework.web.servlet.resource.ResourceHttpRequestHandler) {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        return check(request, response, handlerMethod);
+        return check(request, response);
     }
 
-    private boolean check(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) {
+    private boolean check(HttpServletRequest request, HttpServletResponse response) {
         if (JwtConstants.AUTH_PATH.contains(request.getServletPath())) {
             return true;
         }
+
         final String requestHeader = request.getHeader(JwtConstants.AUTH_HEADER);
+        Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()){
+            String headName = headerNames.nextElement();
+            System.out.println(headName + ": " + request.getHeader(headName));
+        }
         String authToken;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);

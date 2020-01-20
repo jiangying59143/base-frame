@@ -32,6 +32,6 @@ public interface JwtConstants {
 
     Long EXPIRATION = 604800L;
 
-    List<String> AUTH_PATH = Arrays.asList("/gunsApi/auth","/gunsApi/doubleColorBalls");
+    List<String> AUTH_PATH = Arrays.asList("/gunsApi/auth");
 
 }
