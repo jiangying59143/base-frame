@@ -57,4 +57,9 @@ public interface UserMapper extends BaseMapper<User> {
      * 通过账号获取用户
      */
     User getByAccount(@Param("account") String account);
+
+    /**
+     * 通过电话获取用户
+     */
+    User getByPhone(@Param("phone") String phone);
 }

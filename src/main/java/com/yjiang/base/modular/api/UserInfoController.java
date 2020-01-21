@@ -22,20 +22,39 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 接口控制器提供
+ * 用户接口
  *
- * @author stylefeng
- * @Date 2018/7/20 23:39
+ * @author yjiang
+ * @Date 2020/01/21
  */
 @RestController
-@RequestMapping("/gunsApi")
-public class ApiController extends BaseController {
+@RequestMapping("/user")
+public class UserInfoController extends BaseController {
 
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private CaipiaoService caipiaoService;
+    /**
+     * api登录接口，通过电话密码获取token
+     */
+    @ApiOperation(value="电话登陆", notes="电话密码登陆")
+    @RequestMapping(value="/phoneAuth", method = RequestMethod.POST)
+    public Object phoneAuth(@RequestParam("phone") String phone,
+                       @RequestParam("password") String password) {
+
+        User user = userService.getByPhone(phone);
+        return auth(user.getAccount(), password);
+    }
+
+    /**
+     * api登录接口，通过电话密码获取token
+     */
+    @ApiOperation(value="根据电话获得用户信息", notes="根据电话获得用户信息")
+    @RequestMapping(value="/getByPhone", method = RequestMethod.POST)
+    public Object getUserInfo(@RequestParam("phone") String phone) {
+        User user = userService.getByPhone(phone);
+        return user;
+    }
 
     /**
      * api登录接口，通过账号密码获取token
@@ -71,29 +90,6 @@ public class ApiController extends BaseController {
         } else {
             return new ErrorResponseData(500, "账号密码错误！");
         }
-    }
-
-    @ApiOperation(value="double", notes="double")
-    @RequestMapping(value="/doubleColorBalls", method = RequestMethod.POST)
-    public Object ball(@RequestParam("num") int num) {
-        HashMap<String, Object> result = new HashMap<>();
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            System.out.println("阿弥陀佛");
-            list.add(DoubleColorBall.getBall(System.nanoTime()));
-        }
-        caipiaoService.init();
-        list.add(caipiaoService.getCaiPiao(3));
-        result.put("list", list);
-        return result;
-    }
-
-    /**
-     * 测试接口是否走鉴权
-     */
-    @RequestMapping(value = "/test", method = RequestMethod.POST)
-    public Object test() {
-        return SUCCESS_TIP;
     }
 
 }

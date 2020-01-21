@@ -58,4 +58,11 @@ public interface IUserService extends IService<User> {
      */
     User getByAccount(@Param("account") String account);
 
+    /**
+     *
+     * @param phone
+     * @return
+     */
+    User getByPhone(@Param("phone") String phone);
+
 }
