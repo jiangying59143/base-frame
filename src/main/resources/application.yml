@@ -31,9 +31,6 @@ spring:
       max-file-size: 100MB
   liquibase:
     change-log: classpath:liquibase/master.xml
-    user: root
-    password: jiangying
-    url: jdbc:mysql://localhost:3306/mybase?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     enabled: true
     drop-first: false
   mail:
