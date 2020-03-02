@@ -49,7 +49,7 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
             return true;
         }
 
-        final String requestHeader = request.getHeader(JwtConstants.AUTH_HEADER);
+        final String requestHeader = request.getHeader(JwtConstants.ACCESS_AUTH_HEADER);
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()){
             String headName = headerNames.nextElement();
@@ -58,6 +58,11 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
         String authToken;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
             authToken = requestHeader.substring(7);
+
+            if(!JwtConstants.TOKEN_TYPE_ACCESS.equals(JwtTokenUtil.getTokenTypeFromToken(authToken))){
+                RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_TYPE_ERROR.getCode(), BizExceptionEnum.TOKEN_TYPE_ERROR.getMessage()));
+                return false;
+            };
 
             //验证token是否过期,包含了验证jwt是否正确
             try {

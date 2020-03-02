@@ -65,4 +65,6 @@ public interface IUserService extends IService<User> {
      */
     User getByPhone(@Param("phone") String phone);
 
+    Long saveUser(User user);
+
 }

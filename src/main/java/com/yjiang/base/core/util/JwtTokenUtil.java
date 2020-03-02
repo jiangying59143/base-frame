@@ -63,6 +63,13 @@ public class JwtTokenUtil {
     }
 
     /**
+     * 获取jwt失效时间
+     */
+    public static String getTokenTypeFromToken(String token) {
+        return getClaimFromToken(token).getId();
+    }
+
+    /**
      * 获取jwt接收者
      */
     public static String getAudienceFromToken(String token) {
@@ -111,20 +118,21 @@ public class JwtTokenUtil {
     /**
      * 生成token(通过用户名和签名时候用的随机数)
      */
-    public static String generateToken(String userId) {
-        Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, userId);
+    public static String generateToken(String tokenType, String userId, Long time) {
+        return doGenerateToken(tokenType, userId, time);
     }
 
     /**
      * 生成token
      */
-    private static String doGenerateToken(Map<String, Object> claims, String subject) {
+    private static String doGenerateToken(String tokenType, String subject, Long time) {
+        Map<String, Object> claims = new HashMap<>();
         final Date createdDate = new Date();
-        final Date expirationDate = new Date(createdDate.getTime() + JwtConstants.EXPIRATION * 1000);
+        final Date expirationDate = new Date(createdDate.getTime() + time * 1000);
 
         return Jwts.builder()
                 .setClaims(claims)
+                .setId(tokenType)
                 .setSubject(subject)
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)

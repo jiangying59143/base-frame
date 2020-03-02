@@ -15,15 +15,16 @@
  */
 package com.yjiang.base.modular.system.service.impl;
 
+import com.yjiang.base.core.util.PasswordHelper;
 import com.yjiang.base.modular.system.dao.UserMapper;
 import com.yjiang.base.modular.system.model.User;
 import com.yjiang.base.modular.system.service.IUserService;
 import cn.stylefeng.roses.core.datascope.DataScope;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -64,5 +65,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public User getByPhone(String phone) {
         return this.baseMapper.getByPhone(phone);
+    }
+
+    @Override
+    @Transactional
+    public Long saveUser(User user) {
+        PasswordHelper.encryptPassword(user);
+        int index = new Random().nextInt(6) + 1;
+        String avatar = "/static/user/user_" + index + ".png";
+        user.setAvatar(avatar);
+        user.setCreatetime(new Date());
+        this.baseMapper.insert(user);
+        return user.getId();
     }
 }

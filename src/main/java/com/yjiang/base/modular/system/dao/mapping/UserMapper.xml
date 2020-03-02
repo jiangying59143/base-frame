@@ -78,6 +78,6 @@
     <select id="getByPhone" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List_With_Pwd"/>
-        from user where phone = #{phone} and state != 3
+        from user where phone_number = #{phone} and state != 3
     </select>
 </mapper>

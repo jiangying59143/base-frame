@@ -54,7 +54,7 @@ public class SwaggerConfig {
                 .title("Guns Doc")
                 .description("Guns Api文档")
                 .termsOfServiceUrl("https://gitee.com/stylefeng/guns")
-                .contact("stylefeng")
+                .contact("yjiang")
                 .version("2.0")
                 .build();
     }

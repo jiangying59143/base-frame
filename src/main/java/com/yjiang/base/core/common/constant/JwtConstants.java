@@ -1,18 +1,3 @@
-/**
- * Copyright 2018-2020 stylefeng & fengshuonan (https://gitee.com/stylefeng)
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.yjiang.base.core.common.constant;
 
 import java.util.Arrays;
@@ -21,17 +6,22 @@ import java.util.List;
 /**
  * jwt相关配置
  *
- * @author fengshuonan
+ * @author yjiang
  * @date 2017-08-23 9:23
  */
 public interface JwtConstants {
+    String TOKEN_TYPE_REFRESH = "REFRESH_TOKEN";
 
-    String AUTH_HEADER = "Authorization";
+    String TOKEN_TYPE_ACCESS = "ACCESS_TOKEN";
 
-    String SECRET = "defaultSecret";
+    String ACCESS_AUTH_HEADER = "Authorization";
 
-    Long EXPIRATION = 604800L;
+    String SECRET = "yjiang-base-frame";
 
-    List<String> AUTH_PATH = Arrays.asList("/user/phoneAuth","/user/auth");
+    Long ACCESS_TOKEN_EXPIRATION = 1800L;
+
+    Long REFRESH_TOKEN_EXPIRATION = 604800L;
+
+    List<String> AUTH_PATH = Arrays.asList("/userApi/register","/userApi/auth","/userApi/getTokenByFreshToken");
 
 }

@@ -199,6 +199,12 @@
             <version>1.24</version>
         </dependency>
 
+        <!--<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>-->
+
         <!--需要分布式session的话需要放开注释-->
         <!--<dependency>
             <groupId>org.springframework.session</groupId>
