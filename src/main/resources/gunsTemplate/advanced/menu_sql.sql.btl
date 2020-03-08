@@ -9,7 +9,7 @@
             <column name="code" value="${menu.code}"/>
             <column name="pcode" value="${menu.pcode}"/>
             <column name="pcodes" value="${menu.pcodes}"/>
-            <column name="name" value="系统管理"/>
+            <column name="name" value=""${menu.name}"/>
             <column name="icon" value="${menu.icon}"/>
             <column name="url" value="${menu.url}"/>
             <column name="num" valueNumeric="${menu.num}"/>

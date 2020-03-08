@@ -16,7 +16,7 @@ import java.util.Map;
 @Service
 public class TableService {
 
-    @Value("${spring.datasource.db-name:test}")
+    @Value("${guns.db-name}")
     private String dbName;
 
     /**

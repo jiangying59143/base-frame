@@ -2,16 +2,11 @@ package com.yjiang.base.modular.api;
 
 import cn.stylefeng.roses.core.reqres.response.SuccessResponseData;
 import cn.stylefeng.roses.core.util.RenderUtil;
-import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
-import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
-import com.google.common.collect.Lists;
 import com.yjiang.base.core.common.constant.JwtConstants;
 import com.yjiang.base.core.common.exception.BizExceptionEnum;
 import com.yjiang.base.core.shiro.ShiroKit;
 import com.yjiang.base.core.shiro.ShiroUser;
 import com.yjiang.base.core.util.JwtTokenUtil;
-import com.yjiang.base.lottery.CaipiaoService;
-import com.yjiang.base.lottery.DoubleColorBall;
 import com.yjiang.base.modular.system.model.User;
 import com.yjiang.base.modular.system.service.IUserService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -19,21 +14,15 @@ import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

@@ -5,4 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <include file="classpath:liquibase/changelog/changelog_original.xml"/>
+    <include file="classpath:liquibase/changelog/lottery.xml"/>
+	<include file="classpath:liquibase/changelog/SsqLottery.xml"/>
 </databaseChangeLog>

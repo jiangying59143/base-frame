@@ -62,7 +62,9 @@ Code.generate = function () {
 Code.setTableName = function (tableName) {
     var preSize = $("#ignoreTabelPrefix").val().length;
     $("#tableName").val(tableName);
-    $("#className").val(Feng.underLineToCamel(tableName.substring(preSize)));
+    var name = Feng.underLineToCamel(tableName.substring(preSize));
+    $("#className").val(name);
+    $("#moduleName").val(name);
 };
 
 /**

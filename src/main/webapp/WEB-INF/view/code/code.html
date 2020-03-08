@@ -73,7 +73,12 @@
                                             @for(table in tables!){
                                             <a href="javascript:void(0)" class="list-group-item"
                                                tableName="${table.tableName}"
-                                               onclick="Code.selectTable('${table.tableName}')">${table.tableName}-${table.tableComment}</a>
+                                               onclick="Code.selectTable('${table.tableName}')">
+                                                ${table.tableName}
+                                                @if(isNotEmpty(table.tableComment)){
+                                                    -${table.tableComment}
+                                                @}
+                                            </a>
                                             @}
                                         </div>
                                     </div>

@@ -1,5 +1,6 @@
 package com.yjiang.base.lottery;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,31 +20,74 @@ import org.springframework.stereotype.Service;
 public class CaipiaoServiceImp implements CaipiaoService {
 
 	public void init() {
-		SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-		String date = sf.format(new Date());
-		String url = "http://baidu.lecai.com/lottery/draw/list/50/?type=range_date&start=2003-01-01&end=" + date;
-		try {
-			System.out.println("开始");
-			Connection conn = Jsoup.connect(url);
-
-			Document doc = conn.get();
-			Elements links = doc.getElementsByClass("balls");
-			for (Element ae : links) {
-				String hrefText = ae.text().replace(" ", "");
-				List<Integer> lst = new ArrayList<Integer>();
-				for (int i = 0; i < hrefText.length() / 2; i++) {
-					String metadata = hrefText.substring(i * 2, i * 2 + 2);
-					lst.add(Integer.parseInt(metadata));
-				}
-				list.add(lst);
+		String url = "https://www.cjcp.com.cn/kaijiang/ssqmingxi.html";
+		int i = 1;
+		while(true) {
+			try {
+				processSinglePage(url);
+			} catch (IOException e) {
+				break;
 			}
-			System.out.println("结束");
-		} catch (Exception e) {
-			e.printStackTrace();
+			url = "https://www.cjcp.com.cn/kaijiang/ssqmingxi_" + (++i)  + ".html";
 		}
 	}
 
-	/**
+	private void processSinglePage(String url) throws IOException {
+		Connection conn = Jsoup.connect(url)
+				.header("Cookie", "Hm_lvt_78803024be030ae6c48f7d9d0f3b6f03=1583651059; Hm_lpvt_78803024be030ae6c48f7d9d0f3b6f03=1583651059; wzws_cid=b7ce79d7bde11f72105bca5c47e81582c4bfa6d412ada8c7055f5919c4479cdcbd7fa3dabb910641adad64a278d6866e4d96e4dd9615542637aa474310a6f88e1caf91fae18f1d0f7fdeba71c5e23b51")
+				.userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36");
+		Document doc = conn.get();
+		Element tableBody = doc.getElementById("kjnum");
+		Elements trs = tableBody.getElementsByTag("tr");
+		for (Element tr : trs) {
+			Elements tds = tr.getElementsByTag("td");
+			for (int i = 0; i < tds.size(); i++) {
+				Element td = tds.get(i);
+				switch (i) {
+					case 0:
+						System.out.print("期号:" + td.text());
+						break;
+					case 1:
+						System.out.print("开奖时间:" + td.text());
+						break;
+					case 2:
+						System.out.print("双色球开奖结果:" + td.text());
+						break;
+					case 3:
+						System.out.print("总销售额:" + td.text());
+						break;
+					case 4:
+						System.out.print("奖池:" + td.text());
+						break;
+					case 5:
+						System.out.print("一等奖注数:" + td.text());
+						break;
+					case 6:
+						System.out.print("一等奖金额:" + td.text());
+						break;
+					case 7:
+						System.out.print("二等奖注数:" + td.text());
+						break;
+					case 8:
+						System.out.print("二等奖金额:" + td.text());
+						break;
+					case 9:
+						System.out.print("三等奖注数:" + td.text());
+						break;
+					case 10:
+						System.out.print("三等奖金额:" + td.text());
+						break;
+				}
+			}
+			System.out.println();
+		}
+	}
+
+	public static void main(String[] args) {
+		new CaipiaoServiceImp().init();
+	}
+
+		/**
 	 * 获取彩票概率
 	 *
 	 * @return
@@ -80,7 +124,6 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		while (true) {
 			if (!list.contains(red)) {
 				list.add(red);
-//				System.out.print(red + " ");
 			} else {
 				red = composeRed();
 			}

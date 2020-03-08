@@ -1,5 +1,8 @@
 package com.yjiang.base.generator.modular.controller;
 
+import cn.stylefeng.roses.core.util.ToolUtil;
+import cn.stylefeng.roses.kernel.model.exception.ServiceException;
+import com.yjiang.base.core.common.exception.BizExceptionEnum;
 import com.yjiang.base.generator.modular.factory.DefaultTemplateFactory;
 import com.yjiang.base.generator.modular.service.TableService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
@@ -48,6 +51,12 @@ public class CodeController extends BaseController {
     @RequestMapping(value = "/generate", method = RequestMethod.POST)
     @ResponseBody
     public Object generate(GenQo genQo) {
+        if (ToolUtil.isOneEmpty(genQo, genQo.getModuleName())) {
+            throw new ServiceException(BizExceptionEnum.ERROR_MODULE_NAME_EMPTY);
+        }
+        if (ToolUtil.isOneEmpty(genQo, genQo.getBizName())) {
+            throw new ServiceException(BizExceptionEnum.ERROR_BIZ_NAME_EMPTY);
+        }
         genQo.setUrl(druidProperties.getUrl());
         genQo.setUserName(druidProperties.getUsername());
         genQo.setPassword(druidProperties.getPassword());

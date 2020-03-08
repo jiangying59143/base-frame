@@ -45,8 +45,8 @@ public class DefaultTemplateFactory {
         genQo.setProjectPackage("com.yjiang.base");
         genQo.setCorePackage("com.yjiang.base.core");
         genQo.setIgnoreTabelPrefix("");
-        genQo.setModuleName("system");
-        genQo.setParentMenuName("系统管理");
+        genQo.setModuleName("");
+        genQo.setParentMenuName("顶级");
         return genQo;
     }
 

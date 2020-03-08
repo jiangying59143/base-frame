@@ -1,0 +1,36 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="yjiang" id="1">
+        <createTable tableName="ssq_lottery">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="create_by" type="BIGINT"/>
+            <column name="create_date" type="datetime"/>
+            <column name="update_by" type="BIGINT"/>
+            <column name="update_date" type="datetime"/>
+            <column defaultValueNumeric="1" name="version" type="INT"/>
+            <column name="number" type="VARCHAR(20)"/>
+            <column name="open_date" type="datetime"/>
+            <column name="red_ball_1" type="SMALLINT"/>
+            <column name="red_ball_2" type="SMALLINT"/>
+            <column name="red_ball_3" type="SMALLINT"/>
+            <column name="red_ball_4" type="SMALLINT"/>
+            <column name="red_ball_5" type="SMALLINT"/>
+            <column name="red_ball_6" type="SMALLINT"/>
+            <column name="blue_ball_1" type="SMALLINT"/>
+            <column name="totalSale" type="java.sql.Types.NUMERIC(19,2)"/>
+            <column name="prizePond" type="java.sql.Types.NUMERIC(19,2)"/>
+            <column name="firstCount" type="INT" />
+            <column name="secondCount" type="INT" />
+            <column name="thirdCount" type="INT" />
+            <column name="firstAmountMoney" type="java.sql.Types.NUMERIC(19,2)" />
+            <column name="secondAmountMoney" type="java.sql.Types.NUMERIC(19,2)" />
+            <column name="thirdAmountMoney" type="java.sql.Types.NUMERIC(19,2)" />
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

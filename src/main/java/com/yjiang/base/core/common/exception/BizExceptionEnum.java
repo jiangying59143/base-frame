@@ -31,6 +31,8 @@ public enum BizExceptionEnum implements AbstractBaseExceptionEnum {
     ERROR_CREATE_DICT(500, "创建字典失败"),
     ERROR_WRAPPER_FIELD(500, "包装字典属性失败"),
     ERROR_CODE_EMPTY(500, "字典类型不能为空"),
+    ERROR_BIZ_NAME_EMPTY(500, "业务名称不能为空"),
+    ERROR_MODULE_NAME_EMPTY(500, "模块名称不能为空"),
 
     /**
      * 文件上传
