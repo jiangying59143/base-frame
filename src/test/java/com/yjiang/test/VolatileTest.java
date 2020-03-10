@@ -1,6 +1,6 @@
 package com.yjiang.test;
 
-public class Test extends Thread {
+public class VolatileTest extends Thread {
     //不加volatile
     private static boolean flag = false;
 
@@ -18,7 +18,7 @@ public class Test extends Thread {
     }
 
     public static void main(String[] args) throws Exception {
-        new Test().start();
+        new VolatileTest().start();
         Thread.sleep(2000);
         flag = true;
     }

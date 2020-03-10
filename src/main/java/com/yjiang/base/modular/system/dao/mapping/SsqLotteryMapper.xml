@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yjiang.base.modular.system.dao.SsqLotteryMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yjiang.base.modular.system.model.SsqLottery">
+        <id column="id" property="id" />
+        <result column="create_by" property="createBy" />
+        <result column="create_date" property="createDate" />
+        <result column="update_by" property="updateBy" />
+        <result column="update_date" property="updateDate" />
+        <result column="version" property="version" />
+        <result column="number" property="number" />
+        <result column="open_date" property="openDate" />
+        <result column="red_ball_1" property="redBall1" />
+        <result column="red_ball_2" property="redBall2" />
+        <result column="red_ball_3" property="redBall3" />
+        <result column="red_ball_4" property="redBall4" />
+        <result column="red_ball_5" property="redBall5" />
+        <result column="red_ball_6" property="redBall6" />
+        <result column="blue_ball_1" property="blueBall1" />
+        <result column="totalSale" property="totalSale" />
+        <result column="prizePond" property="prizePond" />
+        <result column="firstCount" property="firstCount" />
+        <result column="secondCount" property="secondCount" />
+        <result column="thirdCount" property="thirdCount" />
+        <result column="firstAmountMoney" property="firstAmountMoney" />
+        <result column="secondAmountMoney" property="secondAmountMoney" />
+        <result column="thirdAmountMoney" property="thirdAmountMoney" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, create_by, create_date, update_by, update_date, version, number, open_date, red_ball_1, red_ball_2, red_ball_3, red_ball_4, red_ball_5, red_ball_6, blue_ball_1, totalSale, prizePond, firstCount, secondCount, thirdCount, firstAmountMoney, secondAmountMoney, thirdAmountMoney
+    </sql>
+
+</mapper>

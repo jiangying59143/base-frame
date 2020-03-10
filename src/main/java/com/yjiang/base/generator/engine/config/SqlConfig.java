@@ -49,7 +49,7 @@ public class SqlConfig {
         //业务菜单
         Menu menu = new Menu();
         menu.setId(IdWorker.getId());
-        menu.setCode("0");
+        menu.setCode(contextConfig.getBizEnName());
         menu.setPcode(pcodeAndPcodes[0]);
         menu.setPcodes(pcodeAndPcodes[1] + "[" + pcodeAndPcodes[0] + "],");
         menu.setName(contextConfig.getBizChName());

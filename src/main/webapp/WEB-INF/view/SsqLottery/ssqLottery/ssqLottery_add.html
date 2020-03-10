@@ -1,0 +1,48 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" underline="true"/>
+                            <#input id="createBy" name="" underline="true"/>
+                            <#input id="createDate" name="" underline="true"/>
+                            <#input id="updateBy" name="" underline="true"/>
+                            <#input id="updateDate" name="" underline="true"/>
+                            <#input id="version" name="" underline="true"/>
+                            <#input id="number" name="" underline="true"/>
+                            <#input id="openDate" name="" underline="true"/>
+                            <#input id="redBall1" name="" underline="true"/>
+                            <#input id="redBall2" name="" underline="true"/>
+                            <#input id="redBall3" name="" underline="true"/>
+                            <#input id="redBall4" name=""/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="redBall5" name="" underline="true"/>
+                            <#input id="redBall6" name="" underline="true"/>
+                            <#input id="blueBall1" name="" underline="true"/>
+                            <#input id="totalSale" name="" underline="true"/>
+                            <#input id="prizePond" name="" underline="true"/>
+                            <#input id="firstCount" name="" underline="true"/>
+                            <#input id="secondCount" name="" underline="true"/>
+                            <#input id="thirdCount" name="" underline="true"/>
+                            <#input id="firstAmountMoney" name="" underline="true"/>
+                            <#input id="secondAmountMoney" name="" underline="true"/>
+                            <#input id="thirdAmountMoney" name="" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SsqLotteryInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SsqLotteryInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/SsqLottery/ssqLottery/ssqLottery_info.js"></script>
+@}

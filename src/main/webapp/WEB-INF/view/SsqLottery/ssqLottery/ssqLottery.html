@@ -1,0 +1,38 @@
+@layout("/common/_container.html"){
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>双色球管理</h5>
+            </div>
+            <div class="ibox-content">
+                <div class="row row-lg">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <#NameCon id="condition" name="名称" />
+                            </div>
+                            <div class="col-sm-3">
+                                <#button name="搜索" icon="fa-search" clickFun="SsqLottery.search()"/>
+                            </div>
+                        </div>
+                        <div class="hidden-xs" id="SsqLotteryTableToolbar" role="group">
+                            @if(shiro.hasPermission("/ssqLottery/add")){
+                                <#button name="添加" icon="fa-plus" clickFun="SsqLottery.openAddSsqLottery()"/>
+                            @}
+                            @if(shiro.hasPermission("/ssqLottery/update")){
+                                <#button name="修改" icon="fa-edit" clickFun="SsqLottery.openSsqLotteryDetail()" space="true"/>
+                            @}
+                            @if(shiro.hasPermission("/ssqLottery/delete")){
+                                <#button name="删除" icon="fa-remove" clickFun="SsqLottery.delete()" space="true"/>
+                            @}
+                        </div>
+                        <#table id="SsqLotteryTable"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/SsqLottery/ssqLottery/ssqLottery.js"></script>
+@}

@@ -1,0 +1,48 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" value="${item.id}" underline="true"/>
+                            <#input id="createBy" name="" value="${item.createBy}" underline="true"/>
+                            <#input id="createDate" name="" value="${item.createDate}" underline="true"/>
+                            <#input id="updateBy" name="" value="${item.updateBy}" underline="true"/>
+                            <#input id="updateDate" name="" value="${item.updateDate}" underline="true"/>
+                            <#input id="version" name="" value="${item.version}" underline="true"/>
+                            <#input id="number" name="" value="${item.number}" underline="true"/>
+                            <#input id="openDate" name="" value="${item.openDate}" underline="true"/>
+                            <#input id="redBall1" name="" value="${item.redBall1}" underline="true"/>
+                            <#input id="redBall2" name="" value="${item.redBall2}" underline="true"/>
+                            <#input id="redBall3" name="" value="${item.redBall3}" underline="true"/>
+                            <#input id="redBall4" name="" value="${item.redBall4}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="redBall5" name="" value="${item.redBall5}" underline="true"/>
+                            <#input id="redBall6" name="" value="${item.redBall6}" underline="true"/>
+                            <#input id="blueBall1" name="" value="${item.blueBall1}" underline="true"/>
+                            <#input id="totalSale" name="" value="${item.totalSale}" underline="true"/>
+                            <#input id="prizePond" name="" value="${item.prizePond}" underline="true"/>
+                            <#input id="firstCount" name="" value="${item.firstCount}" underline="true"/>
+                            <#input id="secondCount" name="" value="${item.secondCount}" underline="true"/>
+                            <#input id="thirdCount" name="" value="${item.thirdCount}" underline="true"/>
+                            <#input id="firstAmountMoney" name="" value="${item.firstAmountMoney}" underline="true"/>
+                            <#input id="secondAmountMoney" name="" value="${item.secondAmountMoney}" underline="true"/>
+                            <#input id="thirdAmountMoney" name="" value="${item.thirdAmountMoney}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="SsqLotteryInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="SsqLotteryInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/SsqLottery/ssqLottery/ssqLottery_info.js"></script>
+@}

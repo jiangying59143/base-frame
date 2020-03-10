@@ -1,0 +1,102 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="generator" id="88a37c75-3a44-4144-afb5-8952d5299eea">
+        <insert tableName="sys_menu">
+            <column name="code" value="ssqLottery"/>
+            <column name="pcode" value="0"/>
+            <column name="pcodes" value="[0],"/>
+            <column name="name" value="双色球"/>
+            <column name="icon" value="fa-user"/>
+            <column name="url" value="/ssqLottery"/>
+            <column name="num" valueNumeric="120"/>
+            <column name="levels" valueNumeric="1"/>
+            <column name="ismenu" valueNumeric="1"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="769ab14f-bf15-4e3b-8441-ac7cfb347cf3">
+        <insert tableName="sys_menu">
+            <column name="code" value="ssqLottery_list"/>
+            <column name="pcode" value="ssqLottery"/>
+            <column name="pcodes" value="[0],[ssqLottery],"/>
+            <column name="name" value="双色球列表"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/ssqLottery/list"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="73c78e28-5d8d-4398-85d1-55011cd6e066">
+        <insert tableName="sys_menu">
+            <column name="code" value="ssqLottery_add"/>
+            <column name="pcode" value="ssqLottery"/>
+            <column name="pcodes" value="[0],[ssqLottery],"/>
+            <column name="name" value="双色球添加"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/ssqLottery/add"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="286cf214-5680-4903-821a-5610cae85756">
+        <insert tableName="sys_menu">
+            <column name="code" value="ssqLottery_update"/>
+            <column name="pcode" value="ssqLottery"/>
+            <column name="pcodes" value="[0],[ssqLottery],"/>
+            <column name="name" value="双色球更新"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/ssqLottery/update"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="21fea776-f1d1-47ab-8a9d-89be12c5e91b">
+        <insert tableName="sys_menu">
+            <column name="code" value="ssqLottery_delete"/>
+            <column name="pcode" value="ssqLottery"/>
+            <column name="pcodes" value="[0],[ssqLottery],"/>
+            <column name="name" value="双色球删除"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/ssqLottery/delete"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="05d1d83f-bc27-4000-84f0-dd218a904108">
+        <insert tableName="sys_menu">
+            <column name="code" value="ssqLottery_detail"/>
+            <column name="pcode" value="ssqLottery"/>
+            <column name="pcodes" value="[0],[ssqLottery],"/>
+            <column name="name" value="双色球详情"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/ssqLottery/detail"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
