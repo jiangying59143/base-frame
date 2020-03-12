@@ -33,7 +33,7 @@ public class LotteryApiController {
     public Object Count(){
         caipiaoService.init();
         Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
-        return new SuccessResponseData(200, "登录成功", lotteryService.selectCount(wrapper));
+        return new SuccessResponseData(200, "成功", lotteryService.selectCount(wrapper));
     }
 
     @ApiOperation(value="计算每个号码出现次数", notes="计算每个号码出现次数")
@@ -42,7 +42,7 @@ public class LotteryApiController {
     })
     @RequestMapping(value="/ballTimesSummary", method = RequestMethod.GET)
     public Object calEachNumCount(){
-        return new SuccessResponseData(200, "登录成功", caipiaoService.calEachNumCount());
+        return new SuccessResponseData(200, "成功", caipiaoService.calEachNumCount());
     }
 
     @ApiOperation(value="获取彩票中奖率", notes="获取彩票中奖率")
@@ -51,7 +51,7 @@ public class LotteryApiController {
     })
     @RequestMapping(value="/getWinRatio", method = RequestMethod.GET)
     public Object getCaiPiaoWinRate(){
-        return new SuccessResponseData(200, "登录成功", caipiaoService.getCaiPiaoWinRate());
+        return new SuccessResponseData(200, "成功", caipiaoService.getCaiPiaoWinRate());
     }
 
     @ApiOperation(value="获取彩票号码", notes="获取彩票号码")
@@ -65,6 +65,6 @@ public class LotteryApiController {
             List<Integer> lottery = caipiaoService.getCaiPiao(notContinueNumber);
             lotteries.add(lottery);
         }
-        return new SuccessResponseData(200, "登录成功", lotteries);
+        return new SuccessResponseData(200, "成功", lotteries);
     }
 }
