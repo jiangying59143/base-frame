@@ -6,8 +6,8 @@ import com.yjiang.base.core.shiro.ShiroKit;
 import com.yjiang.base.core.util.PicRecognizeUtils;
 import com.yjiang.base.modular.SsqLottery.service.ISsqLotteryService;
 import com.yjiang.base.modular.system.model.SsqLottery;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.shiro.util.CollectionUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -110,24 +110,15 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		for (Element tr : trs) {
 			SsqLottery ssqLottery = new SsqLottery();
 			Elements tds = tr.getElementsByTag("td");
-			if(processSingleRow(tds, ssqLottery)) {
-				ssqLottery.setCreateBy(ShiroKit.getUser().getId());
-				ssqLottery.setCreateDate(new Date());
-				lotteryService.insert(ssqLottery);
+			if(!isExistedForRow(tds.get(0).text())){
+				processSingleRow(tds, ssqLottery);
 			}
 		}
 	}
 
-	private boolean processSingleRow(Elements tds,SsqLottery ssqLottery) {
+	private void processSingleRow(Elements tds,SsqLottery ssqLottery) {
 		for (int i = 0; i < tds.size(); i++) {
 			Element td = tds.get(i);
-			if(i == 0){
-				Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
-				wrapper.eq("number", td.text());
-				if(lotteryService.selectOne(wrapper) != null){
-					return false;
-				}
-			}
 			switch (i) {
 				case 0:
 					ssqLottery.setNumber(td.text());
@@ -170,7 +161,18 @@ public class CaipiaoServiceImp implements CaipiaoService {
 					break;
 			}
 		}
-		return true;
+		ssqLottery.setCreateBy(ShiroKit.getUser().getId());
+		ssqLottery.setCreateDate(new Date());
+		lotteryService.insert(ssqLottery);
+	}
+
+	private boolean isExistedForRow(String termNumber){
+		Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
+		wrapper.eq("number", termNumber);
+		if(lotteryService.selectOne(wrapper) != null){
+			return true;
+		}
+		return false;
 	}
 
 	private void processBalls(Elements imgs, SsqLottery ssqLottery, Map<String, Integer> ballPicMap){
@@ -225,7 +227,7 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	 *
 	 * @return
 	 */
-	public int getCaiPiaoCatSums() {
+	public int getCaiPiaoWinRate() {
 		int a = 33 * 32 * 31 * 30 * 29 * 28 / 6 / 5 / 4 / 3 / 2 * 16;
 		return a;
 	}
@@ -233,17 +235,23 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	/**
 	 * 每个数字往期出现的次数
 	 */
-	public void calEachNumCount() {
-		for (List<Integer> lst : list) {
-			for (int i = 0; i < lst.size(); i++) {
-				if (i < 6) {
-					redBallMap.put(lst.get(i), redBallMap.get(lst.get(i)) == null ? 1 : redBallMap.get(lst.get(i)) + 1);
-				} else {
-					blueBallMap.put(lst.get(i), blueBallMap.get(lst.get(i)) == null ? 1 : blueBallMap.get(lst.get(i)) + 1);
-				}
-			}
+	public Map<String, Map<Integer, Integer>> calEachNumCount() {
+		Map<Integer, Integer> redBallMap = new HashMap<>();
+		Map<Integer, Integer> blueBallMap = new HashMap<>();
+		List<SsqLottery> ssqLotteries = lotteryService.selectList(new EntityWrapper<>());
+		for (SsqLottery ssqLottery : ssqLotteries) {
+			redBallMap.put(ssqLottery.getRedBall1(), redBallMap.get(ssqLottery.getRedBall1()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall1()) + 1);
+			redBallMap.put(ssqLottery.getRedBall2(), redBallMap.get(ssqLottery.getRedBall2()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall2()) + 1);
+			redBallMap.put(ssqLottery.getRedBall3(), redBallMap.get(ssqLottery.getRedBall3()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall3()) + 1);
+			redBallMap.put(ssqLottery.getRedBall4(), redBallMap.get(ssqLottery.getRedBall4()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall4()) + 1);
+			redBallMap.put(ssqLottery.getRedBall5(), redBallMap.get(ssqLottery.getRedBall5()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall5()) + 1);
+			redBallMap.put(ssqLottery.getRedBall6(), redBallMap.get(ssqLottery.getRedBall6()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall6()) + 1);
+			blueBallMap.put(ssqLottery.getBlueBall1(), blueBallMap.get(ssqLottery.getBlueBall1()) == null ? 1 : blueBallMap.get(ssqLottery.getBlueBall1()) + 1);
 		}
-
+		Map<String, Map<Integer, Integer>> returnMap = new HashMap<>();
+		returnMap.put("red", redBallMap);
+		returnMap.put("blue", blueBallMap);
+		return returnMap;
 	}
 
 	/**
@@ -283,24 +291,20 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	/**
 	 * list拼接成字符串彩票
 	 *
-	 * @param continueNum
+	 * @param notContinueNum
 	 * @return
 	 */
-	public String getCaiPiao(int continueNum) {
+	public List<Integer> getCaiPiao(int notContinueNum) {
 		List<Integer> list = listComposedRed();
+		list = sortList(list);
+		list.add(composeBlue());
 		while (true) {
-			if (continueRed(list, continueNum) || hasOldData(list)) {
+			if (continueRed(list, notContinueNum) || hasOldData(list)) {
 				list = listComposedRed();
 			}
 			break;
 		}
-		list = sortList(list);
-		String s = "";
-		for (Integer a : list) {
-			s += a + ", ";
-		}
-		s += composeBlue();
-		return s;
+		return list;
 	}
 
 	/**
@@ -331,24 +335,23 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	/**
 	 * 是否生成的是老数据
 	 *
-	 * @param list1
+	 * @param balls
 	 * @return
 	 */
-	public boolean hasOldData(List<Integer> list1) {
-		for (int i = 0; i < list.size(); i++) {
-			List<Integer> listtmp = list.get(i);
-//			System.out.print(list.get(i));
-			int k = 0;
-			for (int j = 0; j < list1.size(); j++) {
-				if (listtmp.get(j) == list1.get(j)) {
-					k++;
-				}
-			}
-			if (k == 7) {
-				System.out.print(list.get(i));
-				System.out.print(true);
-				return true;
-			}
+	public boolean hasOldData(List<Integer> balls) {
+		Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
+		Map<String, Object> params = new HashMap<>();
+		params.put("red_ball_1", balls.get(0));
+		params.put("red_ball_2", balls.get(1));
+		params.put("red_ball_3", balls.get(2));
+		params.put("red_ball_4", balls.get(3));
+		params.put("red_ball_5", balls.get(4));
+		params.put("red_ball_6", balls.get(5));
+		params.put("blue_ball_1", balls.get(6));
+		wrapper.allEq(params);
+		List<SsqLottery> ssqLotteries = lotteryService.selectList(wrapper);
+		if(CollectionUtils.isNotEmpty(ssqLotteries)){
+			return true;
 		}
 		return false;
 	}
