@@ -1,3 +1,4 @@
+/*
 package com.yjiang.test;
 
 import net.sourceforge.tess4j.ITesseract;
@@ -27,3 +28,4 @@ public class TessTest {
         System.out.println("OCR Result: \n" + ocrResult + "\n 耗时：" + (System.currentTimeMillis() - startTime) + "ms");
     }
 }
+*/

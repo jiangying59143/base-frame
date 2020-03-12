@@ -200,7 +200,7 @@
         </dependency>
 
         <!--图片识别（文字、字母、数字-->
-        <dependency>
+        <!--<dependency>
             <groupId>net.java.dev.jna</groupId>
             <artifactId>jna</artifactId>
             <version>4.5.1</version>
@@ -215,7 +215,7 @@
                     <artifactId>jna</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.baidu.aip</groupId>
