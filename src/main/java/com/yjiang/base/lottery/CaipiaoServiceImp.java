@@ -295,15 +295,12 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	 * @return
 	 */
 	public List<Integer> getCaiPiao(int notContinueNum) {
-		List<Integer> list = listComposedRed();
-		list = sortList(list);
-		list.add(composeBlue());
-		while (true) {
-			if (continueRed(list, notContinueNum) || hasOldData(list)) {
-				list = listComposedRed();
-			}
-			break;
-		}
+		List<Integer> list;
+		do{
+			list = listComposedRed();
+			list = sortList(list);
+			list.add(composeBlue());
+		}while(continueRed(list, notContinueNum) || hasOldData(list));
 		return list;
 	}
 
