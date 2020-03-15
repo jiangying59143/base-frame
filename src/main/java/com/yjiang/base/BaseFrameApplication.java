@@ -34,8 +34,8 @@ public class BaseFrameApplication {
     private final static Logger logger = LoggerFactory.getLogger(BaseFrameApplication.class);
 
     public static void main(String[] args) {
-        MailUtils.sendSimpleMail("907292671@qq.com", "启动成功", "base frame 启动成功！！！");
         SpringApplication.run(BaseFrameApplication.class, args);
+        MailUtils.sendSimpleMail("907292671@qq.com", "启动成功", "base frame 启动成功！！！");
         logger.info("Base Frame is success!");
     }
 }
