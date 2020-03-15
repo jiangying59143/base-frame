@@ -1,17 +1,14 @@
 package com.yjiang.base.modular.api;
 
+import cn.stylefeng.roses.core.base.controller.BaseController;
+import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import cn.stylefeng.roses.core.reqres.response.SuccessResponseData;
-import cn.stylefeng.roses.core.util.RenderUtil;
 import com.yjiang.base.core.common.constant.JwtConstants;
-import com.yjiang.base.core.common.exception.BizExceptionEnum;
 import com.yjiang.base.core.shiro.ShiroKit;
 import com.yjiang.base.core.shiro.ShiroUser;
 import com.yjiang.base.core.util.JwtTokenUtil;
 import com.yjiang.base.modular.system.model.User;
 import com.yjiang.base.modular.system.service.IUserService;
-import cn.stylefeng.roses.core.base.controller.BaseController;
-import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
-import io.jsonwebtoken.JwtException;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -21,7 +18,8 @@ import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,29 +50,30 @@ public class UserApiController extends BaseController {
 
     /**
      *
-     * @param refreshToken
+     * @param
      * @return
      */
     @ApiOperation(value="通过refreshToken获取token", notes="通过refreshToken获取token")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "令牌(Bearer )", required = true, dataType = "String", paramType = "header")
+    })
     @RequestMapping(value="/getTokenByFreshToken", method = RequestMethod.POST)
-    public Object getTokenByFreshToken(HttpServletResponse response, @RequestParam("RFT")String refreshToken){
-        //验证token是否过期,包含了验证jwt是否正确
-        try {
-            boolean flag = JwtTokenUtil.isTokenExpired(refreshToken);
-            if (flag) {
-                RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.REFRESH_TOKEN_EXPIRED.getCode(), BizExceptionEnum.REFRESH_TOKEN_EXPIRED.getMessage()));
-                return false;
-            }
-        } catch (JwtException e) {
-            //有异常就是token解析失败
-            RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));
-            return false;
+    public Object getTokenByFreshToken(HttpServletRequest request) {
+        final String requestHeader = request.getHeader(JwtConstants.ACCESS_AUTH_HEADER);
+        String authToken = requestHeader.substring(7);
+        String userId = JwtTokenUtil.getUsernameFromToken(authToken);
+        User user = userService.selectById(userId);
+        if(JwtTokenUtil.getIssuedAtDateFromToken(authToken).compareTo(user.getLoginTime()) == 0){
+            HashMap<String, Object> result = new HashMap<>();
+            Date date = new Date();
+            user.setLoginTime(date);
+            userService.updateById(user);
+            result.put("refresh_token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_REFRESH, String.valueOf(userId), date, JwtConstants.REFRESH_TOKEN_EXPIRATION));
+            result.put("token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_ACCESS, String.valueOf(userId), date, JwtConstants.ACCESS_TOKEN_EXPIRATION));
+            return new SuccessResponseData(200, "成功", result);
+        }else{
+            return new ErrorResponseData(700, "信息已过期");
         }
-        String userId = JwtTokenUtil.getUsernameFromToken(refreshToken);
-        HashMap<String, Object> result = new HashMap<>();
-        result.put("refresh_token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_REFRESH, String.valueOf(userId), JwtConstants.REFRESH_TOKEN_EXPIRATION));
-        result.put("token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_ACCESS, String.valueOf(userId), JwtConstants.ACCESS_TOKEN_EXPIRATION));
-        return result;
     }
 
     /**
@@ -145,9 +144,12 @@ public class UserApiController extends BaseController {
 
             if (passwordTrueFlag) {
                 HashMap<String, Object> result = new HashMap<>();
-                result.put("refresh_token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_REFRESH, String.valueOf(user.getId()), JwtConstants.REFRESH_TOKEN_EXPIRATION));
-                result.put("token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_ACCESS, String.valueOf(user.getId()), JwtConstants.ACCESS_TOKEN_EXPIRATION));
+                Date date = new Date();
+                result.put("refresh_token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_REFRESH, String.valueOf(user.getId()), date, JwtConstants.REFRESH_TOKEN_EXPIRATION));
+                result.put("token", JwtTokenUtil.generateToken(JwtConstants.TOKEN_TYPE_ACCESS, String.valueOf(user.getId()), date, JwtConstants.ACCESS_TOKEN_EXPIRATION));
                 result.put("user", user);
+                user.setLoginTime(date);
+                userService.updateById(user);
                 return new SuccessResponseData(200, "登录成功", result);
             } else {
                 return new ErrorResponseData(500, "账号密码错误！");

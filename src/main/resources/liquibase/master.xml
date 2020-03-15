@@ -7,4 +7,5 @@
     <include file="classpath:liquibase/changelog/changelog_original.xml"/>
     <include file="classpath:liquibase/changelog/lottery.xml"/>
 	<include file="classpath:liquibase/changelog/SsqLottery.xml"/>
+    <include file="classpath:liquibase/changelog/user.xml"/>
 </databaseChangeLog>

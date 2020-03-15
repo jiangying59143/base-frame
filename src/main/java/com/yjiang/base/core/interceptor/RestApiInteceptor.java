@@ -15,17 +15,17 @@
  */
 package com.yjiang.base.core.interceptor;
 
+import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
+import cn.stylefeng.roses.core.util.RenderUtil;
 import com.yjiang.base.core.common.constant.JwtConstants;
 import com.yjiang.base.core.common.exception.BizExceptionEnum;
 import com.yjiang.base.core.util.JwtTokenUtil;
-import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
-import cn.stylefeng.roses.core.util.RenderUtil;
 import io.jsonwebtoken.JwtException;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
+import java.util.Arrays;
 
 
 /**
@@ -50,19 +50,8 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
         }
 
         final String requestHeader = request.getHeader(JwtConstants.ACCESS_AUTH_HEADER);
-        Enumeration<String> headerNames = request.getHeaderNames();
-        while (headerNames.hasMoreElements()){
-            String headName = headerNames.nextElement();
-            System.out.println(headName + ": " + request.getHeader(headName));
-        }
-        String authToken;
         if (requestHeader != null && requestHeader.startsWith("Bearer ")) {
-            authToken = requestHeader.substring(7);
-
-            if(!JwtConstants.TOKEN_TYPE_ACCESS.equals(JwtTokenUtil.getTokenTypeFromToken(authToken))){
-                RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_TYPE_ERROR.getCode(), BizExceptionEnum.TOKEN_TYPE_ERROR.getMessage()));
-                return false;
-            };
+            String authToken = requestHeader.substring(7);
 
             //验证token是否过期,包含了验证jwt是否正确
             try {
@@ -71,6 +60,10 @@ public class RestApiInteceptor extends HandlerInterceptorAdapter {
                     RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_EXPIRED.getCode(), BizExceptionEnum.TOKEN_EXPIRED.getMessage()));
                     return false;
                 }
+                if(!Arrays.asList(JwtConstants.TOKEN_TYPE_ACCESS, JwtConstants.TOKEN_TYPE_REFRESH).contains(JwtTokenUtil.getTokenTypeFromToken(authToken))){
+                    RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_TYPE_ERROR.getCode(), BizExceptionEnum.TOKEN_TYPE_ERROR.getMessage()));
+                    return false;
+                };
             } catch (JwtException e) {
                 //有异常就是token解析失败
                 RenderUtil.renderJson(response, new ErrorResponseData(BizExceptionEnum.TOKEN_ERROR.getCode(), BizExceptionEnum.TOKEN_ERROR.getMessage()));

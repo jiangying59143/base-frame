@@ -89,6 +89,11 @@ public class User extends Model<User> {
     @TableField(value = "create_date")
     private Date createtime;
     /**
+     * 登录时间
+     */
+    @TableField(value = "login_time")
+    private Date loginTime;
+    /**
      * 保留字段
      */
     private Integer version;
@@ -206,6 +211,14 @@ public class User extends Model<User> {
         this.createtime = createtime;
     }
 
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+    }
+
     public Integer getVersion() {
         return version;
     }
@@ -223,20 +236,21 @@ public class User extends Model<User> {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", avatar=" + avatar +
-                ", account=" + account +
-                ", password=" + password +
-                ", salt=" + salt +
-                ", name=" + name +
+                ", avatar='" + avatar + '\'' +
+                ", account='" + account + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                ", name='" + name + '\'' +
                 ", birthday=" + birthday +
                 ", sex=" + sex +
-                ", email=" + email +
-                ", phone=" + phone +
-                ", roleid=" + roleid +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", roleid='" + roleid + '\'' +
                 ", deptid=" + deptid +
                 ", status=" + status +
                 ", createtime=" + createtime +
+                ", loginTime=" + loginTime +
                 ", version=" + version +
-                "}";
+                '}';
     }
 }
