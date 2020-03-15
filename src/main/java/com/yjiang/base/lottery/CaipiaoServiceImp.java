@@ -111,7 +111,7 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		}
 	}
 
-	@Scheduled(cron="* * */1 * * ?")
+	@Scheduled(cron="0 0/30 * * * ?")
 	public void updateLatestRecord() {
 		System.out.println("updateLatestRecord启动啦，=================");
 		Elements tds = getTds();
