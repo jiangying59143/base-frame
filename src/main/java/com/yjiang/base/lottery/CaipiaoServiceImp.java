@@ -1,8 +1,9 @@
 package com.yjiang.base.lottery;
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.yjiang.base.core.shiro.ShiroKit;
+import com.yjiang.base.core.util.MailUtils;
 import com.yjiang.base.core.util.PicRecognizeUtils;
 import com.yjiang.base.modular.SsqLottery.service.ISsqLotteryService;
 import com.yjiang.base.modular.system.model.SsqLottery;
@@ -14,6 +15,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,6 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@EnableScheduling
 public class CaipiaoServiceImp implements CaipiaoService {
 
 	@Autowired
@@ -82,6 +86,31 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		ballPicMap.put("https://www.cjcp.com.cn/js/kj_js_css/img/20180820032902133669.png",33);
 	}
 
+	@Scheduled(cron="0 1/1 21 ? * TUE,THU,SUN")
+	public void initFirstPage() {
+		System.out.println("initFirstPage启动啦，=================");
+		String ssqBaseUrl = baseUrl + "kaijiang/ssqmingxi.html";
+		try {
+			Connection conn = Jsoup.connect(ssqBaseUrl)
+					.header("Cookie", "Hm_lvt_78803024be030ae6c48f7d9d0f3b6f03=1583651059; Hm_lpvt_78803024be030ae6c48f7d9d0f3b6f03=1583651059; wzws_cid=b7ce79d7bde11f72105bca5c47e81582c4bfa6d412ada8c7055f5919c4479cdcbd7fa3dabb910641adad64a278d6866e4d96e4dd9615542637aa474310a6f88e1caf91fae18f1d0f7fdeba71c5e23b51")
+					.userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.88 Safari/537.36");
+			Document doc = conn.get();
+			Element tableBody = doc.getElementById("kjnum");
+			Elements trs = tableBody.getElementsByTag("tr");
+			if(CollectionUtils.isEmpty(trs)){
+				return;
+			}
+			Element tr = trs.get(0);
+			Elements tds = tr.getElementsByTag("td");
+			if(!isExistedForRow(tds.get(0).text())){
+				String balls = processSingleRow(tds);
+				MailUtils.sendSimpleMail("907292671@qq.com", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss") + " 最新的双色球：", balls);
+			}
+		} catch (IOException e) {
+			return;
+		}
+	}
+
 	public void init() {
 		String ssqBaseUrl = baseUrl + "kaijiang/ssqmingxi.html";
 		String url = ssqBaseUrl;
@@ -108,15 +137,15 @@ public class CaipiaoServiceImp implements CaipiaoService {
 
 	private void processSinglePage(Elements trs, Map<String, Integer> ballPicMap) {
 		for (Element tr : trs) {
-			SsqLottery ssqLottery = new SsqLottery();
 			Elements tds = tr.getElementsByTag("td");
 			if(!isExistedForRow(tds.get(0).text())){
-				processSingleRow(tds, ssqLottery);
+				processSingleRow(tds);
 			}
 		}
 	}
 
-	private void processSingleRow(Elements tds,SsqLottery ssqLottery) {
+	private String processSingleRow(Elements tds) {
+		SsqLottery ssqLottery = new SsqLottery();
 		for (int i = 0; i < tds.size(); i++) {
 			Element td = tds.get(i);
 			switch (i) {
@@ -161,9 +190,11 @@ public class CaipiaoServiceImp implements CaipiaoService {
 					break;
 			}
 		}
-		ssqLottery.setCreateBy(ShiroKit.getUser().getId());
+		ssqLottery.setCreateBy(1L);
 		ssqLottery.setCreateDate(new Date());
 		lotteryService.insert(ssqLottery);
+		return ssqLottery.getRedBall1() + ", " + ssqLottery.getRedBall2() + ", " + ssqLottery.getRedBall3() + ", " + ssqLottery.getRedBall4()
+				+ ", " + ssqLottery.getRedBall5() + ", " + ssqLottery.getRedBall6() + ", " + ssqLottery.getBlueBall1();
 	}
 
 	private boolean isExistedForRow(String termNumber){
@@ -216,10 +247,6 @@ public class CaipiaoServiceImp implements CaipiaoService {
 			}
 
 		}
-	}
-
-	public static void main(String[] args) {
-		ballPicMap.entrySet().parallelStream().sorted(Comparator.comparingInt(Map.Entry::getValue)).collect(Collectors.toList()).forEach(entry-> System.out.println("ballPicMap.put(\"" + entry.getKey() + "\"," + entry.getValue() + ");"));
 	}
 
 		/**
@@ -312,21 +339,35 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	 * @return
 	 */
 	public boolean continueRed(List<Integer> list, int continueNum) {
-		int k = 1;
-		if (continueNum == 1) {
+		if (continueNum <= 1) {
 			return true;
 		}
+		int max = continueRed(list);
+		if (max >= continueNum) {
+			return true;
+		}
+		return false;
+	}
+
+	public int continueRed(List<Integer> list){
+		int max = continueMap(list).entrySet().parallelStream().sorted((e1, e2)-> e2.getValue()-e1.getValue()).findFirst().get().getValue();
+		return max;
+	}
+
+	public Map<Integer, Integer> continueMap(List<Integer> list){
+		Map<Integer, Integer> continueMap = new HashMap<>();
+		continueMap.put(0, 1);
 		for (int i = list.size() - 1; i >= 1; i--) {
-			for (int j = list.size() - 2; j >= 0; j--) {
-				if (list.get(i) - list.get(j) == 1) {
-					k++;
-				}
-				if (k == continueNum) {
-					return true;
+			if (list.get(i) - list.get(i-1) == 1) {
+				if(continueMap.containsKey(i+1)){
+					continueMap.put(i, continueMap.get(i+1) + 1);
+					continueMap.remove(i+1);
+				}else{
+					continueMap.put(i, 2);
 				}
 			}
 		}
-		return false;
+		return continueMap;
 	}
 
 	/**
@@ -361,6 +402,21 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	public int composeBlue() {
 		Random random = new Random();
 		return random.nextInt(16) + 1;
+	}
+
+	public static void main(String[] args) {
+//		ballPicMap.entrySet().parallelStream().sorted(Comparator.comparingInt(Map.Entry::getValue)).collect(Collectors.toList()).forEach(entry-> System.out.println("ballPicMap.put(\"" + entry.getKey() + "\"," + entry.getValue() + ");"));
+		CaipiaoServiceImp caipiaoServiceImp = new CaipiaoServiceImp();
+//		int total = caipiaoServiceImp.getCaiPiaoWinRate();
+//		System.out.println("total: " + total);
+//		int threeTotal = (33-3) * 30 * 29 * 28/3/2 * 16;
+//		System.out.println("threeTotal: " + threeTotal);
+//		int twoTotal = (33-2) * 31 * 30 * 29 * 28/4/3/2*16;
+//		System.out.println("twoTotal: " + twoTotal);
+//		System.out.println("remove threeTotal:" + (total-threeTotal));
+//		System.out.println("remove twoTotal:" + (total-twoTotal));
+		caipiaoServiceImp.continueMap(Arrays.asList(1,2,3,4,5,6,7,8,10,11,12)).entrySet().forEach(System.out::println);
+		System.out.println(caipiaoServiceImp.continueRed(Arrays.asList(1,2,3,4,5,6,7,8,10,11,12)));
 	}
 
 }

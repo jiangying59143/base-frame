@@ -11,5 +11,7 @@ public interface CaipiaoService {
 	
 	int getCaiPiaoWinRate();
 
+	boolean continueRed(List<Integer> list, int continueNum);
+
 	List<Integer> getCaiPiao(int notContinueNum);
 }

@@ -9,6 +9,9 @@ guns:
   session-invalidate-time: 1800     #session失效时间(只在单机环境下生效，多机环境在SpringSessionConfig类中配置) 单位：秒
   session-validation-interval: 900  #多久检测一次失效的session(只在单机环境下生效) 单位：秒
   db-name: mybase
+  mail:
+    fromMail:
+      addr: 907292671@qq.com
 
 beetl:
   resource-auto-check: true       #热加载beetl模板，开发时候用
@@ -38,7 +41,7 @@ spring:
     host: smtp.qq.com
     port: 465
     username: 907292671@qq.com
-    password: ewtekhrfhlpzbddb
+    password: xxxx
     properties:
       mail:
         smtp:
