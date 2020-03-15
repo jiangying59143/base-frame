@@ -86,9 +86,42 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		ballPicMap.put("https://www.cjcp.com.cn/js/kj_js_css/img/20180820032902133669.png",33);
 	}
 
-	@Scheduled(cron="0 1/1 21 ? * TUE,THU,SUN")
-	public void initFirstPage() {
-		System.out.println("initFirstPage启动啦，=================");
+	@Scheduled(cron="0 21,25,30,35 21 ? * TUE,THU,SUN")
+	public void initLatestRecord() {
+		System.out.println("initLatestRecord启动啦，=================");
+		Elements tds = getTds();
+		if(!isExistedForRow(tds.get(0).text())){
+			SsqLottery ssqLottery = processSingleRow(tds);
+			String html = "<br/>" +
+					"<h1>" + "&nbsp;&nbsp;" +
+					"<span style='color:red'>"
+					+ ssqLottery.getRedBall1() + "&nbsp;&nbsp;"
+					+ ssqLottery.getRedBall2() + "&nbsp;&nbsp;"
+					+ ssqLottery.getRedBall3() + "&nbsp;&nbsp;"
+					+ ssqLottery.getRedBall4() + "&nbsp;&nbsp;"
+					+ ssqLottery.getRedBall5() + "&nbsp;&nbsp;"
+					+ ssqLottery.getRedBall6() + "&nbsp;&nbsp;" +
+					"</span>" +
+					"<span style='color:blue'>"
+					+ ssqLottery.getBlueBall1() + "&nbsp;&nbsp;" +
+					"</span>"
+					+"</h1>";
+			html += "<br/><br/><div align='right'>" + DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss") + "</div>";
+			MailUtils.sendHtmlMail("907292671@qq.com", DateUtil.format(ssqLottery.getOpenDate(), "yyyy-MM-dd") + " 双色球：", html);
+		}
+	}
+
+	@Scheduled(cron="* * */1 * * ?")
+	public void updateLatestRecord() {
+		System.out.println("updateLatestRecord启动啦，=================");
+		Elements tds = getTds();
+		if(isExistedForRow(tds.get(0).text()) && tds.get(3).text().length() > 1){
+			SsqLottery ssqLottery = processSingleRow(tds);
+			MailUtils.sendSimpleMail("907292671@qq.com", DateUtil.format(ssqLottery.getOpenDate(), "yyyy-MM-dd") + " 双色球：", "更新成功！！！");
+		}
+	}
+
+	private Elements getTds() {
 		String ssqBaseUrl = baseUrl + "kaijiang/ssqmingxi.html";
 		try {
 			Connection conn = Jsoup.connect(ssqBaseUrl)
@@ -98,16 +131,13 @@ public class CaipiaoServiceImp implements CaipiaoService {
 			Element tableBody = doc.getElementById("kjnum");
 			Elements trs = tableBody.getElementsByTag("tr");
 			if(CollectionUtils.isEmpty(trs)){
-				return;
+				return null;
 			}
 			Element tr = trs.get(0);
 			Elements tds = tr.getElementsByTag("td");
-			if(!isExistedForRow(tds.get(0).text())){
-				String balls = processSingleRow(tds);
-				MailUtils.sendSimpleMail("907292671@qq.com", DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss") + " 最新的双色球：", balls);
-			}
+			return tds;
 		} catch (IOException e) {
-			return;
+			return null;
 		}
 	}
 
@@ -144,8 +174,17 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		}
 	}
 
-	private String processSingleRow(Elements tds) {
+	private SsqLottery processSingleRow(Elements tds) {
 		SsqLottery ssqLottery = new SsqLottery();
+
+		Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
+		wrapper.eq("number", tds.get(0).text());
+		wrapper.isNull("totalSale");
+		SsqLottery ssqLottery1 = lotteryService.selectOne(wrapper);
+		if(ssqLottery1 != null){
+			ssqLottery = ssqLottery1;
+		}
+
 		for (int i = 0; i < tds.size(); i++) {
 			Element td = tds.get(i);
 			switch (i) {
@@ -165,24 +204,45 @@ public class CaipiaoServiceImp implements CaipiaoService {
 					processBalls(imgs, ssqLottery, ballPicMap);
 					break;
 				case 3:
+					if(td.text().length() == 0 || td.text().length() == 1){
+						break;
+					}
 					ssqLottery.setTotalSale(new BigDecimal(td.text().substring(0, td.text().length()-1)));
 					break;
 				case 4:
+					if(td.text().length() == 0 || td.text().length() == 1){
+						break;
+					}
 					ssqLottery.setPrizePond(new BigDecimal(td.text().substring(0, td.text().length()-1)));
 					break;
 				case 5:
+					if(td.text().length() == 0 || td.text().length() == 1){
+						break;
+					}
 					ssqLottery.setFirstCount(Integer.parseInt(td.text().substring(0, td.text().length()-1)));
 					break;
 				case 6:
+					if(td.text().length() == 0 || td.text().length() == 1){
+						break;
+					}
 					ssqLottery.setFirstAmountMoney(new BigDecimal(td.text().substring(0, td.text().length()-1)));
 					break;
 				case 7:
+					if(td.text().length() == 0 || td.text().length() == 1){
+						break;
+					}
 					ssqLottery.setSecondCount(Integer.parseInt(td.text()));
 					break;
 				case 8:
+					if(td.text().length() == 0 || td.text().length() == 1){
+						break;
+					}
 					ssqLottery.setSecondAmountMoney(new BigDecimal(td.text().substring(0, td.text().length()-1)));
 					break;
 				case 9:
+					if(td.text() == null || td.text().length() == 0){
+						break;
+					}
 					ssqLottery.setThirdCount(Integer.parseInt(td.text()));
 					break;
 				case 10:
@@ -192,14 +252,14 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		}
 		ssqLottery.setCreateBy(1L);
 		ssqLottery.setCreateDate(new Date());
-		lotteryService.insert(ssqLottery);
-		return ssqLottery.getRedBall1() + ", " + ssqLottery.getRedBall2() + ", " + ssqLottery.getRedBall3() + ", " + ssqLottery.getRedBall4()
-				+ ", " + ssqLottery.getRedBall5() + ", " + ssqLottery.getRedBall6() + ", " + ssqLottery.getBlueBall1();
+		lotteryService.insertOrUpdate(ssqLottery);
+		return ssqLottery;
 	}
 
 	private boolean isExistedForRow(String termNumber){
 		Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
 		wrapper.eq("number", termNumber);
+		wrapper.isNotNull("totalSale");
 		if(lotteryService.selectOne(wrapper) != null){
 			return true;
 		}
