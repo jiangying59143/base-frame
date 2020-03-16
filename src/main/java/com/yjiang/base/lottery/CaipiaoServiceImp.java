@@ -115,7 +115,7 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	public void updateLatestRecord() {
 		System.out.println("updateLatestRecord启动啦，=================");
 		Elements tds = getTds();
-		if(isExistedForRow(tds.get(0).text()) && tds.get(3).text().length() > 1){
+		if(needUpdateForRow(tds.get(0).text()) && tds.get(3).text().length() > 1){
 			SsqLottery ssqLottery = processSingleRow(tds);
 			MailUtils.sendSimpleMail("907292671@qq.com", DateUtil.format(ssqLottery.getOpenDate(), "yyyy-MM-dd") + " 双色球：", "更新成功！！！");
 		}
@@ -254,6 +254,16 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		ssqLottery.setCreateDate(new Date());
 		lotteryService.insertOrUpdate(ssqLottery);
 		return ssqLottery;
+	}
+
+	private boolean needUpdateForRow(String termNumber){
+		Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
+		wrapper.eq("number", termNumber);
+		wrapper.isNull("totalSale");
+		if(lotteryService.selectOne(wrapper) != null){
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isExistedForRow(String termNumber){
