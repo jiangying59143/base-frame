@@ -90,7 +90,9 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	public void initLatestRecord() {
 		System.out.println("initLatestRecord启动啦，=================");
 		Elements tds = getTds();
-		if(!isExistedForRow(tds.get(0).text())){
+		Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
+		wrapper.eq("number", tds.get(0).text());
+		if(lotteryService.selectOne(wrapper) == null){
 			SsqLottery ssqLottery = processSingleRow(tds);
 			String html = "<br/>" +
 					"<h1>" + "&nbsp;&nbsp;" +

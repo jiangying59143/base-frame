@@ -16,7 +16,6 @@
 package com.yjiang.base;
 
 import cn.stylefeng.roses.core.config.WebAutoConfiguration;
-import com.yjiang.base.core.util.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -35,7 +34,7 @@ public class BaseFrameApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BaseFrameApplication.class, args);
-        MailUtils.sendSimpleMail("907292671@qq.com", "启动成功", "base frame 启动成功！！！");
+//        MailUtils.sendSimpleMail("907292671@qq.com", "启动成功", "base frame 启动成功！！！");
         logger.info("Base Frame is success!");
     }
 }
