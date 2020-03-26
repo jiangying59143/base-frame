@@ -11,11 +11,14 @@ guns:
   db-name: mybase
   mail:
     fromMail:
-      addr: 907292671@qq.com
+      addr: 907292671@qq.comWWW
 
 beetl:
   resource-auto-check: true       #热加载beetl模板，开发时候用
 
+webdriver:
+  chrome:
+    driver: driver/chromedriver.exe
 
 spring:
   profiles:
@@ -41,7 +44,7 @@ spring:
     host: smtp.qq.com
     port: 465
     username: 907292671@qq.com
-    password: xxxxx
+    password: xxxxxxxxxxxxxxx
     properties:
       mail:
         smtp:

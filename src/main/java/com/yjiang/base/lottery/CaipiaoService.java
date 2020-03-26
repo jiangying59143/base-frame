@@ -7,11 +7,12 @@ public interface CaipiaoService {
 
 	void init();
 
-	Map<String, Map<Integer, Integer>> calEachNumCount();
+	Map<String, List<CaipiaoServiceImp.KeyValue>> calEachNumCount(Integer limit);
 	
 	int getCaiPiaoWinRate();
 
 	boolean continueRed(List<Integer> list, int continueNum);
 
-	List<Integer> getCaiPiao(int notContinueNum);
+	List<Integer> getCaiPiao(int notContinueNum, boolean flag);
+
 }

@@ -41,8 +41,8 @@ public class LotteryApiController {
             @ApiImplicitParam(name = "Authorization", value = "令牌(Bearer )", required = true, dataType = "String", paramType = "header")
     })
     @RequestMapping(value="/ballTimesSummary", method = RequestMethod.GET)
-    public Object calEachNumCount(){
-        return new SuccessResponseData(200, "成功", caipiaoService.calEachNumCount());
+    public Object calEachNumCount(int count){
+        return new SuccessResponseData(200, "成功", caipiaoService.calEachNumCount(count));
     }
 
     @ApiOperation(value="获取彩票中奖率", notes="获取彩票中奖率")
@@ -61,8 +61,10 @@ public class LotteryApiController {
     @RequestMapping(value="/getNumbers", method = RequestMethod.GET)
     public Object getNumbers(int count, int notContinueNumber){
         List<List<Integer>> lotteries = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            List<Integer> lottery = caipiaoService.getCaiPiao(notContinueNumber);
+        List<Integer> l = caipiaoService.getCaiPiao(notContinueNumber, true);
+        lotteries.add(l);
+        for (int i = 1; i < count; i++) {
+            List<Integer> lottery = caipiaoService.getCaiPiao(notContinueNumber, false);
             lotteries.add(lottery);
         }
         return new SuccessResponseData(200, "成功", lotteries);

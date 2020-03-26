@@ -3,6 +3,7 @@ package com.yjiang.base.lottery;
 import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.yjiang.base.core.util.MailUtils;
 import com.yjiang.base.core.util.PicRecognizeUtils;
 import com.yjiang.base.modular.SsqLottery.service.ISsqLotteryService;
@@ -321,6 +322,8 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		}
 	}
 
+
+
 		/**
 	 * 获取彩票概率
 	 *
@@ -334,10 +337,20 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	/**
 	 * 每个数字往期出现的次数
 	 */
-	public Map<String, Map<Integer, Integer>> calEachNumCount() {
+	public Map<String, List<KeyValue>> calEachNumCount(Integer limit) {
+
+		Wrapper<SsqLottery> wrapper = new EntityWrapper<>();
+		wrapper.orderBy("number", false);
+
+		List<SsqLottery> ssqLotteries = null;
+		if(limit == null){
+			ssqLotteries = lotteryService.selectList(wrapper);
+		}else{
+			ssqLotteries = lotteryService.selectPage(new Page<>(0, limit), wrapper).getRecords();
+		}
+
 		Map<Integer, Integer> redBallMap = new HashMap<>();
 		Map<Integer, Integer> blueBallMap = new HashMap<>();
-		List<SsqLottery> ssqLotteries = lotteryService.selectList(new EntityWrapper<>());
 		for (SsqLottery ssqLottery : ssqLotteries) {
 			redBallMap.put(ssqLottery.getRedBall1(), redBallMap.get(ssqLottery.getRedBall1()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall1()) + 1);
 			redBallMap.put(ssqLottery.getRedBall2(), redBallMap.get(ssqLottery.getRedBall2()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall2()) + 1);
@@ -347,10 +360,36 @@ public class CaipiaoServiceImp implements CaipiaoService {
 			redBallMap.put(ssqLottery.getRedBall6(), redBallMap.get(ssqLottery.getRedBall6()) == null ? 1 : redBallMap.get(ssqLottery.getRedBall6()) + 1);
 			blueBallMap.put(ssqLottery.getBlueBall1(), blueBallMap.get(ssqLottery.getBlueBall1()) == null ? 1 : blueBallMap.get(ssqLottery.getBlueBall1()) + 1);
 		}
-		Map<String, Map<Integer, Integer>> returnMap = new HashMap<>();
-		returnMap.put("red", redBallMap);
-		returnMap.put("blue", blueBallMap);
+		Map<String, List<KeyValue>> returnMap = new HashMap<>();
+		returnMap.put("red", redBallMap.entrySet().stream().map(e->new KeyValue(e.getKey(), e.getValue())).sorted(Comparator.comparingInt(e -> e.value)).collect(Collectors.toList()));
+		returnMap.put("blue", blueBallMap.entrySet().stream().map(e->new KeyValue(e.getKey(), e.getValue())).sorted(Comparator.comparingInt(e -> e.value)).collect(Collectors.toList()));
 		return returnMap;
+	}
+
+	class KeyValue{
+		private int key;
+		private int value;
+
+		public KeyValue(int key, int value) {
+			this.key = key;
+			this.value = value;
+		}
+
+		public int getKey() {
+			return key;
+		}
+
+		public void setKey(int key) {
+			this.key = key;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		public void setValue(int value) {
+			this.value = value;
+		}
 	}
 
 	/**
@@ -393,14 +432,25 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	 * @param notContinueNum
 	 * @return
 	 */
-	public List<Integer> getCaiPiao(int notContinueNum) {
+	public List<Integer> getCaiPiao(int notContinueNum, boolean flag) {
 		List<Integer> list;
-		do{
-			list = listComposedRed();
-			list = sortList(list);
-			list.add(composeBlue());
-		}while(continueRed(list, notContinueNum) || hasOldData(list));
+		if(flag){
+			list = sortList(this.getLeastRedBalls());
+			list.add(this.calEachNumCount(null).get("blue").get(0).getKey());
+		}else {
+			do {
+				list = listComposedRed();
+				list = sortList(list);
+				//			list.add(composeBlue());
+				list.add(this.calEachNumCount(null).get("blue").get(0).getKey());
+			} while (continueRed(list, notContinueNum) || hasOldData(list));
+		}
 		return list;
+	}
+
+	private List<Integer> getLeastRedBalls(){
+		List<KeyValue> redList = this.calEachNumCount(null).get("red");
+		return Arrays.asList(redList.get(0).getKey(), redList.get(1).getKey(), redList.get(2).getKey(), redList.get(3).getKey(), redList.get(4).getKey(), redList.get(5).getKey());
 	}
 
 	/**
