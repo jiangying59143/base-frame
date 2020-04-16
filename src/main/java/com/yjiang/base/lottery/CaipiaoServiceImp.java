@@ -449,11 +449,16 @@ public class CaipiaoServiceImp implements CaipiaoService {
 	}
 
 	public List<Integer> getCaiPiao2(int experiencePreCount, boolean medium){
+		List<Integer> list;
 		if(medium){
-			return this.getMidiumBalls(experiencePreCount);
+			list = this.getMidiumBalls(experiencePreCount);
 		}else{
-			return this.getLeastBalls(experiencePreCount);
+			list = this.getLeastBalls(experiencePreCount);
 		}
+		int blue = list.get(6);
+		list = list.subList(0, 6).stream().sorted().collect(Collectors.toList());
+		list.add(blue);
+		return list;
 	}
 
 	private List<Integer> getLeastBalls(int experiencePreCount){
