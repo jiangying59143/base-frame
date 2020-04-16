@@ -22,6 +22,6 @@ public interface JwtConstants {
 
     Long REFRESH_TOKEN_EXPIRATION = 604800L;
 
-    List<String> AUTH_PATH = Arrays.asList("/userApi/register","/userApi/auth", "/lotteryApi/count");
+    List<String> AUTH_PATH = Arrays.asList("/userApi/register","/userApi/auth","/userApi/phoneAuth", "/lotteryApi/count");
 
 }

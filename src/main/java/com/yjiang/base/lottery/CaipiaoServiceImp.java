@@ -448,6 +448,28 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		return list;
 	}
 
+	public List<Integer> getCaiPiao2(int experiencePreCount, boolean medium){
+		if(medium){
+			return this.getMidiumBalls(experiencePreCount);
+		}else{
+			return this.getLeastBalls(experiencePreCount);
+		}
+	}
+
+	private List<Integer> getLeastBalls(int experiencePreCount){
+		Map<String, List<KeyValue>> map = this.calEachNumCount(experiencePreCount);
+		List<KeyValue> redList = map.get("red");
+		List<KeyValue> blueList = map.get("blue");
+		return Arrays.asList(redList.get(0).getKey(), redList.get(1).getKey(), redList.get(2).getKey(), redList.get(3).getKey(), redList.get(4).getKey(), redList.get(5).getKey(), blueList.get(0).getKey());
+	}
+
+	private List<Integer> getMidiumBalls(int experiencePreCount){
+		Map<String, List<KeyValue>> map = this.calEachNumCount(experiencePreCount);
+		List<KeyValue> redList = map.get("red");
+		List<KeyValue> blueList = map.get("blue");
+		return Arrays.asList(redList.get(13).getKey(), redList.get(14).getKey(), redList.get(15).getKey(), redList.get(16).getKey(), redList.get(17).getKey(), redList.get(18).getKey(), blueList.get(8).getKey());
+	}
+
 	private List<Integer> getLeastRedBalls(){
 		List<KeyValue> redList = this.calEachNumCount(null).get("red");
 		return Arrays.asList(redList.get(0).getKey(), redList.get(1).getKey(), redList.get(2).getKey(), redList.get(3).getKey(), redList.get(4).getKey(), redList.get(5).getKey());

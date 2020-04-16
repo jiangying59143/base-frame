@@ -15,4 +15,6 @@ public interface CaipiaoService {
 
 	List<Integer> getCaiPiao(int notContinueNum, boolean flag);
 
+	List<Integer> getCaiPiao2(int experiencePreCount, boolean medium);
+
 }

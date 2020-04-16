@@ -69,4 +69,21 @@ public class LotteryApiController {
         }
         return new SuccessResponseData(200, "成功", lotteries);
     }
+
+    @ApiOperation(value="获取彩票号码", notes="获取彩票号码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "Authorization", value = "令牌(Bearer )", required = true, dataType = "String", paramType = "header")
+    })
+    @RequestMapping(value="/getNumbers1", method = RequestMethod.GET)
+    public Object getNumbers1(int count, int experiencePreCount){
+        List<List<Integer>> lotteries = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            if(i%2==0){
+                experiencePreCount = experiencePreCount*i;
+            }
+            List<Integer> lottery = caipiaoService.getCaiPiao2(experiencePreCount, i%2==0?true:false);
+            lotteries.add(lottery);
+        }
+        return new SuccessResponseData(200, "成功", lotteries);
+    }
 }
