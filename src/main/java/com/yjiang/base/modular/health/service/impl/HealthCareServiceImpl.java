@@ -61,7 +61,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-    @Scheduled(cron="* 3 * * * ?")
+    @Scheduled(cron="* 7 * * * ?")
 //    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         System.out.println("health care start");
