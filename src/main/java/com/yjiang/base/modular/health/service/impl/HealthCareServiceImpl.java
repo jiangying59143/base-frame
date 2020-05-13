@@ -48,7 +48,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-    @Scheduled(cron="* 15 * * * ?")
+    @Scheduled(cron="*/30 * * * * ?")
 //    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         //等待时间,模拟任意时间 7-17
