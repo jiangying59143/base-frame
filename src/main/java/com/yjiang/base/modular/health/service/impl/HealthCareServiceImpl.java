@@ -23,6 +23,7 @@ import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,12 +58,16 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
 
         driver = new ChromeDriver(chromeService, options);
+        driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+        //定位对象时给10s 的时间, 如果10s 内还定位不到则抛出异常
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().setScriptTimeout(3, TimeUnit.SECONDS);
         driver.get(url);
     }
 
     @Override
-    @Scheduled(cron="* 25 * * * ?")
-//    @Scheduled(cron="0 0 7 * * ?")
+//    @Scheduled(cron="*/1 * * * * ?")
+    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         System.out.println("health care start");
         //等待时间,模拟任意时间 7-17
