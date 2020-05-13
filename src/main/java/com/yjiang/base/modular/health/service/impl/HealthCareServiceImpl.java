@@ -40,7 +40,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     private String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
     public void init() {
-        System.setProperty("webdriver.chrome.driver","/root/driver/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver","/root/driver/chromedriver");
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu");
         driver = new ChromeDriver(options);
@@ -48,7 +48,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-    @Scheduled(cron="* 1 * * * ?")
+    @Scheduled(cron="* 15 * * * ?")
 //    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         //等待时间,模拟任意时间 7-17
