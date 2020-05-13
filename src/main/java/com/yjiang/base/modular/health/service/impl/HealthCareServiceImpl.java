@@ -88,9 +88,11 @@ public class HealthCareServiceImpl implements HealthCareService {
             }
             for (int i = count+1; i <= 10; i++) {
                 personInfoMap.put("index", String.valueOf(i));
-                atomOperation(personInfoMap);
-                healthUser.setCount(healthUser.getCount() + 1);
-                healthUsersService.updateById(healthUser);
+                boolean fineFlag = atomOperation(personInfoMap);
+                if(fineFlag) {
+                    healthUser.setCount(healthUser.getCount() + 1);
+                    healthUsersService.updateById(healthUser);
+                }
             }
         }
 
@@ -98,21 +100,22 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     }
 
-    private void atomOperation(Map<String, String> personInfoMap){
+    private boolean atomOperation(Map<String, String> personInfoMap){
         boolean fineFlag = false;
         while(!fineFlag) {
             try {
                 processSingle(personInfoMap);
                 fineFlag = true;
             } catch (Exception e) {
-                e.printStackTrace();
-                if(e instanceof NullPointerException){
-                    break;
-                }
-                driver.close();
                 fineFlag = false;
+                e.printStackTrace();
+//                if(e instanceof NullPointerException){
+//                    break;
+//                }
+                driver.close();
             }
         }
+        return fineFlag;
     }
 
     public void processSingle(Map<String, String> personInfoMap) throws IOException {
