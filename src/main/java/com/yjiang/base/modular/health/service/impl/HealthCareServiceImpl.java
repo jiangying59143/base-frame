@@ -46,7 +46,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     public void init() {
         System.setProperty("webdriver.chrome.driver",diverPath);
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--disable-gpu");
+        options.addArguments("--headless","--no-sandbox","--disable-gpu", "--whitelisted-ips");
 
         ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
         ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(3333).build();
@@ -102,6 +102,9 @@ public class HealthCareServiceImpl implements HealthCareService {
                 processSingle(personInfoMap);
                 fineFlag = true;
             } catch (Exception e) {
+                if(e instanceof NullPointerException){
+                    break;
+                }
                 driver.close();
                 e.printStackTrace();
                 fineFlag = false;
