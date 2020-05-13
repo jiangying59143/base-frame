@@ -61,7 +61,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-    @Scheduled(cron="* 34 * * * ?")
+    @Scheduled(cron="* 52 * * * ?")
 //    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         System.out.println("health care start");
@@ -107,12 +107,12 @@ public class HealthCareServiceImpl implements HealthCareService {
                 processSingle(personInfoMap);
                 fineFlag = true;
             } catch (Exception e) {
-                fineFlag = false;
-                e.printStackTrace();
-//                if(e instanceof NullPointerException){
-//                    break;
-//                }
-                driver.close();
+                try{
+                    driver.close();
+                }finally {
+                    fineFlag = false;
+                    e.printStackTrace();
+                }
             }
             try {
                 Thread.sleep(2000);
