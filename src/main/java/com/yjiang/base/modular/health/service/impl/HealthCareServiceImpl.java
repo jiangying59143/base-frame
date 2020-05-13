@@ -61,8 +61,8 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-//    @Scheduled(cron="*/5 * * * * ?")
-    @Scheduled(cron="0 0 7 * * ?")
+    @Scheduled(cron="* 34 * * * ?")
+//    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         System.out.println("health care start");
         //等待时间,模拟任意时间 7-17
