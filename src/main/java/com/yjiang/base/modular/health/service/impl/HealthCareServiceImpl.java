@@ -64,6 +64,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     @Scheduled(cron="*/5 * * * * ?")
 //    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
+        System.out.println("health care start");
         //等待时间,模拟任意时间 7-17
         Random random = new Random();
 //        try {
@@ -93,6 +94,8 @@ public class HealthCareServiceImpl implements HealthCareService {
             }
         }
 
+        System.out.println("health care end");
+
     }
 
     private void atomOperation(Map<String, String> personInfoMap){
@@ -102,19 +105,17 @@ public class HealthCareServiceImpl implements HealthCareService {
                 processSingle(personInfoMap);
                 fineFlag = true;
             } catch (Exception e) {
+                e.printStackTrace();
                 if(e instanceof NullPointerException){
                     break;
                 }
                 driver.close();
-                e.printStackTrace();
                 fineFlag = false;
             }
         }
     }
 
     public void processSingle(Map<String, String> personInfoMap) throws IOException {
-        System.out.println("health care start");
-
         List<Health> questionBankList = healthService.selectList(new EntityWrapper<>());
 
         this.init();
@@ -131,7 +132,6 @@ public class HealthCareServiceImpl implements HealthCareService {
         ChromeDriveUtils.screenShotLong(driver, appName, personInfoMap.get("name"), personInfoMap.get("index"));
         driver.close();
 
-        System.out.println("health care end");
     }
 
     private Map<String, String> getPersonInfo(String name, String orgName){
