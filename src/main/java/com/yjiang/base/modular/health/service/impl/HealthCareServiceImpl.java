@@ -12,6 +12,7 @@ import com.yjiang.base.modular.system.model.HealthUsers;
 import org.apache.commons.collections.CollectionUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -19,6 +20,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,16 +41,27 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     private String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
+    private String diverPath = "/root/driver/chromedriver";
+
     public void init() {
-        System.setProperty("webdriver.chrome.driver","/root/driver/chromedriver");
+        System.setProperty("webdriver.chrome.driver",diverPath);
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless", "--disable-gpu");
-        driver = new ChromeDriver(options);
+
+        ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
+        ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(3333).build();
+        try{
+            chromeService.start();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+        driver = new ChromeDriver(chromeService, options);
         driver.get(url);
     }
 
     @Override
-    @Scheduled(cron="*/30 * * * * ?")
+    @Scheduled(cron="*/5 * * * * ?")
 //    @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         //等待时间,模拟任意时间 7-17
