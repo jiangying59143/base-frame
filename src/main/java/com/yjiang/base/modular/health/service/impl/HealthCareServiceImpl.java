@@ -107,8 +107,10 @@ public class HealthCareServiceImpl implements HealthCareService {
                 processSingle(personInfoMap);
                 fineFlag = true;
             } catch (Exception e) {
-                try{
+                try {
                     driver.close();
+                }catch (Exception ex){
+                    ex.printStackTrace();
                 }finally {
                     fineFlag = false;
                     e.printStackTrace();
