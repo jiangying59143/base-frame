@@ -16,7 +16,7 @@ import com.yjiang.base.modular.HealthUsers.service.IHealthUsersService;
  * 健康素养人员控制器
  *
  * @author fengshuonan
- * @Date 2020-05-14 12:15:15
+ * @Date 2020-05-14 19:17:23
  */
 @Controller
 @RequestMapping("/healthUsers")

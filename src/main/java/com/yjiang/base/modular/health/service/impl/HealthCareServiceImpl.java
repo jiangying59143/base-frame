@@ -10,11 +10,15 @@ import com.yjiang.base.modular.health.service.IHealthService;
 import com.yjiang.base.modular.system.model.Health;
 import com.yjiang.base.modular.system.model.HealthUsers;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.Select;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -29,12 +33,16 @@ import java.util.stream.Collectors;
 @Service
 @EnableScheduling
 public class HealthCareServiceImpl implements HealthCareService {
+    private static Logger logger = LoggerFactory.getLogger(HealthCareServiceImpl.class);
 
     @Resource
     private IHealthService healthService;
 
     @Resource
     private IHealthUsersService healthUsersService;
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
 
     private ChromeDriver driver;
 
@@ -44,10 +52,21 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     private String diverPath = "/root/driver/chromedriver";
 
+    public static void main(String[] args) {
+        List<String> correctSelectionDetails = Arrays.asList("1", "2");
+        String s = "[\"" + correctSelectionDetails.stream().collect(Collectors.joining("\", \"")) + "\"]";
+        System.out.println(s);
+        for (String s1 : s.substring(2, s.length()-2).split("\",\"")) {
+            System.out.println(s1);
+        }
+    }
+
     public void init() {
         System.setProperty("webdriver.chrome.driver",diverPath);
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless","--no-sandbox","--disable-gpu", "--whitelisted-ips");
+        if(!"local".equals(activeProfile)) {
+            options.addArguments("--headless", "--no-sandbox", "--disable-gpu", "--whitelisted-ips");
+        }
 
         ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
         ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(3333).build();
@@ -65,10 +84,8 @@ public class HealthCareServiceImpl implements HealthCareService {
         driver.get(url);
     }
 
-    @Override
-//    @Scheduled(cron="* 17 * * * ?")
     @Scheduled(cron="0 0 7 * * ?")
-    public void process() throws IOException {
+    public void scheduleProcess(){
         System.out.println("health care start");
         //等待时间,模拟任意时间 7-17
         Random random = new Random();
@@ -79,14 +96,17 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
 
         int personNum = random.nextInt(31) + 20;
+        process(personNum, true);
+    }
 
+    @Override
+    public void process(int personNum, boolean wrongSet) {
         Wrapper<HealthUsers>  wrapper = new EntityWrapper<>();
         wrapper.and("`count` < 10").orderBy("id");
-
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
-            Map<String, String> personInfoMap = this.getPersonInfo(healthUser.getName(), healthUser.getOrgName());
-            personInfoMap.put("sex", healthUser.getSex());
+            Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
+            personInfoMap.put("wrongSet", wrongSet);
             int count = healthUser.getCount();
             if(count >= 10){
                 return;
@@ -94,7 +114,10 @@ public class HealthCareServiceImpl implements HealthCareService {
             for (int i = count+1; i <= 10; i++) {
                 personInfoMap.put("index", String.valueOf(i));
                 atomOperation(personInfoMap);
-                healthUser.setCount(healthUser.getCount() + 1);
+                healthUser.setCount(i);
+                healthUser.setAge(personInfoMap.get("age").toString());
+                healthUser.setEducation(personInfoMap.get("education").toString());
+                healthUser.setJob(personInfoMap.get("job").toString());
                 healthUsersService.updateById(healthUser);
                 System.out.println(healthUser.getName() + "完成第" + i + "遍数" );
             }
@@ -104,7 +127,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     }
 
-    private void atomOperation(Map<String, String> personInfoMap){
+    private void atomOperation(Map<String, Object> personInfoMap){
         boolean fineFlag = false;
         while(!fineFlag) {
             try {
@@ -128,38 +151,40 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
     }
 
-    public void processSingle(Map<String, String> personInfoMap) throws IOException {
+    public void processSingle(Map<String, Object> personInfoMap) throws IOException {
         List<Health> questionBankList = healthService.selectList(new EntityWrapper<>());
-
         this.init();
-        login(personInfoMap.get("name"),
-                personInfoMap.get("age"),
-                personInfoMap.get("sex"),
-                personInfoMap.get("education"),
-                personInfoMap.get("job"),
-                personInfoMap.get("orgName"));
+        login(personInfoMap.get("name").toString(),
+                personInfoMap.get("age").toString(),
+                personInfoMap.get("sex").toString(),
+                personInfoMap.get("education").toString(),
+                personInfoMap.get("job").toString(),
+                personInfoMap.get("orgName").toString());
         int questionCount = Integer.parseInt(driver.findElementById("__subjectCount").getText());
-        doTest(questionBankList, questionCount, getRandomNumbers(questionCount,1 + new Random().nextInt(questionCount/3 + 1)));
+        List<Integer> wrongItems = new ArrayList<>();
+        if((boolean)personInfoMap.get("wrongSet")){
+            wrongItems = getRandomNumbers(questionCount,1 + new Random().nextInt(questionCount/3 + 1));
+        }
+        doTest(questionBankList, questionCount, wrongItems);
         submit(questionCount);
         this.processReport(questionCount, questionBankList);
-        ChromeDriveUtils.screenShotLong(driver, appName, personInfoMap.get("name"), personInfoMap.get("index"));
+        ChromeDriveUtils.screenShotLong(driver, appName, personInfoMap.get("name").toString(), personInfoMap.get("index").toString());
         driver.close();
 
     }
 
-    private Map<String, String> getPersonInfo(String name, String orgName){
-        Map<String, String> map = new HashMap<>();
+    private Map<String, Object> getPersonInfo(HealthUsers healthUser){
+        Map<String, Object> map = new HashMap<>();
         Random random = new Random();
         String age = Arrays.asList("20～25岁以下", "25～30岁以下", "30～35岁以下", "35～40岁以下", "40～45岁以下").get(random.nextInt(5));
-//        String sex = Arrays.asList("男", "女").get(random.nextInt(2));
         String education = Arrays.asList("小学", "初中", "高中/职高/中专", "大专/本科").get(random.nextInt(2));
         String job = Arrays.asList("教师", "饮食服务", "商业服务", "医务人员", "公司管理").get(random.nextInt(5));
-        map.put("name", name);
-        map.put("age", age);
-//        map.put("sex", sex);
-        map.put("education", education);
-        map.put("job", job);
-        map.put("orgName", orgName);
+        map.put("name", healthUser.getName());
+        map.put("age", StringUtils.isNotBlank(healthUser.getAge()) ? healthUser.getAge() : age);
+        map.put("sex", healthUser.getSex());
+        map.put("education", StringUtils.isNotBlank(healthUser.getEducation()) ? healthUser.getEducation() :education);
+        map.put("job", StringUtils.isNotBlank(healthUser.getJob()) ? healthUser.getJob() :job);
+        map.put("orgName", healthUser.getOrgName());
         return map;
     }
 
@@ -203,19 +228,35 @@ public class HealthCareServiceImpl implements HealthCareService {
         for (int questionIndex = 1;questionIndex <= totalQuestionCount; questionIndex++) {
             Map<String, String> questionAndSelection = this.getTitleAndAnswers(questionIndex, true);
             String title = questionAndSelection.get("title");
-            String[] correctSelections = this.getCorrectSelections(questionIndex);
-            List<String> correctSelectionDetails = this.getCorrectSelectionsDetails(questionAndSelection, correctSelections);
+            String[] correctSelections = this.getCorrectSelectionsForReport(questionIndex);
+            questionAndSelection.remove("title");
+            List<String> correctSelectionDetails = this.getSelectionsDetails(questionAndSelection, correctSelections, true);
+            List<String> selectionDetials = this.getSelectionsDetails(questionAndSelection, correctSelections, false);
 
-            if(!questionTitles.contains(title)) {
+            if(isMissed(questionIndex)){
+                logger.info("错题集:");
+                logger.info("title: " + title);
+                logger.info("selectionDetials: " + Arrays.toString(selectionDetials.toArray()));
+                logger.info("correctSelectionDetails: " + Arrays.toString(correctSelectionDetails.toArray()));
+            }
+
+            if(!questionTitles.contains(title)
+                    || isMissed(questionIndex)) {
                 Health health = new Health();
                 health.setTitle(title);
-                health.setAnswers(String.valueOf(correctSelectionDetails.toArray()));
+                health.setAnswers("[\"" + correctSelectionDetails.stream().collect(Collectors.joining("\", \"")) + "\"]");
+                System.out.println(health);
                 healthService.insert(health);
             }
         }
     }
 
-    private String[] getCorrectSelections(int questionIndex){
+    private boolean isMissed(int questionIndex){
+        String answers = driver.findElementById("KWait" + questionIndex).getText();
+        return answers.contains("标准答案：");
+    }
+
+    private String[] getCorrectSelectionsForReport(int questionIndex){
         String answers = driver.findElementById("KWait" + questionIndex).getText();
         if(answers.contains("标准答案：")){
             answers = answers.split("您的答案：")[1].split("标准答案：")[1].trim();
@@ -225,16 +266,17 @@ public class HealthCareServiceImpl implements HealthCareService {
         return answers.split("");
     }
 
-    private List<String> getCorrectSelectionsDetails(Map<String, String> questionAndSelection, String[] correctSelections){
-        questionAndSelection.remove("title");
-        List<String> correctSelectionDetails = null;
-        for (String correctSelection : correctSelections) {
-            correctSelectionDetails = questionAndSelection.entrySet().stream()
-                    .filter(e-> Arrays.asList(correctSelections).contains(e.getKey()))
-                    .map(e->e.getValue())
+    private List<String> getSelectionsDetails(Map<String, String> questionAndSelection, String[] correctSelections, boolean correctFlag){
+        if(correctFlag) {
+            return questionAndSelection.entrySet().stream()
+                    .filter(e -> Arrays.asList(correctSelections).contains(e.getKey()))
+                    .map(e -> e.getValue())
+                    .collect(Collectors.toList());
+        }else{
+            return questionAndSelection.entrySet().stream()
+                    .map(e -> e.getValue())
                     .collect(Collectors.toList());
         }
-        return correctSelectionDetails;
     }
 
     private Map<String, String> getTitleAndAnswers(int questionIndex, boolean isScoreReport) {
@@ -245,6 +287,10 @@ public class HealthCareServiceImpl implements HealthCareService {
         String[] this_title_and_answers = this_title_html.split("<br>");
         String this_title = this_title_and_answers[1].split("</b>")[1].replace("<b>" + questionIndex + ".</br>", "").trim();
         title_and_answers.put("title", this_title);
+        if(this_title == null){
+            System.out.println("this_title error");
+            System.out.println(this_title_html);
+        }
         for (int answerIndex = 2; answerIndex < this_title_and_answers.length; answerIndex++) {
             String[] selectionAndDetail = this_title_and_answers[answerIndex].split("、", 2);
             try {
@@ -264,14 +310,17 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     private List<String> getCorrectSelections(List<Health> questionBankList, Map<String, String> questionAndSelection){
         List<String> correctSelections = null;
+
         for (Health health : questionBankList) {
-            if(questionAndSelection.get("title").contains(health.getTitle())){
-                questionAndSelection.remove("title");
+            List<String> healthCorrectSelections = health.getSelections();
+            if (questionAndSelection.get("title").contains(health.getTitle())) {
                 correctSelections = questionAndSelection.entrySet().stream()
-                        .filter(e-> health.getSelections().contains(e.getKey()))
-                        .map(e->e.getValue())
+                        .filter(e -> healthCorrectSelections.contains(e.getKey()))
+                        .map(e -> e.getValue())
                         .collect(Collectors.toList());
-                return correctSelections;
+                if (CollectionUtils.isNotEmpty(correctSelections)) {
+                    return correctSelections;
+                }
             }
         }
         return correctSelections;
@@ -290,7 +339,6 @@ public class HealthCareServiceImpl implements HealthCareService {
                 driver.findElementByXPath("//input[@type='radio'][@value='A" + questionIndex + "']").click();
             }
         }else{
-            Object[] preCorrectSelections = correctSelections.toArray();
             if(wrongItems.contains(questionIndex)){
                 if(correctSelections.size() > 1 ) {
                     correctSelections.remove(0);
@@ -301,9 +349,9 @@ public class HealthCareServiceImpl implements HealthCareService {
             }
             if(multipleFlag){
                 for(String selection : correctSelections) {
-                    driver.findElementByXPath("//input[@type='checkbox'][@value='" + selection + questionIndex + "']").click();
-                    driver.findElementByXPath("//img[@id='Key_Next']").click();
+                    driver.findElementById("k" + selection + questionIndex).click();
                 }
+                driver.findElementByXPath("//img[@id='Key_Next']").click();
             }else {
                 driver.findElementByXPath("//input[@type='radio'][@value='" + correctSelections.get(0) + questionIndex + "']").click();
             }

@@ -65,8 +65,8 @@ log:
 spring:
   profiles: local
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/mybase?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
-    username: root
+    url: jdbc:mysql://106.12.148.35:3306/mybase?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: jiangying
     password: jiangying
     filters: wall,mergeStat
 

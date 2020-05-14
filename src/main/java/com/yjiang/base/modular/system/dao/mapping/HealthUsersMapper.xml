@@ -6,14 +6,17 @@
     <resultMap id="BaseResultMap" type="com.yjiang.base.modular.system.model.HealthUsers">
         <id column="id" property="id" />
         <result column="name" property="name" />
+        <result column="age" property="age" />
         <result column="sex" property="sex" />
+        <result column="education" property="education" />
+        <result column="job" property="job" />
         <result column="org_name" property="orgName" />
         <result column="count" property="count" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, sex, org_name, count
+        id, name, age, sex, education, job, org_name, count
     </sql>
 
 </mapper>

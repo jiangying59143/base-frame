@@ -55,7 +55,7 @@ public class Health extends Model<Health> {
 
     public List<String> getSelections(){
         if(StringUtils.isNotBlank(answers)){
-            return Arrays.asList(answers.substring(2, answers.length()-2).split("\",\""));
+            return Arrays.asList(answers.substring(2, answers.length()-2).split("\", \""));
         }
         return null;
     }

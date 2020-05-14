@@ -23,7 +23,10 @@ public class HealthUsers extends Model<HealthUsers> {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     private String name;
+    private String age;
     private String sex;
+    private String education;
+    private String job;
     @TableField("org_name")
     private String orgName;
     private Integer count;
@@ -45,12 +48,36 @@ public class HealthUsers extends Model<HealthUsers> {
         this.name = name;
     }
 
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
+    }
+
     public String getSex() {
         return sex;
     }
 
     public void setSex(String sex) {
         this.sex = sex;
+    }
+
+    public String getEducation() {
+        return education;
+    }
+
+    public void setEducation(String education) {
+        this.education = education;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 
     public String getOrgName() {
@@ -79,7 +106,10 @@ public class HealthUsers extends Model<HealthUsers> {
         return "HealthUsers{" +
         ", id=" + id +
         ", name=" + name +
+        ", age=" + age +
         ", sex=" + sex +
+        ", education=" + education +
+        ", job=" + job +
         ", orgName=" + orgName +
         ", count=" + count +
         "}";
