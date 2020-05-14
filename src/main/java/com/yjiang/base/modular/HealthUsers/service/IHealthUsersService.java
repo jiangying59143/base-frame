@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.service.IService;
  * </p>
  *
  * @author jiangying
- * @since 2020-05-13
+ * @since 2020-05-14
  */
 public interface IHealthUsersService extends IService<HealthUsers> {
 

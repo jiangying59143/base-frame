@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author jiangying
- * @since 2020-05-13
+ * @since 2020-05-14
  */
 public interface HealthUsersMapper extends BaseMapper<HealthUsers> {
 

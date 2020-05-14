@@ -2,6 +2,7 @@ package com.yjiang.base.modular.system.model;
 
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author jiangying
- * @since 2020-05-13
+ * @since 2020-05-14
  */
 @TableName("health_users")
 public class HealthUsers extends Model<HealthUsers> {
@@ -22,6 +23,8 @@ public class HealthUsers extends Model<HealthUsers> {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     private String name;
+    private String sex;
+    @TableField("org_name")
     private String orgName;
     private Integer count;
 
@@ -40,6 +43,14 @@ public class HealthUsers extends Model<HealthUsers> {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     public String getOrgName() {
@@ -68,6 +79,7 @@ public class HealthUsers extends Model<HealthUsers> {
         return "HealthUsers{" +
         ", id=" + id +
         ", name=" + name +
+        ", sex=" + sex +
         ", orgName=" + orgName +
         ", count=" + count +
         "}";

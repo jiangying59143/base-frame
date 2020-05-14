@@ -86,6 +86,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
             Map<String, String> personInfoMap = this.getPersonInfo(healthUser.getName(), healthUser.getOrgName());
+            personInfoMap.put("sex", healthUser.getSex());
             int count = healthUser.getCount();
             if(count >= 10){
                 return;
@@ -150,12 +151,12 @@ public class HealthCareServiceImpl implements HealthCareService {
         Map<String, String> map = new HashMap<>();
         Random random = new Random();
         String age = Arrays.asList("20～25岁以下", "25～30岁以下", "30～35岁以下", "35～40岁以下", "40～45岁以下").get(random.nextInt(5));
-        String sex = Arrays.asList("男", "女").get(random.nextInt(2));
+//        String sex = Arrays.asList("男", "女").get(random.nextInt(2));
         String education = Arrays.asList("小学", "初中", "高中/职高/中专", "大专/本科").get(random.nextInt(2));
         String job = Arrays.asList("教师", "饮食服务", "商业服务", "医务人员", "公司管理").get(random.nextInt(5));
         map.put("name", name);
         map.put("age", age);
-        map.put("sex", sex);
+//        map.put("sex", sex);
         map.put("education", education);
         map.put("job", job);
         map.put("orgName", orgName);
