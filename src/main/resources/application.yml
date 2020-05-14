@@ -54,6 +54,8 @@ spring:
 
 mybatis-plus:
   typeAliasesPackage: com.yjiang.base.modular.system.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
 
 log:
   path: frame-logs

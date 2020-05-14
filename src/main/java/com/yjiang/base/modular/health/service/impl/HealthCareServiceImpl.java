@@ -66,7 +66,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-//    @Scheduled(cron="*/1 * * * * ?")
+//    @Scheduled(cron="* 17 * * * ?")
     @Scheduled(cron="0 0 7 * * ?")
     public void process() throws IOException {
         System.out.println("health care start");
@@ -78,8 +78,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 //            e.printStackTrace();
 //        }
 
-//        int personNum = random.nextInt(31) + 20;
-        int personNum = 2;
+        int personNum = random.nextInt(31) + 20;
 
         Wrapper<HealthUsers>  wrapper = new EntityWrapper<>();
         wrapper.and("`count` < 10").orderBy("id");
@@ -93,11 +92,10 @@ public class HealthCareServiceImpl implements HealthCareService {
             }
             for (int i = count+1; i <= 10; i++) {
                 personInfoMap.put("index", String.valueOf(i));
-                boolean fineFlag = atomOperation(personInfoMap);
-                if(fineFlag) {
-                    healthUser.setCount(healthUser.getCount() + 1);
-                    healthUsersService.updateById(healthUser);
-                }
+                atomOperation(personInfoMap);
+                healthUser.setCount(healthUser.getCount() + 1);
+                healthUsersService.updateById(healthUser);
+                System.out.println(healthUser.getName() + "完成第" + i + "遍数" );
             }
         }
 
@@ -105,7 +103,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     }
 
-    private boolean atomOperation(Map<String, String> personInfoMap){
+    private void atomOperation(Map<String, String> personInfoMap){
         boolean fineFlag = false;
         while(!fineFlag) {
             try {
@@ -127,7 +125,6 @@ public class HealthCareServiceImpl implements HealthCareService {
                 e.printStackTrace();
             }
         }
-        return fineFlag;
     }
 
     public void processSingle(Map<String, String> personInfoMap) throws IOException {
