@@ -72,11 +72,11 @@ public class HealthCareServiceImpl implements HealthCareService {
         System.out.println("health care start");
         //等待时间,模拟任意时间 7-17
         Random random = new Random();
-//        try {
-//            Thread.sleep(random.nextInt(3600*10) * 1000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            Thread.sleep(random.nextInt(3600*10) * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         int personNum = random.nextInt(31) + 20;
 
