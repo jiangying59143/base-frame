@@ -167,7 +167,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
         doTest(questionBankList, questionCount, wrongItems);
         submit(questionCount);
-        this.processReport(questionCount, questionBankList);
+        this.processReport(questionCount, questionBankList, wrongItems);
         ChromeDriveUtils.screenShotLong(driver, appName, personInfoMap.get("name").toString(), personInfoMap.get("index").toString());
         driver.close();
 
@@ -223,7 +223,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         confirm.accept();
     }
 
-    public void processReport(int totalQuestionCount, List<Health> questionBankList){
+    public void processReport(int totalQuestionCount, List<Health> questionBankList, List<Integer> wrongItems){
         List<String> questionTitles = questionBankList.stream().map(Health::getTitle).collect(Collectors.toList());
         for (int questionIndex = 1;questionIndex <= totalQuestionCount; questionIndex++) {
             Map<String, String> questionAndSelection = this.getTitleAndAnswers(questionIndex, true);
@@ -233,7 +233,7 @@ public class HealthCareServiceImpl implements HealthCareService {
             List<String> correctSelectionDetails = this.getSelectionsDetails(questionAndSelection, correctSelections, true);
             List<String> selectionDetials = this.getSelectionsDetails(questionAndSelection, correctSelections, false);
 
-            if(isMissed(questionIndex)){
+            if(isMissed(questionIndex) && !wrongItems.contains(questionIndex)){
                 logger.info("错题集:");
                 logger.info("title: " + title);
                 logger.info("selectionDetials: " + Arrays.toString(selectionDetials.toArray()));
@@ -241,7 +241,7 @@ public class HealthCareServiceImpl implements HealthCareService {
             }
 
             if(!questionTitles.contains(title)
-                    || isMissed(questionIndex)) {
+                    || isMissed(questionIndex) && !wrongItems.contains(questionIndex)) {
                 Health health = new Health();
                 health.setTitle(title);
                 health.setAnswers("[\"" + correctSelectionDetails.stream().collect(Collectors.joining("\", \"")) + "\"]");
