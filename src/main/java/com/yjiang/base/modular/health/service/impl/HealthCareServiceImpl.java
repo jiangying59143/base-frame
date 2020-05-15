@@ -52,13 +52,20 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     private String diverPath = "/root/driver/chromedriver";
 
-    public static void main(String[] args) {
-        List<String> correctSelectionDetails = Arrays.asList("1", "2");
-        String s = "[\"" + correctSelectionDetails.stream().collect(Collectors.joining("\", \"")) + "\"]";
-        System.out.println(s);
-        for (String s1 : s.substring(2, s.length()-2).split("\",\"")) {
-            System.out.println(s1);
+    @Scheduled(cron="0 0 7 * * ?")
+    public void scheduleProcess(){
+        System.out.println("health care automation started");
+        //等待时间,模拟任意时间 7-17
+        Random random = new Random();
+        try {
+            Thread.sleep(random.nextInt(3600*10) * 1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        int personNum = random.nextInt(31) + 20;
+        process(personNum, true);
+        System.out.println("health care automation ended");
     }
 
     public void init() {
@@ -84,47 +91,36 @@ public class HealthCareServiceImpl implements HealthCareService {
         driver.get(url);
     }
 
-    @Scheduled(cron="0 0 7 * * ?")
-    public void scheduleProcess(){
-        System.out.println("health care start");
-        //等待时间,模拟任意时间 7-17
-        Random random = new Random();
-        try {
-            Thread.sleep(random.nextInt(3600*10) * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        int personNum = random.nextInt(31) + 20;
-        process(personNum, true);
-    }
-
     @Override
     public void process(int personNum, boolean wrongSet) {
         Wrapper<HealthUsers>  wrapper = new EntityWrapper<>();
         wrapper.and("`count` < 10").orderBy("id");
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
-            Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
-            personInfoMap.put("wrongSet", wrongSet);
-            int count = healthUser.getCount();
-            if(count >= 10){
-                return;
-            }
-            for (int i = count+1; i <= 10; i++) {
-                personInfoMap.put("index", String.valueOf(i));
-                atomOperation(personInfoMap);
-                healthUser.setCount(i);
-                healthUser.setAge(personInfoMap.get("age").toString());
-                healthUser.setEducation(personInfoMap.get("education").toString());
-                healthUser.setJob(personInfoMap.get("job").toString());
-                healthUsersService.updateById(healthUser);
-                System.out.println(healthUser.getName() + "完成第" + i + "遍数" );
-            }
+            singlePersonProcess(healthUser, wrongSet);
         }
 
         System.out.println("health care end");
 
+    }
+
+    private void singlePersonProcess(HealthUsers healthUser,boolean wrongSet){
+        Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
+        personInfoMap.put("wrongSet", wrongSet);
+        int count = healthUser.getCount();
+        if(count >= 10){
+            return;
+        }
+        for (int i = count+1; i <= 10; i++) {
+            personInfoMap.put("index", String.valueOf(i));
+            atomOperation(personInfoMap);
+            healthUser.setCount(i);
+            healthUser.setAge(personInfoMap.get("age").toString());
+            healthUser.setEducation(personInfoMap.get("education").toString());
+            healthUser.setJob(personInfoMap.get("job").toString());
+            healthUsersService.updateById(healthUser);
+            System.out.println(healthUser.getName() + "完成第" + i + "遍数" );
+        }
     }
 
     private void atomOperation(Map<String, Object> personInfoMap){

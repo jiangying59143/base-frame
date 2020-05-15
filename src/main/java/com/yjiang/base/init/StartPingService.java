@@ -14,7 +14,10 @@ public class StartPingService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        healthCareService.process(2, false);
+        System.out.println("health care with high score automation started");
+        healthCareService.process(1, false);
+        System.out.println("health care with low score automation started");
+        healthCareService.process(1, true);
     }
 
 }
