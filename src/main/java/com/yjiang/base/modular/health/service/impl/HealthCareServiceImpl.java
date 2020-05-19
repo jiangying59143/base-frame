@@ -173,8 +173,8 @@ public class HealthCareServiceImpl implements HealthCareService {
         Map<String, Object> map = new HashMap<>();
         Random random = new Random();
         String age = Arrays.asList("20～25岁以下", "25～30岁以下", "30～35岁以下", "35～40岁以下", "40～45岁以下").get(random.nextInt(5));
-        String education = Arrays.asList("小学", "初中", "高中/职高/中专", "大专/本科").get(random.nextInt(2));
-        String job = Arrays.asList("教师", "饮食服务", "商业服务", "医务人员", "公司管理").get(random.nextInt(5));
+        String education = Arrays.asList("小学", "初中", "高中/职高/中专").get(random.nextInt(3));
+        String job = Arrays.asList("工人", "民工", "农民").get(random.nextInt(3));
         map.put("name", healthUser.getName());
         map.put("age", StringUtils.isNotBlank(healthUser.getAge()) ? healthUser.getAge() : age);
         map.put("sex", healthUser.getSex());
