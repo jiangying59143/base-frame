@@ -63,7 +63,7 @@ public class HealthCareServiceImpl implements HealthCareService {
             e.printStackTrace();
         }
 
-        int personNum = random.nextInt(31) + 20;
+        int personNum = random.nextInt(31) + 40;
         process(personNum, true);
         System.out.println("health care automation ended");
     }
