@@ -51,8 +51,6 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     private String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
-    private String diverPath = "/root/driver/chromedriver";
-
     @Scheduled(cron="0 0 7 * * ?")
     public void scheduleProcess(){
         System.out.println("health care automation started");
