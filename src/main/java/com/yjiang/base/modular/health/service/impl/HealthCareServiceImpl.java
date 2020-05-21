@@ -85,8 +85,8 @@ public class HealthCareServiceImpl implements HealthCareService {
 
         driver = new ChromeDriver(chromeService, options);
         driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
-        //定位对象时给10s 的时间, 如果10s 内还定位不到则抛出异常
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        //定位对象时给10s 的时间, 如果10s 内还定位不到则抛出异常 不注释会报org.openqa.selenium.TimeoutException: timeout
+        //        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(3, TimeUnit.SECONDS);
         driver.get(url);
     }
