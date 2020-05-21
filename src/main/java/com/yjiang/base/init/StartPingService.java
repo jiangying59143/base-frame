@@ -24,7 +24,7 @@ public class StartPingService implements CommandLineRunner {
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
-                MailUtils.sendSimpleMail("907292671@qq.com", "healthCare " + e.getMessage(), healthCareService.diverPath);
+                MailUtils.sendSimpleMail("907292671@qq.com", "healthCare " + e.getMessage(), healthCareService.url);
                 try {
                     Thread.sleep(600 * 1000);
                 } catch (InterruptedException x) {

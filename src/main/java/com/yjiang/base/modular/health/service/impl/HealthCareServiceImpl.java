@@ -49,7 +49,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     private String appName = "health";
 
-    private String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
+    String diverPath = "/root/driver/chromedriver";
 
     @Scheduled(cron="0 0 7 * * ?")
     public void scheduleProcess(){
@@ -69,7 +69,7 @@ public class HealthCareServiceImpl implements HealthCareService {
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
-                MailUtils.sendSimpleMail("907292671@qq.com", "healthCare " + e.getMessage(), diverPath);
+                MailUtils.sendSimpleMail("907292671@qq.com", "healthCare " + e.getMessage(), url);
                 try {
                     Thread.sleep(1800 * 1000);
                 } catch (InterruptedException x) {
