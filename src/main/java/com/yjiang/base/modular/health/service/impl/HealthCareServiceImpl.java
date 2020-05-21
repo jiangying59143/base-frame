@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.yjiang.base.core.util.ChromeDriveUtils;
+import com.yjiang.base.core.util.MailUtils;
 import com.yjiang.base.modular.HealthUsers.service.IHealthUsersService;
 import com.yjiang.base.modular.health.service.HealthCareService;
 import com.yjiang.base.modular.health.service.IHealthService;
@@ -70,6 +71,7 @@ public class HealthCareServiceImpl implements HealthCareService {
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
+                MailUtils.sendSimpleMail("907292671@qq.com", "healthCare " + e.getMessage(), diverPath);
                 try {
                     Thread.sleep(1800 * 1000);
                 } catch (InterruptedException x) {
