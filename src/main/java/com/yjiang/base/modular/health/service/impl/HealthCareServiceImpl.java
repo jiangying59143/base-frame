@@ -64,35 +64,52 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
 
         int personNum = random.nextInt(31) + 40;
-        process(personNum, true);
+        for (int i = 0; i < 5; i++) {
+            try {
+                process(personNum, true);
+                break;
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    Thread.sleep(1800 * 1000);
+                } catch (InterruptedException x) {
+                    x.printStackTrace();
+                }
+            }
+        }
+
         System.out.println("health care automation ended");
     }
 
-    public void init() {
-        System.setProperty("webdriver.chrome.driver",diverPath);
-        ChromeOptions options = new ChromeOptions();
-        if(!"local".equals(activeProfile)) {
-            options.addArguments("--headless", "--no-sandbox", "--disable-gpu", "--whitelisted-ips");
-        }
+    public void init() throws Exception {
+        try {
+            System.setProperty("webdriver.chrome.driver", diverPath);
+            ChromeOptions options = new ChromeOptions();
+            if (!"local".equals(activeProfile)) {
+                options.addArguments("--headless", "--no-sandbox", "--disable-gpu", "--whitelisted-ips");
+            }
 
-        ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
-        ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(3333).build();
-        try{
-            chromeService.start();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+            ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
+            ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(3333).build();
+            try {
+                chromeService.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-        driver = new ChromeDriver(chromeService, options);
-        driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
-        //定位对象时给10s 的时间, 如果10s 内还定位不到则抛出异常 不注释会报org.openqa.selenium.TimeoutException: timeout
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        driver.manage().timeouts().setScriptTimeout(3, TimeUnit.SECONDS);
-        driver.get(url);
+            driver = new ChromeDriver(chromeService, options);
+            driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+            //定位对象时给10s 的时间, 如果10s 内还定位不到则抛出异常 不注释会报org.openqa.selenium.TimeoutException: timeout
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            driver.manage().timeouts().setScriptTimeout(3, TimeUnit.SECONDS);
+            driver.get(url);
+        }catch(Exception e){
+            throw new Exception("webdriver 初始化失败，应该是网站无法访问");
+        }
     }
 
     @Override
-    public void process(int personNum, boolean wrongSet) {
+    public void process(int personNum, boolean wrongSet) throws Exception {
         Wrapper<HealthUsers>  wrapper = new EntityWrapper<>();
         wrapper.and("`count` < 10").orderBy("id");
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
@@ -104,7 +121,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     }
 
-    private void singlePersonProcess(HealthUsers healthUser,boolean wrongSet){
+    private void singlePersonProcess(HealthUsers healthUser,boolean wrongSet) throws Exception {
         Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
         personInfoMap.put("wrongSet", wrongSet);
         int count = healthUser.getCount();
@@ -123,7 +140,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
     }
 
-    private void atomOperation(Map<String, Object> personInfoMap){
+    private void atomOperation(Map<String, Object> personInfoMap) throws Exception {
         boolean fineFlag = false;
         while(!fineFlag) {
             this.init();
