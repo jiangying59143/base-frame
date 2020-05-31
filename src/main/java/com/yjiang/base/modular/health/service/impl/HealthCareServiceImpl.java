@@ -31,8 +31,8 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@Service
 @EnableScheduling
+@Service("HealthCareServiceImpl")
 public class HealthCareServiceImpl implements HealthCareService {
     private static Logger logger = LoggerFactory.getLogger(HealthCareServiceImpl.class);
 
@@ -45,11 +45,13 @@ public class HealthCareServiceImpl implements HealthCareService {
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
-    private ChromeDriver driver;
+    protected ChromeDriver driver;
 
-    private String appName = "health";
+    protected String appName = "health";
 
     String diverPath = "/root/driver/chromedriver";
+
+    String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
     @Scheduled(cron="0 0 7 * * ?")
     public void scheduleProcess(){
@@ -69,7 +71,7 @@ public class HealthCareServiceImpl implements HealthCareService {
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
-                MailUtils.sendSimpleMail("907292671@qq.com", "healthCare " + e.getMessage(), url);
+                MailUtils.sendSimpleMail("907292671@qq.com", "healthCare " + e.getMessage(), getUrl());
                 try {
                     Thread.sleep(1800 * 1000);
                 } catch (InterruptedException x) {
@@ -81,6 +83,10 @@ public class HealthCareServiceImpl implements HealthCareService {
         System.out.println("health care automation ended");
     }
 
+    public String getAppName(){
+        return appName;
+    }
+
     public void init() throws Exception {
         try {
             System.setProperty("webdriver.chrome.driver", diverPath);
@@ -90,7 +96,7 @@ public class HealthCareServiceImpl implements HealthCareService {
             }
 
             ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
-            ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(3333).build();
+            ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(getPort()).build();
             try {
                 chromeService.start();
             } catch (IOException e) {
@@ -102,16 +108,25 @@ public class HealthCareServiceImpl implements HealthCareService {
             //定位对象时给10s 的时间, 如果10s 内还定位不到则抛出异常 不注释会报org.openqa.selenium.TimeoutException: timeout
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             driver.manage().timeouts().setScriptTimeout(3, TimeUnit.SECONDS);
-            driver.get(url);
+            driver.get(getUrl());
         }catch(Exception e){
             throw new Exception("webdriver 初始化失败，应该是网站无法访问");
         }
     }
 
-    @Override
-    public void process(int personNum, boolean wrongSet) throws Exception {
+    public int getPort(){
+        return 3333;
+    }
+
+    public Wrapper<HealthUsers> getUsersWrapper(){
         Wrapper<HealthUsers>  wrapper = new EntityWrapper<>();
         wrapper.and("`count` < 10").orderBy("id");
+        return wrapper;
+    }
+
+    @Override
+    public void process(int personNum, boolean wrongSet) throws Exception {
+        Wrapper<HealthUsers>  wrapper = getUsersWrapper();
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
             singlePersonProcess(healthUser, wrongSet);
@@ -121,23 +136,40 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     }
 
+    @Override
+    public String getUrl() {
+        return url;
+    }
+
+    public int getPersonCount(){
+        return 10;
+    }
+
+    public int getCount(HealthUsers healthUser){
+        return healthUser.getCount();
+    }
+
     private void singlePersonProcess(HealthUsers healthUser,boolean wrongSet) throws Exception {
         Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
         personInfoMap.put("wrongSet", wrongSet);
-        int count = healthUser.getCount();
-        if(count >= 10){
+        int count = getCount(healthUser);
+        if(count >= getPersonCount()){
             return;
         }
-        for (int i = count+1; i <= 10; i++) {
+        for (int i = count+1; i <= getPersonCount(); i++) {
             personInfoMap.put("index", String.valueOf(i));
             atomOperation(personInfoMap);
-            healthUser.setCount(i);
-            healthUser.setAge(personInfoMap.get("age").toString());
-            healthUser.setEducation(personInfoMap.get("education").toString());
-            healthUser.setJob(personInfoMap.get("job").toString());
+            update(healthUser, i, personInfoMap);
             healthUsersService.updateById(healthUser);
             System.out.println(healthUser.getName() + "完成第" + i + "遍数" );
         }
+    }
+
+    public void update(HealthUsers healthUser, int i, Map<String, Object> personInfoMap){
+        healthUser.setCount(i);
+        healthUser.setAge(personInfoMap.get("age").toString());
+        healthUser.setEducation(personInfoMap.get("education").toString());
+        healthUser.setJob(personInfoMap.get("job").toString());
     }
 
     private void atomOperation(Map<String, Object> personInfoMap) throws Exception {
@@ -148,13 +180,18 @@ public class HealthCareServiceImpl implements HealthCareService {
                 processSingle(personInfoMap);
                 fineFlag = true;
             } catch (Exception e) {
-                try {
-                    driver.close();
-                }catch (Exception ex){
-                    ex.printStackTrace();
-                }finally {
-                    fineFlag = false;
+                if(!"local".equals(activeProfile)) {
+                    try {
+                        driver.close();
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        fineFlag = false;
+                        e.printStackTrace();
+                    }
+                }else {
                     e.printStackTrace();
+                    fineFlag = true;
                 }
             }
             try {
@@ -165,6 +202,10 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
     }
 
+    public int getQuestionCount(){
+        return Integer.parseInt(driver.findElementById("__subjectCount").getText());
+    }
+
     public void processSingle(Map<String, Object> personInfoMap) throws IOException {
         List<Health> questionBankList = healthService.selectList(new EntityWrapper<>());
         login(personInfoMap.get("name").toString(),
@@ -173,20 +214,23 @@ public class HealthCareServiceImpl implements HealthCareService {
                 personInfoMap.get("education").toString(),
                 personInfoMap.get("job").toString(),
                 personInfoMap.get("orgName").toString());
-        int questionCount = Integer.parseInt(driver.findElementById("__subjectCount").getText());
+        int questionCount = getQuestionCount();
         List<Integer> wrongItems = new ArrayList<>();
         if((boolean)personInfoMap.get("wrongSet")){
-            wrongItems = getRandomNumbers(questionCount,1 + new Random().nextInt(questionCount/3 + 1));
+            int randomNum = new Random().nextInt(questionCount/3 + 1);
+            if(randomNum > 0) {
+                wrongItems = getRandomNumbers(questionCount, randomNum);
+            }
         }
         doTest(questionBankList, questionCount, wrongItems);
         submit(questionCount);
         this.processReport(questionCount, questionBankList, wrongItems);
-        ChromeDriveUtils.screenShotLong(driver, appName, personInfoMap.get("name").toString(), personInfoMap.get("index").toString());
+        ChromeDriveUtils.screenShotLong(driver, getAppName(), personInfoMap.get("name").toString(), personInfoMap.get("index").toString());
         driver.close();
 
     }
 
-    private Map<String, Object> getPersonInfo(HealthUsers healthUser){
+    public Map<String, Object> getPersonInfo(HealthUsers healthUser){
         Map<String, Object> map = new HashMap<>();
         Random random = new Random();
         String age = Arrays.asList("20～25岁以下", "25～30岁以下", "30～35岁以下", "35～40岁以下", "40～45岁以下").get(random.nextInt(5));
@@ -292,7 +336,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
     }
 
-    private Map<String, String> getTitleAndAnswers(int questionIndex, boolean isScoreReport) {
+    public Map<String, String> getTitleAndAnswers(int questionIndex, boolean isScoreReport) {
         Map<String, String> title_and_answers = new HashMap<>();
         String this_title_html = driver.findElementByXPath(
                 "//li[@id='E" + questionIndex + "'][@style='display: block;']/table[1]/tbody[1]/tr[1]/td[1]/div[@class='ECnt']")
@@ -339,7 +383,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         return correctSelections;
     }
 
-    private void setAnswersToQuestion(List<String> correctSelections, int questionIndex, List<Integer> wrongItems){
+    public void setAnswersToQuestion(List<String> correctSelections, int questionIndex, List<Integer> wrongItems){
         String questionType = driver
                 .findElementByXPath("//li[@id='E" + questionIndex + "'][@style='display: block;']/table[1]/tbody[1]/tr[1]/td[1]/div[@class='ECnt']/b[1]")
                 .getText().trim();

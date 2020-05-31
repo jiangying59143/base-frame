@@ -12,11 +12,12 @@
         <result column="job" property="job" />
         <result column="org_name" property="orgName" />
         <result column="count" property="count" />
+        <result column="nutrition" property="nutrition" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, age, sex, education, job, org_name, count
+        id, name, age, sex, education, job, org_name, count, nutrition
     </sql>
 
 </mapper>

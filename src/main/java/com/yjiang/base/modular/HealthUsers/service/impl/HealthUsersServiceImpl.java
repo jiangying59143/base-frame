@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author jiangying
- * @since 2020-05-14
+ * @since 2020-05-30
  */
 @Service
 public class HealthUsersServiceImpl extends ServiceImpl<HealthUsersMapper, HealthUsers> implements IHealthUsersService {

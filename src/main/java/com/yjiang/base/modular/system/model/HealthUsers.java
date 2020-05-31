@@ -13,7 +13,7 @@ import java.io.Serializable;
  * </p>
  *
  * @author jiangying
- * @since 2020-05-14
+ * @since 2020-05-30
  */
 @TableName("health_users")
 public class HealthUsers extends Model<HealthUsers> {
@@ -30,6 +30,7 @@ public class HealthUsers extends Model<HealthUsers> {
     @TableField("org_name")
     private String orgName;
     private Integer count;
+    private Integer nutrition;
 
 
     public Integer getId() {
@@ -96,6 +97,14 @@ public class HealthUsers extends Model<HealthUsers> {
         this.count = count;
     }
 
+    public Integer getNutrition() {
+        return nutrition;
+    }
+
+    public void setNutrition(Integer nutrition) {
+        this.nutrition = nutrition;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
@@ -112,6 +121,7 @@ public class HealthUsers extends Model<HealthUsers> {
         ", job=" + job +
         ", orgName=" + orgName +
         ", count=" + count +
+        ", nutrition=" + nutrition +
         "}";
     }
 }
