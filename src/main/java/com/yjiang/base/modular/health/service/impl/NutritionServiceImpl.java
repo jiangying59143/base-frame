@@ -115,23 +115,14 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
 
 
     public void doTest(List<Health> questionBankList, int questionCount, List<Integer> wrongItems){
-        int i=0;
         String[] answers = driver.findElementById("subject1Type").getAttribute("value").split(",");
-        while(true){
+        for (int i = 0; i < answers.length; i++) {
             if("null".equals(answers[i])){
                 driver.findElementById("A" + i).click();
             }else{
                 answerSingleQuestion(answers, i, wrongItems);
             }
-            i++;
-            if(driver.findElementById("jd").getText().contains("100")){
-                break;
-            }
-//            driver.findElementByXPath("//img[@onclick='down(" + (i+1) + ")']").click();
-            ;
         }
-        answerSingleQuestion(answers, i, wrongItems);
-
     }
 
     private void answerSingleQuestion(String[] answers, int i, List<Integer> wrongItems){
