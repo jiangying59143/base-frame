@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -108,13 +109,17 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         driver.findElementById("log_img").click();
     }
 
+    public List<Health> getQuestionBankList(){
+        return null;
+    }
+
     public int getQuestionCount(){
         String[] answers = driver.findElementById("subject1Type").getAttribute("value").split(",");
         return answers.length;
     }
 
 
-    public void doTest(List<Health> questionBankList, int questionCount, List<Integer> wrongItems){
+    public void doTest(List<Health> questionBankList, int questionCount, List<Integer> wrongItems, Map<String, Object> personInfoMap) {
         String[] answers = driver.findElementById("subject1Type").getAttribute("value").split(",");
         for (int i = 0; i < answers.length; i++) {
             if("null".equals(answers[i])){
@@ -122,6 +127,11 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
             }else{
                 answerSingleQuestion(answers, i, wrongItems);
             }
+        }
+        try {
+            screenShot(personInfoMap.get("name").toString(), "last");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

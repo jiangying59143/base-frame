@@ -207,7 +207,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     public void processSingle(Map<String, Object> personInfoMap) throws IOException {
-        List<Health> questionBankList = healthService.selectList(new EntityWrapper<>());
+        List<Health> questionBankList = getQuestionBankList();
         login(personInfoMap.get("name").toString(),
                 personInfoMap.get("age").toString(),
                 personInfoMap.get("sex").toString(),
@@ -222,12 +222,19 @@ public class HealthCareServiceImpl implements HealthCareService {
                 wrongItems = getRandomNumbers(questionCount, randomNum);
             }
         }
-        doTest(questionBankList, questionCount, wrongItems);
+        doTest(questionBankList, questionCount, wrongItems, personInfoMap);
         submit(questionCount);
         this.processReport(questionCount, questionBankList, wrongItems);
-        ChromeDriveUtils.screenShotLong(driver, getAppName(), personInfoMap.get("name").toString(), personInfoMap.get("index").toString());
+        screenShot(personInfoMap.get("name").toString(), personInfoMap.get("index").toString());
         driver.close();
+    }
 
+    public void screenShot(String name, String index) throws IOException {
+        ChromeDriveUtils.screenShotLong(driver, getAppName(), name, index);
+    }
+
+    public List<Health> getQuestionBankList(){
+        return healthService.selectList(new EntityWrapper<>());
     }
 
     public Map<String, Object> getPersonInfo(HealthUsers healthUser){
@@ -266,7 +273,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         driver.findElementById("log_img").click();
     }
 
-    public void doTest(List<Health> questionBankList, int questionCount, List<Integer> wrongItems){
+    public void doTest(List<Health> questionBankList, int questionCount, List<Integer> wrongItems, Map<String, Object> personInfoMap){
         for (int questionIndex = 1; questionIndex <= questionCount; questionIndex++) {
             Map<String, String> questionAndSelection = this.getTitleAndAnswers(questionIndex, false);
             List<String> correctSelections = this.getCorrectSelections(questionBankList, questionAndSelection);
