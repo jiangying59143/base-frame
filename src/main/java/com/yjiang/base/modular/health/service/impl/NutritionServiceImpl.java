@@ -25,7 +25,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
     @Resource
     private IHealthUsersService healthUsersService;
 
-    @Scheduled(cron="0 15 12 * * ?")
+    @Scheduled(cron="0 24 12 * * ?")
     public void scheduleProcess(){
         System.out.println("Nutrition automation started");
 

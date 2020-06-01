@@ -29,7 +29,7 @@ public class StartPingService implements CommandLineRunner {
 //                nutritionService.singlePersonProcess(new HealthUsers(0, "曹兴亚", "55～60岁以下", "男", "高中/职高/中专","医务人员", "", 0, 0), false, false);
 //                nutritionService.singlePersonProcess(new HealthUsers(0, "王震", "45～50岁以下", "男", "高中/职高/中专","医务人员", "", 0, 0), false, false);
                 nutritionService.process(1, true);
-                healthCareService.process(1, true);
+//                healthCareService.process(1, true);
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
