@@ -20,7 +20,7 @@ public class StartPingService implements CommandLineRunner {
     HealthCareService healthCareService;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         for (int i = 0; i < 5; i++) {
             try {
 //                nutritionService.singlePersonProcess(new HealthUsers(0, "王冬梅", "25～30岁以下", "女", "大专/本科","医务人员", "", 0, 0), false, false);
@@ -28,8 +28,20 @@ public class StartPingService implements CommandLineRunner {
 //                nutritionService.singlePersonProcess(new HealthUsers(0, "王树喜", "55～60岁以下", "男", "高中/职高/中专","医务人员", "", 0, 0), false, false);
 //                nutritionService.singlePersonProcess(new HealthUsers(0, "曹兴亚", "55～60岁以下", "男", "高中/职高/中专","医务人员", "", 0, 0), false, false);
 //                nutritionService.singlePersonProcess(new HealthUsers(0, "王震", "45～50岁以下", "男", "高中/职高/中专","医务人员", "", 0, 0), false, false);
-                nutritionService.process(1, true);
-//                healthCareService.process(1, true);
+                new Thread(() -> {
+                    try {
+                        nutritionService.process(1, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+                new Thread(() -> {
+                    try {
+                        healthCareService.process(1, true);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
                 break;
             } catch (Exception e) {
                 e.printStackTrace();

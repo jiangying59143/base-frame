@@ -55,16 +55,16 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
-    @Scheduled(cron="0 0 7 * * ?")
+    @Scheduled(cron="0 32 7 * * ?")
     public void scheduleProcess(){
         System.out.println("health care automation started");
         //等待时间,模拟任意时间 7-17
         Random random = new Random();
-        try {
-            Thread.sleep(random.nextInt(3600*10) * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(random.nextInt(3600*10) * 1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         int personNum = random.nextInt(31) + 40;
         for (int i = 0; i < 5; i++) {
