@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author jiangying
@@ -32,6 +32,17 @@ public class HealthUsers extends Model<HealthUsers> {
     private Integer count;
     private Integer nutrition;
 
+    public HealthUsers(Integer id, String name, String age, String sex, String education, String job, String orgName, Integer count, Integer nutrition) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.education = education;
+        this.job = job;
+        this.orgName = orgName;
+        this.count = count;
+        this.nutrition = nutrition;
+    }
 
     public Integer getId() {
         return id;

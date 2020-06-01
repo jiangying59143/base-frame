@@ -25,7 +25,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
     @Resource
     private IHealthUsersService healthUsersService;
 
-    @Scheduled(cron="0 0 7 * * ?")
+    @Scheduled(cron="0 15 12 * * ?")
     public void scheduleProcess(){
         System.out.println("Nutrition automation started");
 
@@ -56,7 +56,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
 
     @Override
     public String getUrl() {
-        return "http://jscdc.cn/KABPWeb2011/paperTest1/createPagerForSafety.action";
+        return "http://www.jscdc.cn/KABPWeb2011/paperTest1/createPagerForSafety.action";
     }
 
     @Override

@@ -49,6 +49,8 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     protected String appName = "health";
 
+//    String diverPath = "C://temp/chromedriver.exe";
+
     String diverPath = "/root/driver/chromedriver";
 
     String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
@@ -129,7 +131,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         Wrapper<HealthUsers>  wrapper = getUsersWrapper();
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
-            singlePersonProcess(healthUser, wrongSet);
+            singlePersonProcess(healthUser, wrongSet, true);
         }
 
         System.out.println("health care end");
@@ -149,7 +151,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         return healthUser.getCount();
     }
 
-    private void singlePersonProcess(HealthUsers healthUser,boolean wrongSet) throws Exception {
+    public void singlePersonProcess(HealthUsers healthUser,boolean wrongSet, boolean needUpdate) throws Exception {
         Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
         personInfoMap.put("wrongSet", wrongSet);
         int count = getCount(healthUser);
@@ -159,8 +161,9 @@ public class HealthCareServiceImpl implements HealthCareService {
         for (int i = count+1; i <= getPersonCount(); i++) {
             personInfoMap.put("index", String.valueOf(i));
             atomOperation(personInfoMap);
-            update(healthUser, i, personInfoMap);
-            healthUsersService.updateById(healthUser);
+            if(needUpdate) {
+                update(healthUser, i, personInfoMap);
+            }
             System.out.println(healthUser.getName() + "完成第" + i + "遍数" );
         }
     }
@@ -170,6 +173,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         healthUser.setAge(personInfoMap.get("age").toString());
         healthUser.setEducation(personInfoMap.get("education").toString());
         healthUser.setJob(personInfoMap.get("job").toString());
+        healthUsersService.updateById(healthUser);
     }
 
     private void atomOperation(Map<String, Object> personInfoMap) throws Exception {
