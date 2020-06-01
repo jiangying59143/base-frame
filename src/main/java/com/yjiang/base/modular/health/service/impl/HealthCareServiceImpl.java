@@ -163,6 +163,7 @@ public class HealthCareServiceImpl implements HealthCareService {
             atomOperation(personInfoMap);
             if(needUpdate) {
                 update(healthUser, i, personInfoMap);
+                healthUsersService.updateById(healthUser);
             }
             System.out.println(healthUser.getName() + "完成第" + i + "遍数" );
         }
@@ -173,7 +174,6 @@ public class HealthCareServiceImpl implements HealthCareService {
         healthUser.setAge(personInfoMap.get("age").toString());
         healthUser.setEducation(personInfoMap.get("education").toString());
         healthUser.setJob(personInfoMap.get("job").toString());
-        healthUsersService.updateById(healthUser);
     }
 
     private void atomOperation(Map<String, Object> personInfoMap) throws Exception {
