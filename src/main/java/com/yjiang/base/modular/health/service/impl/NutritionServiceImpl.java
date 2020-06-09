@@ -9,7 +9,6 @@ import com.yjiang.base.modular.system.model.HealthUsers;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,7 +24,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
     @Resource
     private IHealthUsersService healthUsersService;
 
-    @Scheduled(cron="0 21 8 * * ?")
+//    @Scheduled(cron="0 21 8 * * ?")
     public void scheduleProcess(){
         System.out.println("Nutrition automation started");
 
