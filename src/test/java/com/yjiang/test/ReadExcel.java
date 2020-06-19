@@ -1,18 +1,19 @@
 package com.yjiang.test;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 public class ReadExcel {
-    public static void main(String[] args) throws IOException {
-        List<Map<String,String>> list1 = readFile("C:/Users/yjiang/Documents/WeChat Files/jiangying59143/FileStorage/File/2020-06/2019东小店.xlsx", 0);
-        List<Map<String, String>> list2 = readFile("C:/Users/yjiang/Documents/WeChat Files/jiangying59143/FileStorage/File/2020-06/2019东小店.xlsx", 1);
+    public static void main(String[] args) throws Exception {
+        List<Map<String,String>> list1 = readFile("D:/2019东小店.xlsx", 0);
+        List<Map<String, String>> list2 = readFile("D:/2020 4-4上报新东小店乡低收入户签约 .xlsx", 0);
         List<Map<String, String>> l2 = new ArrayList<>();
         List<Map<String, String>> l1 = new ArrayList<>();
         for (Map<String, String> map2 : list2) {
@@ -49,6 +50,9 @@ public class ReadExcel {
             for (Map<String, String> map2 : l2) {
                 if(map1.get("姓名").equals(map2.get("姓名"))){
                     l3.add(map1);
+                    map2.put("贫困户属性", map1.get("贫困户\n" +
+                            "属性"));
+                    map2.put("行政村", map1.get("行政村"));
                     l4.add(map2);
                 }
             }
@@ -58,7 +62,8 @@ public class ReadExcel {
         for (Map<String, String> map2 : list2) {
             boolean flag = false;
             for (Map<String, String> map1 : list1) {
-                if((map1.get("姓名").equals(map2.get("姓名")) && map1.get("身份证号").contains(map2.get("身份证号")))){
+                if((map1.get("姓名").equals(map2.get("姓名")) && map1.get("身份证号").contains(map2.get("身份证号"))) || map2.containsKey("贫困户属性")){
+                    map2.put("行政村", map1.get("行政村"));
                     map2.put("贫困户属性", map1.get("贫困户\n" +
                             "属性"));
                     flag = true;
@@ -70,7 +75,7 @@ public class ReadExcel {
             }
         }
 
-        printList(list2, null, "贫困户属性", "贫困户属性");
+        printList(list2, null, "贫困户属性", "行政村", "贫困户属性");
     }
 
     public static List<Map<String,String>> readFile(String fileName, int sheetNum) {
@@ -117,17 +122,21 @@ public class ReadExcel {
 
     }
 
-    public static void printList(List<Map<String,String>> list, List<Map<String,String>> list2, String name, String... s) throws IOException {
+    public static void printList(List<Map<String,String>> list, List<Map<String,String>> list2, String name, String... s) throws Exception {
         //遍历解析出来的list
         String filePath = "D:/2019-2020东小店数据.xlsx";
         File file = new File(filePath);
         if(!file.exists()){
-            file.createNewFile();
+            createExcel(filePath);
         }
         Workbook wb = getWorkbook(filePath);
         FileOutputStream fileOutputStream = new FileOutputStream(filePath);
-
-        Sheet sheet = wb.createSheet(name);
+        Sheet sheet = wb.getSheet("Sheet1");
+        if(sheet != null){
+            wb.setSheetName(0, name);
+        }else{
+            sheet = wb.createSheet(name);
+        }
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             Row row = sheet.createRow(i);
@@ -181,6 +190,26 @@ public class ReadExcel {
         }
         return wb;
     }
+
+    public static void createExcel(String path) throws Exception {
+        String extString = path.substring(path.lastIndexOf("."));
+        //创建Excel文件对象
+        Workbook wb = null;
+        if(".xls".equals(extString)){
+            wb = new HSSFWorkbook();
+        }else if(".xlsx".equals(extString)){
+            wb = new XSSFWorkbook();
+        }else{
+            return;
+        }
+        //用文件对象创建sheet对象  
+        Sheet sheet = wb.createSheet("Sheet1");
+        //输出Excel文件
+        FileOutputStream output = new FileOutputStream(path);
+        wb.write(output);
+        output.flush();
+    }
+
     public static Object getCellFormatValue(Cell cell){
         Object cellValue = null;
         if(cell!=null){
