@@ -265,6 +265,13 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>-->
 
+        <!-- 引入poi，解析workbook视图 -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.17</version>
+        </dependency>
+
     </dependencies>
 
     <build>
