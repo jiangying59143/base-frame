@@ -15,7 +15,7 @@ public class ReadExcel {
         List<Map<String, String>> list2 = readFile("C:/Users/yjiang/Documents/WeChat Files/jiangying59143/FileStorage/File/2020-06/2019东小店.xlsx", 1);
         List<Map<String, String>> l2 = new ArrayList<>();
         List<Map<String, String>> l1 = new ArrayList<>();
-        /*for (Map<String, String> map2 : list2) {
+        for (Map<String, String> map2 : list2) {
             boolean flag = false;
             for (Map<String, String> map1 : list1) {
                 if((map1.get("姓名").equals(map2.get("姓名")) && map1.get("身份证号").contains(map2.get("身份证号")))){
@@ -39,8 +39,8 @@ public class ReadExcel {
                 l1.add(map1);
             }
         }
-        printList(l2, null,"2020不在2019");
         printList(l1, null,"2019不在2020");
+        printList(l2, null,"2020不在2019");
 
         List<Map<String, String>> l3 = new ArrayList<>();
         List<Map<String, String>> l4 = new ArrayList<>();
@@ -53,7 +53,7 @@ public class ReadExcel {
                 }
             }
         }
-        printList(l3, l4, "名字相同");*/
+        printList(l3, l4, "名字相同");
 
         for (Map<String, String> map2 : list2) {
             boolean flag = false;
@@ -119,7 +119,7 @@ public class ReadExcel {
 
     public static void printList(List<Map<String,String>> list, List<Map<String,String>> list2, String name, String... s) throws IOException {
         //遍历解析出来的list
-        String filePath = "D:/test.xlsx";
+        String filePath = "D:/2019-2020东小店数据.xlsx";
         File file = new File(filePath);
         if(!file.exists()){
             file.createNewFile();
@@ -144,6 +144,9 @@ public class ReadExcel {
             }else {
                 row.createCell(0).setCellValue(map.get("姓名"));
                 row.createCell(1).setCellValue(map.get("身份证号"));
+                if(map.containsKey("贫困户\n" +"属性")){
+                    row.createCell(2).setCellValue(map.get("贫困户\n" +"属性"));
+                }
                 if(s != null){
                     for (int i1 = 1; i1 <= s.length; i1++) {
                         row.createCell(1+i1).setCellValue(map.get(s[i1-1]));
