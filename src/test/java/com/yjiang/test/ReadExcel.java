@@ -42,8 +42,8 @@ public class ReadExcel {
                 l1.add(map1);
             }
         }
-        printList(l1, "D:/建档导出比较.xlsx","导出不在建档",  "户主姓名", "成员姓名", "身份证号码");
-        printList(l2, "D:/建档导出比较.xlsx","建档不在导出", "姓名", "身份证号");
+        printList(l1, "D:/建档导出比较.xlsx","导出不在建档",  "户主姓名", "成员姓名", "身份证号码", "建档单位");
+        printList(l2, "D:/建档导出比较.xlsx","建档不在导出", "姓名", "身份证号", "行政村");
 /*
         List<Map<String, String>> l3 = new ArrayList<>();
         List<Map<String, String>> l4 = new ArrayList<>();
@@ -170,14 +170,20 @@ public class ReadExcel {
 
     public static void printList(List<Map<String,String>> list,String filePath, String sheetName, String... s) throws Exception {
         //遍历解析出来的list
+        Workbook wb;
         File file = new File(filePath);
         if(!file.exists()){
             createExcel(filePath);
+            wb = getWorkbook(filePath);
         }else{
-            file.delete();
-            createExcel(filePath);
+            wb = getWorkbook(filePath);
+            if(wb.getSheet(sheetName) != null) {
+                file.delete();
+                createExcel(filePath);
+                wb = getWorkbook(filePath);
+            }
         }
-        Workbook wb = getWorkbook(filePath);
+
         FileOutputStream fileOutputStream = new FileOutputStream(filePath);
         Sheet sheet = wb.getSheet("Sheet1");
         if(sheet != null){
