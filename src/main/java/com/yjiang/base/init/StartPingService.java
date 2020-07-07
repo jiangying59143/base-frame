@@ -20,11 +20,11 @@ public class StartPingService implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        try {
-            nutritionService.process(1, false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            nutritionService.process(1, false);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
 }
