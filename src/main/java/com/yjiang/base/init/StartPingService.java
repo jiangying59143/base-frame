@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 public class StartPingService implements CommandLineRunner {
 
     @Autowired
-    @Qualifier("NutritionServiceImpl")
-    HealthCareService nutritionService;
+    @Qualifier("HealthCareServiceImpl")
+    HealthCareService healthCareService;
 
     @Autowired
     @Qualifier("XieWeiServiceImpl")
@@ -20,11 +20,11 @@ public class StartPingService implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-//        try {
-//            nutritionService.process(1, false);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        try {
+            healthCareService.process(156, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

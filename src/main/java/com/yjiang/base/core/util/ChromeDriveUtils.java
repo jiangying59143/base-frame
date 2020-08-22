@@ -34,6 +34,10 @@ public class ChromeDriveUtils {
         Object scroll_width = driver_js.executeScript("return document.body.parentNode.scrollWidth");
         Object scroll_height = driver_js.executeScript("return document.body.parentNode.scrollHeight");
         driver.manage().window().setSize(new Dimension(Integer.parseInt(scroll_width.toString()), Integer.parseInt(scroll_height.toString())));
+        screenShot(driver, appName, folderName, fileName);
+    }
+
+    public static void screenShot(ChromeDriver driver, String appName, String folderName, String fileName) throws IOException {
         String dir_path = "/root/" + appName + "/" + folderName;
         File dir = new File(dir_path);
         if(!dir.exists()) {
