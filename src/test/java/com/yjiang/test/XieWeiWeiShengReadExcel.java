@@ -3,8 +3,6 @@ package com.yjiang.test;
 import com.yjiang.base.core.util.ChromeDriveUtils;
 import com.yjiang.base.core.util.PicRecognizeUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -25,54 +23,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class XieWeiReadExcel {
+public class XieWeiWeiShengReadExcel {
 
     public static void main(String[] args) throws Exception {
 
         ChromeDriver driver = init();
-
-
-
-        List<Map<String,String>> list = readFile("D://五组.xlsx", 0, getColunmNames());
         login(driver);
-        pageAccess(driver);
-        try {
-            familyProcess(driver);
-            int i = 0;
-            int count = 0;
-            Boolean isHuzhu = true;
-            for (Map<String, String> map : list) {
-                if(StringUtils.isNotBlank(map.get("huzhu"))){
-                    isHuzhu = true;
-                }
-                if(BooleanUtils.isTrue(isHuzhu)) {
-                    if (map.get("count") != null && !"".equals(map.get("count"))) {
-                        count = (int) Double.parseDouble(map.get("count"));
-                    }
-                    if (i > 0 && i >= count) {
-                        driver.findElementById("tj").click();
-                        break;
-                        //                familyProcess(driver);
-                    }
-                }
-                isHuzhu = personProcess(driver, map.get("name"), isHuzhu, map.get("relation"), map.get("id"));
-                i++;
-            }
-        }catch (Exception e){
-//            WebElement badGateWay = driver.findElementByXPath("//center/h1[text()='502 Bad Gateway']");
-//            if(badGateWay.isDisplayed()){
-//                throw new Exception("系统502");
-//            }
-            e.printStackTrace();
-        }
+//        pageAccess(driver);
+
     }
 
     public static void login(ChromeDriver driver) throws IOException, JSONException {
 
-        driver.findElementById("account").sendKeys("xiewei");
-        driver.findElementById("pwd").sendKeys("dxdx123456");
-        driver.findElementById("randCode").sendKeys(getRandCode(driver, "D://testimg.png"));
-        driver.findElementByXPath("//img[@src='images/login_bt.gif']").click();
+        driver.findElementById("dx_32_").sendKeys("dxd17");
+        driver.findElementById("dx_33_").sendKeys("321");
+        driver.findElementById("img_dx_30_").click();
     }
 
     public static void pageAccess(ChromeDriver driver){
@@ -179,7 +144,7 @@ public class XieWeiReadExcel {
         //定位对象时给10s 的时间, 如果10s 内还定位不到则抛出异常 不注释会报org.openqa.selenium.TimeoutException: timeout
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().timeouts().setScriptTimeout(3, TimeUnit.SECONDS);
-        driver.get("http://app3.jsnc.gov.cn:8080/nccqjy/login.do");
+        driver.get("http://172.17.0.146:8081/fjhis/start");
         return driver;
     }
 
