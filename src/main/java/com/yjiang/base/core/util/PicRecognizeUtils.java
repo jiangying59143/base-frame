@@ -20,9 +20,9 @@ import java.util.List;
  */
 public class PicRecognizeUtils {
     //设置APPID/AK/SK
-    public static final String APP_ID = "xxx";
-    public static final String API_KEY = "xxx";
-    public static final String SECRET_KEY = "xxx";
+    public static final String APP_ID = "20628364";
+    public static final String API_KEY = "Hg2icVTgFBCULxvtwSTakRl9";
+    public static final String SECRET_KEY = "Nz7Mbz4KSyoDtyDAGFbwVyKp4sejaLZd";
     static int callCount = 0;
 
     static class WordsResult{

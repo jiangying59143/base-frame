@@ -50,7 +50,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
 //    String diverPath = "C://temp/chromedriver.exe";
 
-    String diverPath = "/root/driver/chromedriver";
+    String diverPath = "D:\\root\\driver\\chromedriver91.exe";
 
     String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
@@ -66,6 +66,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 //        }
 
         int personNum = random.nextInt(31) + 40;
+        personNum=1;
         for (int i = 0; i < 5; i++) {
             try {
                 process(personNum, true);
@@ -111,6 +112,7 @@ public class HealthCareServiceImpl implements HealthCareService {
             driver.manage().timeouts().setScriptTimeout(3, TimeUnit.SECONDS);
             driver.get(getUrl());
         }catch(Exception e){
+            logger.error("", e);
             throw new Exception("webdriver 初始化失败，应该是网站无法访问");
         }
     }
@@ -121,7 +123,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     public Wrapper<HealthUsers> getUsersWrapper(){
         Wrapper<HealthUsers>  wrapper = new EntityWrapper<>();
-        wrapper.and("`count` < 10").orderBy("id");
+        wrapper.and("`count` < 10 || `count` is null").orderBy("id");
         return wrapper;
     }
 
@@ -147,7 +149,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     public int getCount(HealthUsers healthUser){
-        return healthUser.getCount();
+        return healthUser.getCount() == null ? 0 : healthUser.getCount();
     }
 
     public void singlePersonProcess(HealthUsers healthUser,boolean wrongSet, boolean needUpdate) throws Exception {
@@ -251,7 +253,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         map.put("sex", healthUser.getSex());
         map.put("education", StringUtils.isNotBlank(healthUser.getEducation()) ? healthUser.getEducation() :education);
         map.put("job", StringUtils.isNotBlank(healthUser.getJob()) ? healthUser.getJob() :job);
-        map.put("orgName", healthUser.getOrgName());
+        map.put("orgName", healthUser.getOrgName() != null ? healthUser.getOrgName() : "");
         return map;
     }
 
@@ -290,7 +292,8 @@ public class HealthCareServiceImpl implements HealthCareService {
         confirm.accept();
     }
 
-    public void processReport(int totalQuestionCount, List<Health> questionBankList, List<Integer> wrongItems){
+    public int processReport(int totalQuestionCount, List<Health> questionBankList, List<Integer> wrongItems){
+        int df = Integer.parseInt(driver.findElementById("df_fs").getText());
         List<String> questionTitles = questionBankList.stream().map(Health::getTitle).collect(Collectors.toList());
         for (int questionIndex = 1;questionIndex <= totalQuestionCount; questionIndex++) {
             Map<String, String> questionAndSelection = this.getTitleAndAnswers(questionIndex, true);
@@ -316,6 +319,8 @@ public class HealthCareServiceImpl implements HealthCareService {
                 healthService.insert(health);
             }
         }
+        System.out.println("-----------------得分--------------------" + df);
+        return df;
     }
 
     private boolean isMissed(int questionIndex){

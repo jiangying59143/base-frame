@@ -1,8 +1,11 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                      http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
     <changeSet author="generator" id="370352bf-50d8-4273-90be-67e3c04b8311">
         <insert tableName="sys_menu">
             <column name="code" value="health"/>
@@ -99,4 +102,40 @@
             <column name="isopen" valueNumeric="0"/>
         </insert>
     </changeSet>
+    <changeSet id="create_health_users" author="yjiang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="health_users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="health_users">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(50)"/>
+            <column name="age" type="VARCHAR(50)"/>
+            <column name="sex" type="VARCHAR(4)"/>
+            <column name="education" type="VARCHAR(50)"/>
+            <column name="job" type="VARCHAR(50)"/>
+            <column name="org_name" type="VARCHAR(50)"/>
+            <column name="count" type="INT"/>
+            <column name="nutrition" type="INT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create_health_answer" author="yjiang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="health_answer"/>
+            </not>
+        </preConditions>
+        <createTable tableName="health_answer">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(500)"/>
+            <column name="answers" type="VARCHAR(500)"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

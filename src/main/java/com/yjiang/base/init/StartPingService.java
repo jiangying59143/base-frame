@@ -21,7 +21,7 @@ public class StartPingService implements CommandLineRunner {
     @Override
     public void run(String... args) {
         try {
-            healthCareService.process(156, true);
+            healthCareService.process(1, false);
         } catch (Exception e) {
             e.printStackTrace();
         }

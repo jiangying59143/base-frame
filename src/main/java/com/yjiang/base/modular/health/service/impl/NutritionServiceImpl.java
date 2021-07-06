@@ -75,7 +75,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
 
     @Override
     public int getCount(HealthUsers healthUser) {
-        return healthUser.getNutrition();
+        return healthUser.getNutrition() == null ? 0 : healthUser.getNutrition();
     }
 
     @Override
@@ -156,8 +156,8 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         confirm1.accept();
     }
 
-    public void processReport(int totalQuestionCount, List<Health> questionBankList, List<Integer> wrongItems){
-
+    public int processReport(int totalQuestionCount, List<Health> questionBankList, List<Integer> wrongItems){
+        return 0;
     }
 
 

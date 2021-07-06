@@ -18,7 +18,7 @@ import java.util.List;
  * @author jiangying
  * @since 2020-05-13
  */
-@TableName("health")
+@TableName("health_answer")
 public class Health extends Model<Health> {
 
     private static final long serialVersionUID = 1L;
