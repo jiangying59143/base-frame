@@ -9,6 +9,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -47,7 +48,7 @@ public class ChromeDriveUtils {
         driver.close();
     }
 
-    public static void screenShotLong(ChromeDriver driver, String appName, String folderName, String fileName) throws IOException {
+    public static void screenShotLong(RemoteWebDriver driver, String appName, String folderName, String fileName) throws IOException {
         driver.manage().window().maximize();
         String js_height = "return document.body.clientHeight";
         JavascriptExecutor driver_js= ((JavascriptExecutor) driver);
@@ -73,7 +74,7 @@ public class ChromeDriveUtils {
         screenShot(driver, appName, folderName, fileName);
     }
 
-    public static void screenShot(ChromeDriver driver, String appName, String folderName, String fileName) throws IOException {
+    public static void screenShot(RemoteWebDriver driver, String appName, String folderName, String fileName) throws IOException {
         String dir_path = "/root/" + appName + "/" + folderName;
         File dir = new File(dir_path);
         if(!dir.exists()) {

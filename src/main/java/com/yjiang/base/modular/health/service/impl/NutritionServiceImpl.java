@@ -7,6 +7,7 @@ import com.yjiang.base.modular.HealthUsers.service.IHealthUsersService;
 import com.yjiang.base.modular.system.model.Health;
 import com.yjiang.base.modular.system.model.HealthUsers;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
@@ -89,7 +90,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
     }
 
     @Override
-    public void login(String name, String age, String sex, String edu, String metier, String orgName){
+    public void login(RemoteWebDriver driver, String name, String age, String sex, String edu, String metier, String orgName){
         Select city = new Select(driver.findElementById("city"));
         city.selectByVisibleText("宿迁市");
         Select zone = new Select(driver.findElementById("zone"));
@@ -112,29 +113,29 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         return null;
     }
 
-    public int getQuestionCount(){
+    public int getQuestionCount(RemoteWebDriver driver){
         String[] answers = driver.findElementById("subject1Type").getAttribute("value").split(",");
         return answers.length;
     }
 
 
-    public void doTest(List<Health> questionBankList, int questionCount, List<Integer> wrongItems, Map<String, Object> personInfoMap) {
+    public void doTest(RemoteWebDriver driver, List<Health> questionBankList, int questionCount, List<Integer> wrongItems, Map<String, Object> personInfoMap) {
         String[] answers = driver.findElementById("subject1Type").getAttribute("value").split(",");
         for (int i = 0; i < answers.length; i++) {
             if("null".equals(answers[i])){
                 driver.findElementById("A" + i).click();
             }else{
-                answerSingleQuestion(answers, i, wrongItems);
+                answerSingleQuestion(driver, answers, i, wrongItems);
             }
         }
         try {
-            screenShot(personInfoMap.get("name").toString(), "last");
+            screenShot(driver, personInfoMap.get("name").toString(), "last");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void answerSingleQuestion(String[] answers, int i, List<Integer> wrongItems){
+    private void answerSingleQuestion(RemoteWebDriver driver, String[] answers, int i, List<Integer> wrongItems){
         if(wrongItems.contains(i+1)){
             if(answers[i].length() > 1) {
                 answers[i] = answers[i].substring(0, answers[i].length()-1);
@@ -148,7 +149,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         }
     }
 
-    public void submit(int totalQuestionCount){
+    public void submit(RemoteWebDriver driver, int totalQuestionCount){
         driver.findElementById("Submit").click();
         Alert confirm = driver.switchTo().alert();
         confirm.accept();
