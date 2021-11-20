@@ -2,7 +2,6 @@ package com.yjiang.base.init;
 
 import com.yjiang.base.modular.health.service.HealthCareService;
 import com.yjiang.base.modular.health.service.IXieWeiService;
-import com.yjiang.base.modular.system.model.HealthUsers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
@@ -20,8 +19,9 @@ public class StartPingService implements CommandLineRunner {
     IXieWeiService xieWeiService;
 
     @Override
-    public void run(String... args) {
-        for (int i = 0; i < 5; i++) {
+    public void run(String... args) throws Exception {
+        healthCareService.process(100, true);
+        /*for (int i = 10; i < 20; i++) {
             int finalI = i;
             new Thread(()-> {
                 try {
@@ -31,7 +31,7 @@ public class StartPingService implements CommandLineRunner {
                     e.printStackTrace();
                 }
             }).start();
-        }
+        }*/
     }
 
 }

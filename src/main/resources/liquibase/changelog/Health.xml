@@ -138,4 +138,22 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="create_health_score" author="yjiang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="health_score"/>
+            </not>
+        </preConditions>
+        <createTable tableName="health_score">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="health_user_id" type="INT">
+                <constraints foreignKeyName="fk_health_user_id" referencedTableName="health_users" referencedColumnNames="id"></constraints>
+            </column>
+            <column name="timeCount" type="INT"/>
+            <column name="score" type="INT"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

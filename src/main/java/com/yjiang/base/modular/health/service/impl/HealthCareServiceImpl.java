@@ -7,8 +7,10 @@ import com.yjiang.base.core.util.ChromeDriveUtils;
 import com.yjiang.base.core.util.MailUtils;
 import com.yjiang.base.modular.HealthUsers.service.IHealthUsersService;
 import com.yjiang.base.modular.health.service.HealthCareService;
+import com.yjiang.base.modular.health.service.IHealthScoreService;
 import com.yjiang.base.modular.health.service.IHealthService;
 import com.yjiang.base.modular.system.model.Health;
+import com.yjiang.base.modular.system.model.HealthScore;
 import com.yjiang.base.modular.system.model.HealthUsers;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -34,11 +36,12 @@ import java.util.stream.Collectors;
 /**
  * 100次
  * 地域改变 东小店
- * 无头模式
+ * 无头模式 -headless
  */
 @EnableScheduling
 @Service("HealthCareServiceImpl")
 public class HealthCareServiceImpl implements HealthCareService {
+
     private static Logger logger = LoggerFactory.getLogger(HealthCareServiceImpl.class);
 
     @Resource
@@ -46,6 +49,9 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     @Resource
     private IHealthUsersService healthUsersService;
+
+    @Resource
+    private IHealthScoreService healthScoreService;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -73,7 +79,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         personNum=1;
         for (int i = 0; i < 5; i++) {
             try {
-                process(personNum, true);
+//                process(personNum, true);
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -138,15 +144,14 @@ public class HealthCareServiceImpl implements HealthCareService {
         Wrapper<HealthUsers>  wrapper = getUsersWrapper();
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
-            new Thread(()-> {
+            executorService.submit(()-> {
                 try {
                     singlePersonProcess(healthUser, wrongSet, true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }).start();
+            });
         }
-
         logger.debug("health care end");
 
     }
@@ -157,7 +162,7 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     public int getPersonCount(){
-        return 100;
+        return 10;
     }
 
     public int getCount(HealthUsers healthUser){
@@ -178,6 +183,7 @@ public class HealthCareServiceImpl implements HealthCareService {
                 update(healthUser, i, personInfoMap);
                 healthUsersService.updateById(healthUser);
             }
+            healthScoreService.insert(new HealthScore(healthUser.getId(), i, df));
             logger.info(healthUser.getName() + "完成第" + i + "遍数, 得分:" + df );
         }
     }
@@ -236,7 +242,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         int questionCount = getQuestionCount(driver);
         List<Integer> wrongItems = new ArrayList<>();
         if((boolean)personInfoMap.get("wrongSet")){
-            int randomNum = new Random().nextInt(questionCount/3 + 1);
+            int randomNum = new Random().nextInt(questionCount/5 + 1);
             if(randomNum > 0) {
                 wrongItems = getRandomNumbers(questionCount, randomNum);
             }
@@ -275,14 +281,14 @@ public class HealthCareServiceImpl implements HealthCareService {
 
     public void login(RemoteWebDriver driver,String name, String age, String sex, String edu, String metier, String orgName){
         Select city = new Select(driver.findElementById("zone3"));
-//        city.selectByVisibleText("宿迁市");
-        city.selectByVisibleText("南京市");
+        city.selectByVisibleText("宿迁市");
+//        city.selectByVisibleText("南京市");
         Select zone = new Select(driver.findElementById("zone4"));
-//        zone.selectByVisibleText("沭阳县");
-        zone.selectByVisibleText("玄武区");
+        zone.selectByVisibleText("沭阳县");
+//        zone.selectByVisibleText("玄武区");
         Select village = new Select(driver.findElementById("zone5"));
-//        village.selectByVisibleText("东小店乡");
-        village.selectByVisibleText("不详乡镇");
+        village.selectByVisibleText("东小店乡");
+//        village.selectByVisibleText("不详乡镇");
         driver.findElementById("name").sendKeys(name);
         Select ageGroup = new Select(driver.findElementById("ageGroup"));
         ageGroup.selectByVisibleText(age);
