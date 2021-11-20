@@ -24,6 +24,7 @@ public class HealthScore extends Model<HealthScore> {
     private Integer id;
     @TableField("health_user_id")
     private Integer healthUserId;
+    @TableField("timeCount")
     private Integer timeCount;
     private Integer score;
 
