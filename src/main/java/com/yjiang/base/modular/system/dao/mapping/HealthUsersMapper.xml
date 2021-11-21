@@ -13,11 +13,13 @@
         <result column="org_name" property="orgName" />
         <result column="count" property="count" />
         <result column="nutrition" property="nutrition" />
+        <result column="create_date" property="createDate" />
+        <result column="update_date" property="updateDate" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, age, sex, education, job, org_name, count, nutrition
+        id, name, age, sex, education, job, org_name, count, nutrition,create_date,update_date
     </sql>
 
 </mapper>

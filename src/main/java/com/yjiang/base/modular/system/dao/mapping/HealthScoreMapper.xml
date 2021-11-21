@@ -8,11 +8,13 @@
         <result column="health_user_id" property="healthUserId" />
         <result column="timeCount" property="timeCount" />
         <result column="score" property="score" />
+        <result column="create_date" property="createDate" />
+        <result column="update_date" property="updateDate" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, health_user_id, timeCount, score
+        id, health_user_id, timeCount, score,create_date,update_date
     </sql>
 
 </mapper>

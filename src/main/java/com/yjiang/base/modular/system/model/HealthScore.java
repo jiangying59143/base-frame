@@ -1,11 +1,13 @@
 package com.yjiang.base.modular.system.model;
 
+import com.baomidou.mybatisplus.enums.FieldFill;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
 import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -27,6 +29,10 @@ public class HealthScore extends Model<HealthScore> {
     @TableField("timeCount")
     private Integer timeCount;
     private Integer score;
+    @TableField(value="create_date", fill = FieldFill.INSERT)
+    private Date createDate;
+    @TableField(value="update_date", fill = FieldFill.INSERT_UPDATE)
+    private Date updateDate;
 
 
     public HealthScore(Integer healthUserId, Integer timeCount, Integer score) {
@@ -65,6 +71,22 @@ public class HealthScore extends Model<HealthScore> {
 
     public void setScore(Integer score) {
         this.score = score;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override

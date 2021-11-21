@@ -156,4 +156,19 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="add_time_to_health" author="yjiang">
+        <addColumn tableName="health_users">
+            <column name="create_date" type="datetime"/>
+            <column name="update_date" type="datetime"/>
+        </addColumn>
+        <addColumn tableName="health_answer">
+            <column name="create_date" type="datetime"/>
+            <column name="update_date" type="datetime"/>
+        </addColumn>
+        <addColumn tableName="health_score">
+            <column name="create_date" type="datetime"/>
+            <column name="update_date" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

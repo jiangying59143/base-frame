@@ -4,6 +4,7 @@ import com.yjiang.base.modular.health.service.HealthCareService;
 import com.yjiang.base.modular.health.service.IXieWeiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -18,9 +19,12 @@ public class StartPingService implements CommandLineRunner {
     @Qualifier("XieWeiServiceImpl")
     IXieWeiService xieWeiService;
 
+    @Value("${test.person.number}")
+    private String personNumber;
+
     @Override
     public void run(String... args) throws Exception {
-        healthCareService.process(100, true);
+        healthCareService.process(Integer.parseInt(personNumber), true);
         /*for (int i = 10; i < 20; i++) {
             int finalI = i;
             new Thread(()-> {

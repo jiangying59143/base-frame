@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public interface HealthCareService {
 
-    Integer numThreads = Runtime.getRuntime().availableProcessors() * 2;
+    Integer numThreads = Runtime.getRuntime().availableProcessors() * 3;
 
     ExecutorService executorService = Executors.newFixedThreadPool(numThreads);
 

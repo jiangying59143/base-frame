@@ -1,13 +1,16 @@
 package com.yjiang.base.modular.system.model;
 
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.FieldFill;
 import com.baomidou.mybatisplus.enums.IdType;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +30,10 @@ public class Health extends Model<Health> {
     private Integer id;
     private String title;
     private String answers;
+    @TableField(value="create_date", fill = FieldFill.INSERT)
+    private Date createDate;
+    @TableField(value="update_date", fill = FieldFill.INSERT_UPDATE)
+    private Date updateDate;
 
 
     public Integer getId() {
@@ -51,6 +58,22 @@ public class Health extends Model<Health> {
 
     public void setAnswers(String answers) {
         this.answers = answers;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     public List<String> getSelections(){
