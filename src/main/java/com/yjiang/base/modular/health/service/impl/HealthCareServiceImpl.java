@@ -140,13 +140,13 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-    public void process(int personNum, boolean wrongSet) throws Exception {
+    public void process(int personNum, int score) throws Exception {
         Wrapper<HealthUsers>  wrapper = getUsersWrapper();
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
             executorService.submit(()-> {
                 try {
-                    singlePersonProcess(healthUser, wrongSet, true);
+                    singlePersonProcess(healthUser, score, true);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -169,9 +169,9 @@ public class HealthCareServiceImpl implements HealthCareService {
         return healthUser.getCount() == null ? 0 : healthUser.getCount();
     }
 
-    public void singlePersonProcess(HealthUsers healthUser,boolean wrongSet, boolean needUpdate) throws Exception {
+    public void singlePersonProcess(HealthUsers healthUser,int score, boolean needUpdate) throws Exception {
         Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
-        personInfoMap.put("wrongSet", wrongSet);
+        personInfoMap.put("score", score);
         int count = getCount(healthUser);
         if(count >= getPersonCount()){
             return;
@@ -241,8 +241,9 @@ public class HealthCareServiceImpl implements HealthCareService {
                 personInfoMap.get("orgName").toString());
         int questionCount = getQuestionCount(driver);
         List<Integer> wrongItems = new ArrayList<>();
-        if((boolean)personInfoMap.get("wrongSet")){
-            int randomNum = new Random().nextInt(questionCount/5 + 1);
+        if(personInfoMap.get("score") != null){
+            int score = (int)personInfoMap.get("score");
+            int randomNum = new Random().nextInt((int)(questionCount * (100-score)/100.00d + 1));
             if(randomNum > 0) {
                 wrongItems = getRandomNumbers(questionCount, randomNum);
             }

@@ -20,7 +20,7 @@ public class StartPingService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        healthCareService.process(100, true);
+        healthCareService.process(100, 80);
         /*for (int i = 10; i < 20; i++) {
             int finalI = i;
             new Thread(()-> {
