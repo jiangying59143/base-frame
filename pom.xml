@@ -218,13 +218,13 @@
             <version>2.7</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.oracle</groupId>
             <artifactId>javaFX</artifactId>
             <version>2.2</version>
             <scope>system</scope>
             <systemPath>D:/software-setup/jdk1.8.0_121/jre/lib/ext/jfxrt.jar</systemPath>
-        </dependency>
+        </dependency>-->
 
         <!--图片识别（文字、字母、数字-->
         <!--<dependency>
