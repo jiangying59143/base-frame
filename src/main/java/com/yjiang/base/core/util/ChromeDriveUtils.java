@@ -19,12 +19,12 @@ import java.util.concurrent.TimeUnit;
 public class ChromeDriveUtils {
 
     public static void main(String[] args) throws Exception {
-        String diverPath = "D:\\root\\driver\\chromedriver104.exe";
+        String diverPath = "D:\\root\\driver\\chromedriver105.exe";
 
         String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
         System.setProperty("webdriver.chrome.driver", diverPath);
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless", "--no-sandbox", "--disable-gpu", "--whitelisted-ips");
+//        options.addArguments("--headless", "--no-sandbox", "--disable-gpu", "--whitelisted-ips");
         ChromeDriverService.Builder builder = new ChromeDriverService.Builder();
         ChromeDriverService chromeService = builder.usingDriverExecutable(new File(diverPath)).usingPort(3333).build();
         try {

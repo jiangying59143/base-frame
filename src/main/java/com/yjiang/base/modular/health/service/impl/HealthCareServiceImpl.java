@@ -60,7 +60,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
 //    String diverPath = "C://temp/chromedriver.exe";
 
-    String diverPath = "D:\\root\\driver\\chromedriver104.exe";
+    String diverPath = "D:\\root\\driver\\chromedriver105.exe";
 
     String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
@@ -245,6 +245,7 @@ public class HealthCareServiceImpl implements HealthCareService {
             int randomNum = new Random().nextInt((int)(questionCount * (100-score)/100.00d + 1));
             if(randomNum > 0) {
                 wrongItems = getRandomNumbers(questionCount, randomNum);
+                System.out.println(questionCount + " " + randomNum + " " + Arrays.toString(wrongItems.toArray()));
             }
         }
         doTest(driver, questionBankList, questionCount, wrongItems, personInfoMap);
