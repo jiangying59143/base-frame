@@ -27,7 +27,8 @@ test:
 
 spring:
   profiles:
-    active: @spring.active@
+#    active: @spring.active@
+    active: local
   mvc:
     static-path-pattern: /static/**
     view:

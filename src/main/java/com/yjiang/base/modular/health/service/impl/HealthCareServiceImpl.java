@@ -60,7 +60,7 @@ public class HealthCareServiceImpl implements HealthCareService {
 
 //    String diverPath = "C://temp/chromedriver.exe";
 
-    String diverPath = "D:\\root\\driver\\chromedriver91.exe";
+    String diverPath = "D:\\root\\driver\\chromedriver104.exe";
 
     String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
 
@@ -140,13 +140,13 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
     @Override
-    public void process(int personNum, int score) throws Exception {
+    public void process(int personNum, int score, String city, String county, String village, String orgName) throws Exception {
         Wrapper<HealthUsers>  wrapper = getUsersWrapper();
         List<HealthUsers> healthUsers = healthUsersService.selectPage(new Page<>(0, personNum), wrapper).getRecords();
         for (HealthUsers healthUser : healthUsers) {
             executorService.submit(()-> {
                 try {
-                    singlePersonProcess(healthUser, score, true);
+                    singlePersonProcess(healthUser, score, true, city, county, village, orgName);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -169,7 +169,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         return healthUser.getCount() == null ? 0 : healthUser.getCount();
     }
 
-    public void singlePersonProcess(HealthUsers healthUser,int score, boolean needUpdate) throws Exception {
+    public void singlePersonProcess(HealthUsers healthUser,int score, boolean needUpdate, String city, String county, String village, String orgName) throws Exception {
         Map<String, Object> personInfoMap = this.getPersonInfo(healthUser);
         personInfoMap.put("score", score);
         int count = getCount(healthUser);
@@ -178,7 +178,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         }
         for (int i = count+1; i <= getPersonCount(); i++) {
             personInfoMap.put("index", String.valueOf(i));
-            int df = atomOperation(personInfoMap);
+            int df = atomOperation(personInfoMap, city, county, village, orgName);
             if(needUpdate) {
                 update(healthUser, i, personInfoMap);
                 healthUsersService.updateById(healthUser);
@@ -195,13 +195,13 @@ public class HealthCareServiceImpl implements HealthCareService {
         healthUser.setJob(personInfoMap.get("job").toString());
     }
 
-    private int atomOperation(Map<String, Object> personInfoMap) throws Exception {
+    private int atomOperation(Map<String, Object> personInfoMap, String city, String county, String village, String orgName) throws Exception {
         int df=0;
         boolean fineFlag = false;
         while(!fineFlag) {
             RemoteWebDriver driver = this.init();
             try {
-                df = processSingle(driver, personInfoMap);
+                df = processSingle(driver, personInfoMap, city, county, village, orgName);
                 fineFlag = true;
             } catch (Exception e) {
                 if(!"local".equals(activeProfile)) {
@@ -231,14 +231,13 @@ public class HealthCareServiceImpl implements HealthCareService {
         return Integer.parseInt(driver.findElementById("__subjectCount").getText());
     }
 
-    public int processSingle(RemoteWebDriver driver, Map<String, Object> personInfoMap) throws IOException {
+    public int processSingle(RemoteWebDriver driver, Map<String, Object> personInfoMap, String city, String county, String village, String orgName) throws IOException {
         List<Health> questionBankList = getQuestionBankList();
-        login(driver, personInfoMap.get("name").toString(),
+        login(driver, city, county, village, personInfoMap.get("name").toString(),
                 personInfoMap.get("age").toString(),
                 personInfoMap.get("sex").toString(),
                 personInfoMap.get("education").toString(),
-                personInfoMap.get("job").toString(),
-                personInfoMap.get("orgName").toString());
+                personInfoMap.get("job").toString(), orgName);
         int questionCount = getQuestionCount(driver);
         List<Integer> wrongItems = new ArrayList<>();
         if(personInfoMap.get("score") != null){
@@ -280,15 +279,15 @@ public class HealthCareServiceImpl implements HealthCareService {
     }
 
 
-    public void login(RemoteWebDriver driver,String name, String age, String sex, String edu, String metier, String orgName){
-        Select city = new Select(driver.findElementById("zone3"));
-        city.selectByVisibleText("宿迁市");
+    public void login(RemoteWebDriver driver,String city, String county, String village, String name, String age, String sex, String edu, String metier, String orgName){
+        Select citySelect = new Select(driver.findElementById("zone3"));
+        citySelect.selectByVisibleText(city);
 //        city.selectByVisibleText("南京市");
         Select zone = new Select(driver.findElementById("zone4"));
-        zone.selectByVisibleText("沭阳县");
+        zone.selectByVisibleText(county);
 //        zone.selectByVisibleText("玄武区");
-        Select village = new Select(driver.findElementById("zone5"));
-        village.selectByVisibleText("东小店乡");
+        Select villageSelect = new Select(driver.findElementById("zone5"));
+        villageSelect.selectByVisibleText(village);
 //        village.selectByVisibleText("不详乡镇");
         driver.findElementById("name").sendKeys(name);
         Select ageGroup = new Select(driver.findElementById("ageGroup"));

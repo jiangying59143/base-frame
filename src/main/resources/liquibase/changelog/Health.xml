@@ -158,16 +158,16 @@
 
     <changeSet id="add_time_to_health" author="yjiang">
         <addColumn tableName="health_users">
-            <column name="create_date" type="datetime"/>
-            <column name="update_date" type="datetime"/>
+            <column name="create_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="update_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </addColumn>
         <addColumn tableName="health_answer">
-            <column name="create_date" type="datetime"/>
-            <column name="update_date" type="datetime"/>
+            <column name="create_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="update_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </addColumn>
         <addColumn tableName="health_score">
-            <column name="create_date" type="datetime"/>
-            <column name="update_date" type="datetime"/>
+            <column name="create_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="update_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </addColumn>
     </changeSet>
 

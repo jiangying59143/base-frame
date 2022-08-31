@@ -38,7 +38,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         int personNum = new Random().nextInt(50) + 100;
         for (int i = 0; i < 5; i++) {
             try {
-                process(personNum, true);
+                process(personNum, 80, "宿迁市", "沭阳县", "东小店乡", null);
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -90,13 +90,13 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
     }
 
     @Override
-    public void login(RemoteWebDriver driver, String name, String age, String sex, String edu, String metier, String orgName){
-        Select city = new Select(driver.findElementById("city"));
-        city.selectByVisibleText("宿迁市");
+    public void login(RemoteWebDriver driver,String city, String county, String village, String name, String age, String sex, String edu, String metier, String orgName){
+        Select citySelect = new Select(driver.findElementById("city"));
+        citySelect.selectByVisibleText("宿迁市");
         Select zone = new Select(driver.findElementById("zone"));
         zone.selectByVisibleText("沭阳县");
-        Select village = new Select(driver.findElementById("village"));
-        village.selectByVisibleText("东小店乡");
+        Select villageSelect = new Select(driver.findElementById("village"));
+        villageSelect.selectByVisibleText("东小店乡");
         driver.findElementById("ename").sendKeys(name);
         Select ageGroup = new Select(driver.findElementById("ageGroup"));
         ageGroup.selectByVisibleText(age);

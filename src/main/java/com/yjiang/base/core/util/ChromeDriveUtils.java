@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class ChromeDriveUtils {
 
     public static void main(String[] args) throws Exception {
-        String diverPath = "D:\\root\\driver\\chromedriver91.exe";
+        String diverPath = "D:\\root\\driver\\chromedriver104.exe";
 
         String url = "http://www.jscdc.cn/KABP2011/business/index1.jsp";
         System.setProperty("webdriver.chrome.driver", diverPath);
@@ -43,7 +43,7 @@ public class ChromeDriveUtils {
         HealthUsers h = new HealthUsers(0, "test", "xx", "男", "xx", "xx", "xx", 0, 0);
 
         HealthCareServiceImpl healthCareService = new HealthCareServiceImpl();
-        healthCareService.singlePersonProcess(h, false, false);
+        healthCareService.singlePersonProcess(h, 80, false, "宿迁市", "沭阳县", "东小店乡", null);
 
         driver.close();
     }

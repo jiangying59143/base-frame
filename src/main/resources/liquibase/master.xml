@@ -9,4 +9,5 @@
 	<include file="classpath:liquibase/changelog/SsqLottery.xml"/>
     <include file="classpath:liquibase/changelog/user.xml"/>
 	<include file="classpath:liquibase/changelog/Health.xml"/>
+    <include file="classpath:liquibase/changelog/Health_init.xml"/>
 </databaseChangeLog>

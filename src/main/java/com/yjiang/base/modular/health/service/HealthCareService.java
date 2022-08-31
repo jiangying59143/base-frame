@@ -14,9 +14,9 @@ public interface HealthCareService {
 
     RemoteWebDriver init() throws Exception;
 
-    void process(int personNum, int score) throws Exception;
+    void process(int personNum, int score, String city, String county, String village, String orgName) throws Exception;
 
-    void singlePersonProcess(HealthUsers healthUser, int score, boolean needUpdate) throws Exception;
+    void singlePersonProcess(HealthUsers healthUser, int score, boolean needUpdate, String city, String county, String village, String orgName) throws Exception;
 
     String getUrl();
 }
