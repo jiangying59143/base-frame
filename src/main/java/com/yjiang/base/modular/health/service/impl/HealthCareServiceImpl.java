@@ -242,6 +242,7 @@ public class HealthCareServiceImpl implements HealthCareService {
         List<Integer> wrongItems = new ArrayList<>();
         if(personInfoMap.get("score") != null){
             int score = (int)personInfoMap.get("score");
+            //最少分数 score
             int randomNum = new Random().nextInt((int)(questionCount * (100-score)/100.00d + 1));
             if(randomNum > 0) {
                 wrongItems = getRandomNumbers(questionCount, randomNum);
