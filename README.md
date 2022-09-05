@@ -20,3 +20,5 @@ _location_info.js_
 
 导出数据库表
 mvn liquibase:generateChangeLog -Dliquibase.diffTypes=tables,views,columns,indexs,foreignkeys,primarykeys,uniqueconstraints,data
+更新数据库
+mvn liquibase:update

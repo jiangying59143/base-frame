@@ -4,10 +4,15 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <include file="classpath:liquibase/changelog/changelog_original.xml"/>
-    <include file="classpath:liquibase/changelog/lottery.xml"/>
-	<include file="classpath:liquibase/changelog/SsqLottery.xml"/>
-    <include file="classpath:liquibase/changelog/user.xml"/>
-	<include file="classpath:liquibase/changelog/Health.xml"/>
-    <include file="classpath:liquibase/changelog/Health_init.xml"/>
+    <changeSet author="yjiang" id="db_character_init">
+        <comment>load initial data to health_answer</comment>
+        <sqlFile path="sql/alter_db_character.sql"/>
+    </changeSet>
+
+    <include file="liquibase/changelog/changelog_original.xml"/>
+    <include file="liquibase/changelog/lottery.xml"/>
+	<include file="liquibase/changelog/SsqLottery.xml"/>
+    <include file="liquibase/changelog/user.xml"/>
+	<include file="liquibase/changelog/Health.xml"/>
+    <include file="liquibase/changelog/Health_init.xml"/>
 </databaseChangeLog>
