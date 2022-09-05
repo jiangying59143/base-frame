@@ -1,3 +1,12 @@
+**java**
+jdk1.8.0_341
+
+**maven**
+version 3.6.3
+
+**mariaDB**
+10.9
+
 **OSS和高德地图 因为下面地方不能用 五个x的地方需要替换成相应的值**
 
 _AliyunOSSClientUtil_
