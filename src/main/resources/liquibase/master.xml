@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet author="yjiang" id="db_character_init">
-        <comment>load initial data to health_answer</comment>
+        <comment>set default charset</comment>
         <sqlFile path="sql/alter_db_character.sql"/>
     </changeSet>
 

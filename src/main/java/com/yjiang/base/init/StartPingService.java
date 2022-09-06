@@ -20,7 +20,8 @@ public class StartPingService implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        healthCareService.process(3, 80, "宿迁市", "沭阳县", "东小店乡", null);
+        System.out.println("not start initial running");
+        //healthCareService.process(3, 80, "宿迁市", "沭阳县", "东小店乡", null);
         /*for (int i = 10; i < 20; i++) {
             int finalI = i;
             new Thread(()-> {
