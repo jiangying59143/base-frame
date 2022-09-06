@@ -28,6 +28,10 @@ public class ControllerConfig {
         imports.add("org.springframework.beans.factory.annotation.Autowired");
         imports.add(contextConfig.getProPackage() + ".core.log.LogObjectHolder");
         imports.add("org.springframework.web.bind.annotation.RequestParam");
+        imports.add("java.util.Date");
+        imports.add("com.baomidou.mybatisplus.mapper.EntityWrapper");
+        imports.add("com.baomidou.mybatisplus.mapper.Wrapper");
+        imports.add("java.util.Arrays");
         imports.add(contextConfig.getModelPackageName() + "." + contextConfig.getEntityName());
         imports.add(contextConfig.getProPackage() + ".modular." + contextConfig.getModuleName() + ".service" + ".I" + contextConfig.getEntityName() + "Service");
         this.imports = imports;

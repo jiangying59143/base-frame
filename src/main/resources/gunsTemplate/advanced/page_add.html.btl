@@ -9,9 +9,9 @@
                     <% var rightSize = tool.toInt(table.fields.~size - leftSize); %>
                     <% for(var i=0;i<leftSize;i++){ %>
                         <% if(i != (leftSize-1) ){ %>
-                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].comment}" underline="true"/>
+                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].propertyName}" underline="true"/>
                         <% }else{ %>
-                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].comment}"/>
+                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].propertyName}"/>
                         <% } %>
                     <% } %>
                 </div>
@@ -19,9 +19,9 @@
                 <div class="col-sm-6">
                     <% for(var i=leftSize;i<table.fields.~size;i++){ %>
                         <% if(i != (rightSize-1) ){ %>
-                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].comment}" underline="true"/>
+                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].propertyName}" underline="true"/>
                         <% }else{ %>
-                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].comment}"/>
+                            <#input id="${table.fields[i].propertyName}" name="${table.fields[i].propertyName}"/>
                         <% } %>
                     <% } %>
                 </div>

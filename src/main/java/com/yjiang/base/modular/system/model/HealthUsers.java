@@ -39,6 +39,13 @@ public class HealthUsers extends Model<HealthUsers> {
     @TableField(value="update_date", fill = FieldFill.INSERT_UPDATE)
     private Date updateDate;
 
+    public HealthUsers() {
+        super();
+    }
+
+    public HealthUsers(Integer id) {
+    }
+
     public HealthUsers(String name, String sex) {
         this.name = name;
         this.sex = sex;

@@ -44,7 +44,7 @@ ${context.bizEnBigName}InfoDlg.close = function() {
  * 收集数据
  */
 ${context.bizEnBigName}InfoDlg.collectData = function() {
-    this
+    this.set('id')
     <% for(item in table.fields!){ %>
     <% if(itemLP.last != true){ %>
     .set('${item.propertyName}')

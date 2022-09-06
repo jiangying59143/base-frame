@@ -1,0 +1,102 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="generator" id="ab1b2d04-26ec-4d1c-91f2-9881ce052bbe">
+        <insert tableName="sys_menu">
+            <column name="code" value="healthAnswer"/>
+            <column name="pcode" value="0"/>
+            <column name="pcodes" value="[0],"/>
+            <column name="name" value="healthAnswer"/>
+            <column name="icon" value="fa-user"/>
+            <column name="url" value="/healthAnswer"/>
+            <column name="num" valueNumeric="170"/>
+            <column name="levels" valueNumeric="1"/>
+            <column name="ismenu" valueNumeric="1"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="e64453cd-3675-4d26-be57-8bdd3a1df43b">
+        <insert tableName="sys_menu">
+            <column name="code" value="healthAnswer_list"/>
+            <column name="pcode" value="healthAnswer"/>
+            <column name="pcodes" value="[0],[healthAnswer],"/>
+            <column name="name" value="healthAnswer列表"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/healthAnswer/list"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="5fa0764e-5b12-457f-897f-3c9e052e62e7">
+        <insert tableName="sys_menu">
+            <column name="code" value="healthAnswer_add"/>
+            <column name="pcode" value="healthAnswer"/>
+            <column name="pcodes" value="[0],[healthAnswer],"/>
+            <column name="name" value="healthAnswer添加"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/healthAnswer/add"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="173950b6-834f-416d-80a3-e2f49e316d55">
+        <insert tableName="sys_menu">
+            <column name="code" value="healthAnswer_update"/>
+            <column name="pcode" value="healthAnswer"/>
+            <column name="pcodes" value="[0],[healthAnswer],"/>
+            <column name="name" value="healthAnswer更新"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/healthAnswer/update"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="55530078-9dc0-4ab2-968f-4942ce1bfea9">
+        <insert tableName="sys_menu">
+            <column name="code" value="healthAnswer_delete"/>
+            <column name="pcode" value="healthAnswer"/>
+            <column name="pcodes" value="[0],[healthAnswer],"/>
+            <column name="name" value="healthAnswer删除"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/healthAnswer/delete"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="40165777-c296-41ae-b557-e7ccda06556a">
+        <insert tableName="sys_menu">
+            <column name="code" value="healthAnswer_detail"/>
+            <column name="pcode" value="healthAnswer"/>
+            <column name="pcodes" value="[0],[healthAnswer],"/>
+            <column name="name" value="healthAnswer详情"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/healthAnswer/detail"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
