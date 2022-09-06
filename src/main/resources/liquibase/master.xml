@@ -15,4 +15,5 @@
     <include file="liquibase/changelog/user.xml"/>
 	<include file="liquibase/changelog/Health.xml"/>
     <include file="liquibase/changelog/Health_init.xml"/>
+	<include file="liquibase/changelog/HealthUsers.xml"/>
 </databaseChangeLog>

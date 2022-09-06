@@ -1,0 +1,36 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" underline="true"/>
+                            <#input id="name" name="" underline="true"/>
+                            <#input id="age" name="" underline="true"/>
+                            <#input id="sex" name="" underline="true"/>
+                            <#input id="education" name="" underline="true"/>
+                            <#input id="job" name=""/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="orgName" name="" underline="true"/>
+                            <#input id="count" name="" underline="true"/>
+                            <#input id="nutrition" name="" underline="true"/>
+                            <#input id="createDate" name="" underline="true"/>
+                            <#input id="updateDate" name="" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="HealthUsersInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="HealthUsersInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/HealthUsers/healthUsers/healthUsers_info.js"></script>
+@}

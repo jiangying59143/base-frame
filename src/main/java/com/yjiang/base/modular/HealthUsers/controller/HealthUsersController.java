@@ -13,10 +13,10 @@ import com.yjiang.base.modular.system.model.HealthUsers;
 import com.yjiang.base.modular.HealthUsers.service.IHealthUsersService;
 
 /**
- * 健康素养人员控制器
+ * HealthUser控制器
  *
  * @author fengshuonan
- * @Date 2020-05-30 15:51:32
+ * @Date 2022-09-06 16:55:37
  */
 @Controller
 @RequestMapping("/healthUsers")
@@ -28,7 +28,7 @@ public class HealthUsersController extends BaseController {
     private IHealthUsersService healthUsersService;
 
     /**
-     * 跳转到健康素养人员首页
+     * 跳转到HealthUser首页
      */
     @RequestMapping("")
     public String index() {
@@ -36,7 +36,7 @@ public class HealthUsersController extends BaseController {
     }
 
     /**
-     * 跳转到添加健康素养人员
+     * 跳转到添加HealthUser
      */
     @RequestMapping("/healthUsers_add")
     public String healthUsersAdd() {
@@ -44,7 +44,7 @@ public class HealthUsersController extends BaseController {
     }
 
     /**
-     * 跳转到修改健康素养人员
+     * 跳转到修改HealthUser
      */
     @RequestMapping("/healthUsers_update/{healthUsersId}")
     public String healthUsersUpdate(@PathVariable Integer healthUsersId, Model model) {
@@ -55,7 +55,7 @@ public class HealthUsersController extends BaseController {
     }
 
     /**
-     * 获取健康素养人员列表
+     * 获取HealthUser列表
      */
     @RequestMapping(value = "/list")
     @ResponseBody
@@ -64,7 +64,7 @@ public class HealthUsersController extends BaseController {
     }
 
     /**
-     * 新增健康素养人员
+     * 新增HealthUser
      */
     @RequestMapping(value = "/add")
     @ResponseBody
@@ -74,7 +74,7 @@ public class HealthUsersController extends BaseController {
     }
 
     /**
-     * 删除健康素养人员
+     * 删除HealthUser
      */
     @RequestMapping(value = "/delete")
     @ResponseBody
@@ -84,7 +84,7 @@ public class HealthUsersController extends BaseController {
     }
 
     /**
-     * 修改健康素养人员
+     * 修改HealthUser
      */
     @RequestMapping(value = "/update")
     @ResponseBody
@@ -94,7 +94,7 @@ public class HealthUsersController extends BaseController {
     }
 
     /**
-     * 健康素养人员详情
+     * HealthUser详情
      */
     @RequestMapping(value = "/detail/{healthUsersId}")
     @ResponseBody

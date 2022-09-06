@@ -1,0 +1,36 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="id" name="" value="${item.id}" underline="true"/>
+                            <#input id="name" name="" value="${item.name}" underline="true"/>
+                            <#input id="age" name="" value="${item.age}" underline="true"/>
+                            <#input id="sex" name="" value="${item.sex}" underline="true"/>
+                            <#input id="education" name="" value="${item.education}" underline="true"/>
+                            <#input id="job" name="" value="${item.job}" />
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="orgName" name="" value="${item.orgName}" underline="true"/>
+                            <#input id="count" name="" value="${item.count}" underline="true"/>
+                            <#input id="nutrition" name="" value="${item.nutrition}" underline="true"/>
+                            <#input id="createDate" name="" value="${item.createDate}" underline="true"/>
+                            <#input id="updateDate" name="" value="${item.updateDate}" />
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="HealthUsersInfoDlg.editSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="HealthUsersInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/HealthUsers/healthUsers/healthUsers_info.js"></script>
+@}

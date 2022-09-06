@@ -7,6 +7,16 @@ version 3.6.3
 **mariaDB**
 10.9
 
+**liquibase整合**
+
+导出数据库表
+mvn liquibase:generateChangeLog -Dliquibase.diffTypes=tables,views,columns,indexs,foreignkeys,primarykeys,uniqueconstraints,data
+更新数据库
+mvn liquibase:update
+
+**qq 邮箱授权码**
+登录 qq 邮箱网页版 -> 语言设置为 “简体中文” -> 设置 -> 账户 -> 生成授权码
+
 **OSS和高德地图 因为下面地方不能用 五个x的地方需要替换成相应的值**
 
 _AliyunOSSClientUtil_
@@ -23,11 +33,3 @@ _GmapUtil_
     
 _location_info.js_
     _`$("#map").html("<img src='https://restapi.amap.com/v3/staticmap?markers=mid,0xFF0000,A:" + ui.item.value[0] + "," + ui.item.value[1] +"&key=xxxxx'/>");`_
-    
-    
-**liquibase整合**
-
-导出数据库表
-mvn liquibase:generateChangeLog -Dliquibase.diffTypes=tables,views,columns,indexs,foreignkeys,primarykeys,uniqueconstraints,data
-更新数据库
-mvn liquibase:update
