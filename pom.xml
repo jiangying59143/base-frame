@@ -28,7 +28,7 @@
         <jdbc.username>root</jdbc.username>
         <jdbc.password>jiangying</jdbc.password>
 
-        <shiro.version>1.4.0</shiro.version>
+        <shiro.version>1.10.0</shiro.version>
         <kaptcha.version>2.3.2</kaptcha.version>
         <ehcache.version>3.3.1</ehcache.version>
         <beetl.version>2.9.3</beetl.version>
