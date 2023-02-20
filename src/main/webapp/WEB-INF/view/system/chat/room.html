@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>WebSocket Demo</title>
+        <script src="/js/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="chat-box"></div>
+        <div>
+            <label>Username: </label>
+            <input type="text" id="username">
+        </div>
+        <div>
+            <label>Message: </label>
+            <input type="text" id="message">
+            <button onclick="send()">Send</button>
+        </div>
+        <script>
+            var ws = new WebSocket("ws://" + window.location.host + "/websocket");
+
+            ws.onopen = function (event) {
+                console.log("WebSocket connected.");
+                ws.send("Hello, WebSocket!");
+            };
+
+            ws.onmessage = function (event) {
+                console.log("WebSocket message received: " + event.data);
+                var message = JSON.parse(event.data);
+                var chatBox = $("#chat-box");
+                chatBox.append("<p>" + message.username + ": " + message.content + "</p>");
+            };
+
+            ws.onclose = function (event) {
+                console.log("WebSocket closed.");
+            };
+
+            ws.onerror = function (event) {
+                console.log("WebSocket error: " + event.data);
+            };
+
+            function send() {
+                var username = $("#username").val();
+                var message = $("#message").val();
+                var data = {
+                    "username": username,
+                    "content": message
+                };
+                ws.send(JSON.stringify(data));
+                $("#message").val("");
+            }
+        </script>
+    </body>
+</html>

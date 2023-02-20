@@ -1,7 +1,7 @@
 package com.yjiang.base.generator.engine.base;
 
 import cn.stylefeng.roses.core.util.ToolUtil;
-import com.sun.javafx.PlatformUtil;
+//import com.sun.javafx.PlatformUtil;
 import org.beetl.core.Configuration;
 import org.beetl.core.GroupTemplate;
 import org.beetl.core.Template;
@@ -53,11 +53,11 @@ public abstract class GunsTemplateEngine extends AbstractTemplateEngine {
     protected void generateFile(String template, String filePath) {
         Template pageTemplate = groupTemplate.getTemplate(template);
         configTemplate(pageTemplate);
-        if (PlatformUtil.isWindows()) {
+//        if (PlatformUtil.isWindows()) {
             filePath = filePath.replaceAll("/+|\\\\+", "\\\\");
-        } else {
-            filePath = filePath.replaceAll("/+|\\\\+", "/");
-        }
+//        } else {
+//            filePath = filePath.replaceAll("/+|\\\\+", "/");
+//        }
         File file = new File(filePath);
         File parentFile = file.getParentFile();
         if (!parentFile.exists()) {
