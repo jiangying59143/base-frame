@@ -1,102 +1,77 @@
-<?xml version="1.1" encoding="UTF-8" standalone="no"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
-    <changeSet author="generator" id="370352bf-50d8-4273-90be-67e3c04b8311">
-        <insert tableName="sys_menu">
-            <column name="code" value="health"/>
-            <column name="pcode" value="0"/>
-            <column name="pcodes" value="[0],"/>
-            <column name="name" value="健康素养"/>
-            <column name="icon" value="fa-user"/>
-            <column name="url" value="/health"/>
-            <column name="num" valueNumeric="130"/>
-            <column name="levels" valueNumeric="1"/>
-            <column name="ismenu" valueNumeric="1"/>
-            <column name="tips"/>
-            <column name="status" valueNumeric="1"/>
-            <column name="isopen" valueNumeric="0"/>
-        </insert>
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+                      http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <changeSet id="create_health_users" author="yjiang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="health_users"/>
+            </not>
+        </preConditions>
+        <createTable tableName="health_users">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(50)"/>
+            <column name="age" type="VARCHAR(50)"/>
+            <column name="sex" type="VARCHAR(4)"/>
+            <column name="education" type="VARCHAR(50)"/>
+            <column name="job" type="VARCHAR(50)"/>
+            <column name="org_name" type="VARCHAR(50)"/>
+            <column name="count" type="INT"/>
+            <column name="nutrition" type="INT"/>
+        </createTable>
     </changeSet>
-    <changeSet author="generator" id="3f55b8b0-8007-4780-91ca-ceaaaf9d42d0">
-        <insert tableName="sys_menu">
-            <column name="code" value="health_list"/>
-            <column name="pcode" value="health"/>
-            <column name="pcodes" value="[0],[health],"/>
-            <column name="name" value="健康素养列表"/>
-            <column name="icon" value=""/>
-            <column name="url" value="/health/list"/>
-            <column name="num" valueNumeric="1"/>
-            <column name="levels" valueNumeric="2"/>
-            <column name="ismenu" valueNumeric="0"/>
-            <column name="tips"/>
-            <column name="status" valueNumeric="1"/>
-            <column name="isopen" valueNumeric="0"/>
-        </insert>
+
+    <changeSet id="create_health_answer" author="yjiang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="health_answer"/>
+            </not>
+        </preConditions>
+        <createTable tableName="health_answer">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="VARCHAR(500)"/>
+            <column name="answers" type="VARCHAR(500)"/>
+        </createTable>
     </changeSet>
-    <changeSet author="generator" id="9db70955-8a87-41ed-afab-b46e30666cca">
-        <insert tableName="sys_menu">
-            <column name="code" value="health_add"/>
-            <column name="pcode" value="health"/>
-            <column name="pcodes" value="[0],[health],"/>
-            <column name="name" value="健康素养添加"/>
-            <column name="icon" value=""/>
-            <column name="url" value="/health/add"/>
-            <column name="num" valueNumeric="1"/>
-            <column name="levels" valueNumeric="2"/>
-            <column name="ismenu" valueNumeric="0"/>
-            <column name="tips"/>
-            <column name="status" valueNumeric="1"/>
-            <column name="isopen" valueNumeric="0"/>
-        </insert>
+
+    <changeSet id="create_health_score" author="yjiang">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="health_score"/>
+            </not>
+        </preConditions>
+        <createTable tableName="health_score">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="health_user_id" type="INT">
+                <constraints foreignKeyName="fk_health_user_id" referencedTableName="health_users" referencedColumnNames="id"></constraints>
+            </column>
+            <column name="timeCount" type="INT"/>
+            <column name="score" type="INT"/>
+        </createTable>
     </changeSet>
-    <changeSet author="generator" id="94c0166c-8b02-4e14-9351-ddee7f4be0ba">
-        <insert tableName="sys_menu">
-            <column name="code" value="health_update"/>
-            <column name="pcode" value="health"/>
-            <column name="pcodes" value="[0],[health],"/>
-            <column name="name" value="健康素养更新"/>
-            <column name="icon" value=""/>
-            <column name="url" value="/health/update"/>
-            <column name="num" valueNumeric="1"/>
-            <column name="levels" valueNumeric="2"/>
-            <column name="ismenu" valueNumeric="0"/>
-            <column name="tips"/>
-            <column name="status" valueNumeric="1"/>
-            <column name="isopen" valueNumeric="0"/>
-        </insert>
+
+    <changeSet id="add_time_to_health" author="yjiang">
+        <addColumn tableName="health_users">
+            <column name="create_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="update_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </addColumn>
+        <addColumn tableName="health_answer">
+            <column name="create_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="update_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </addColumn>
+        <addColumn tableName="health_score">
+            <column name="create_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="update_date" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </addColumn>
     </changeSet>
-    <changeSet author="generator" id="9afc0b80-af7a-4314-8fab-c1959a21ab32">
-        <insert tableName="sys_menu">
-            <column name="code" value="health_delete"/>
-            <column name="pcode" value="health"/>
-            <column name="pcodes" value="[0],[health],"/>
-            <column name="name" value="健康素养删除"/>
-            <column name="icon" value=""/>
-            <column name="url" value="/health/delete"/>
-            <column name="num" valueNumeric="1"/>
-            <column name="levels" valueNumeric="2"/>
-            <column name="ismenu" valueNumeric="0"/>
-            <column name="tips"/>
-            <column name="status" valueNumeric="1"/>
-            <column name="isopen" valueNumeric="0"/>
-        </insert>
-    </changeSet>
-    <changeSet author="generator" id="9787d682-1c38-479e-b628-0c002276ff5f">
-        <insert tableName="sys_menu">
-            <column name="code" value="health_detail"/>
-            <column name="pcode" value="health"/>
-            <column name="pcodes" value="[0],[health],"/>
-            <column name="name" value="健康素养详情"/>
-            <column name="icon" value=""/>
-            <column name="url" value="/health/detail"/>
-            <column name="num" valueNumeric="1"/>
-            <column name="levels" valueNumeric="2"/>
-            <column name="ismenu" valueNumeric="0"/>
-            <column name="tips"/>
-            <column name="status" valueNumeric="1"/>
-            <column name="isopen" valueNumeric="0"/>
-        </insert>
-    </changeSet>
+
 </databaseChangeLog>

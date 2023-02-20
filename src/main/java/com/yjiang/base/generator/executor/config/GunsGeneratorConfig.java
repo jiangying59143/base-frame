@@ -26,7 +26,7 @@ public class GunsGeneratorConfig extends AbstractGeneratorConfig {
         dataSourceConfig.setDriverName("com.mysql.cj.jdbc.Driver");
         dataSourceConfig.setUsername("root");
         dataSourceConfig.setPassword("jiangying");
-        dataSourceConfig.setUrl("jdbc:mysql://127.0.0.1:3306/test?characterEncoding=utf8");
+        dataSourceConfig.setUrl("jdbc:mysql://127.0.0.1:3306/mybase?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT");
     }
 
     protected void strategyConfig() {

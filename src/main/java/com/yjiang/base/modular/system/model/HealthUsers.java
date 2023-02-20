@@ -1,11 +1,14 @@
 package com.yjiang.base.modular.system.model;
 
-import com.baomidou.mybatisplus.enums.IdType;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.activerecord.Model;
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.FieldFill;
+import com.baomidou.mybatisplus.enums.IdType;
+
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * <p>
@@ -31,6 +34,22 @@ public class HealthUsers extends Model<HealthUsers> {
     private String orgName;
     private Integer count;
     private Integer nutrition;
+    @TableField(value="create_date", fill = FieldFill.INSERT)
+    private Date createDate;
+    @TableField(value="update_date", fill = FieldFill.INSERT_UPDATE)
+    private Date updateDate;
+
+    public HealthUsers() {
+        super();
+    }
+
+    public HealthUsers(Integer id) {
+    }
+
+    public HealthUsers(String name, String sex) {
+        this.name = name;
+        this.sex = sex;
+    }
 
     public HealthUsers(Integer id, String name, String age, String sex, String education, String job, String orgName, Integer count, Integer nutrition) {
         this.id = id;
@@ -43,6 +62,22 @@ public class HealthUsers extends Model<HealthUsers> {
         this.count = count;
         this.nutrition = nutrition;
     }
+
+    public HealthUsers(Integer id, String name, String age, String sex, String education, String job, String orgName, Integer count, Integer nutrition, java.sql.Timestamp createDate, java.sql.Timestamp updateDate) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
+        this.education = education;
+        this.job = job;
+        this.orgName = orgName;
+        this.count = count;
+        this.nutrition = nutrition;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
+
+
 
     public Integer getId() {
         return id;
@@ -114,6 +149,22 @@ public class HealthUsers extends Model<HealthUsers> {
 
     public void setNutrition(Integer nutrition) {
         this.nutrition = nutrition;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 
     @Override

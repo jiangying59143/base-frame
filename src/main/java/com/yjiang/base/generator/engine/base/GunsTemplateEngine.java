@@ -24,6 +24,8 @@ public abstract class GunsTemplateEngine extends AbstractTemplateEngine {
         initBeetlEngine();
     }
 
+
+
     protected void initBeetlEngine() {
         Properties properties = new Properties();
         properties.put("RESOURCE.root", "");
@@ -93,6 +95,9 @@ public abstract class GunsTemplateEngine extends AbstractTemplateEngine {
         // 行号从1开始
         int i = 1;
         while ((thisLine = in.readLine()) != null) {
+            if(thisLine.trim().equals(lineToBeInserted.trim())){
+                return;
+            }
             // 如果行号等于目标行，则输出要插入的数据
             if (thisLine.equals(nextLineString)) {
                 out.println(lineToBeInserted);

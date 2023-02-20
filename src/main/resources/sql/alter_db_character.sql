@@ -1,0 +1,1 @@
+ALTER DATABASE `mybase` CHARACTER set = utf8 COLLATE utf8_general_ci;

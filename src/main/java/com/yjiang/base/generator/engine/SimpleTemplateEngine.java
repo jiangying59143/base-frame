@@ -68,8 +68,9 @@ public class SimpleTemplateEngine extends GunsTemplateEngine {
                 StrUtil.upperFirst(super.getContextConfig().getBizEnName()));
         generateFile(super.getContextConfig().getTemplatePrefixPath() + "/menu_sql.sql.btl", path);
         try {
-            insertStringInFile(new File(super.getContextConfig().getProjectPath() + "/src/main/resources/liquibase/master.xml"), "</databaseChangeLog>",
-                    StrUtil.format("\t<include file=\"classpath:liquibase/changelog/{}.xml\"/>", StrUtil.upperFirst(super.getContextConfig().getBizEnName())));
+            insertStringInFile(new File(super.getContextConfig().getProjectPath() + "/src/main/resources/liquibase/master.xml"),
+                    "</databaseChangeLog>",
+                    StrUtil.format("\t<include file=\"liquibase/changelog/{}.xml\"/>", StrUtil.upperFirst(super.getContextConfig().getBizEnName())));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("插入master.xml报错");

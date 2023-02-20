@@ -7,6 +7,7 @@ import com.yjiang.base.modular.HealthUsers.service.IHealthUsersService;
 import com.yjiang.base.modular.system.model.Health;
 import com.yjiang.base.modular.system.model.HealthUsers;
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         int personNum = new Random().nextInt(50) + 100;
         for (int i = 0; i < 5; i++) {
             try {
-                process(personNum, true);
+                process(personNum, 80, "宿迁市", "沭阳县", "东小店乡", null);
                 break;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -75,7 +76,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
 
     @Override
     public int getCount(HealthUsers healthUser) {
-        return healthUser.getNutrition();
+        return healthUser.getNutrition() == null ? 0 : healthUser.getNutrition();
     }
 
     @Override
@@ -89,13 +90,13 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
     }
 
     @Override
-    public void login(String name, String age, String sex, String edu, String metier, String orgName){
-        Select city = new Select(driver.findElementById("city"));
-        city.selectByVisibleText("宿迁市");
+    public void login(RemoteWebDriver driver,String city, String county, String village, String name, String age, String sex, String edu, String metier, String orgName){
+        Select citySelect = new Select(driver.findElementById("city"));
+        citySelect.selectByVisibleText("宿迁市");
         Select zone = new Select(driver.findElementById("zone"));
         zone.selectByVisibleText("沭阳县");
-        Select village = new Select(driver.findElementById("village"));
-        village.selectByVisibleText("东小店乡");
+        Select villageSelect = new Select(driver.findElementById("village"));
+        villageSelect.selectByVisibleText("东小店乡");
         driver.findElementById("ename").sendKeys(name);
         Select ageGroup = new Select(driver.findElementById("ageGroup"));
         ageGroup.selectByVisibleText(age);
@@ -112,29 +113,29 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         return null;
     }
 
-    public int getQuestionCount(){
+    public int getQuestionCount(RemoteWebDriver driver){
         String[] answers = driver.findElementById("subject1Type").getAttribute("value").split(",");
         return answers.length;
     }
 
 
-    public void doTest(List<Health> questionBankList, int questionCount, List<Integer> wrongItems, Map<String, Object> personInfoMap) {
+    public void doTest(RemoteWebDriver driver, List<Health> questionBankList, int questionCount, List<Integer> wrongItems, Map<String, Object> personInfoMap) {
         String[] answers = driver.findElementById("subject1Type").getAttribute("value").split(",");
         for (int i = 0; i < answers.length; i++) {
             if("null".equals(answers[i])){
                 driver.findElementById("A" + i).click();
             }else{
-                answerSingleQuestion(answers, i, wrongItems);
+                answerSingleQuestion(driver, answers, i, wrongItems);
             }
         }
         try {
-            screenShot(personInfoMap.get("name").toString(), "last");
+            screenShot(driver, personInfoMap.get("name").toString(), "last");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void answerSingleQuestion(String[] answers, int i, List<Integer> wrongItems){
+    private void answerSingleQuestion(RemoteWebDriver driver, String[] answers, int i, List<Integer> wrongItems){
         if(wrongItems.contains(i+1)){
             if(answers[i].length() > 1) {
                 answers[i] = answers[i].substring(0, answers[i].length()-1);
@@ -148,7 +149,7 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         }
     }
 
-    public void submit(int totalQuestionCount){
+    public void submit(RemoteWebDriver driver, int totalQuestionCount){
         driver.findElementById("Submit").click();
         Alert confirm = driver.switchTo().alert();
         confirm.accept();
@@ -156,8 +157,8 @@ public class NutritionServiceImpl extends HealthCareServiceImpl {
         confirm1.accept();
     }
 
-    public void processReport(int totalQuestionCount, List<Health> questionBankList, List<Integer> wrongItems){
-
+    public int processReport(int totalQuestionCount, List<Health> questionBankList, List<Integer> wrongItems){
+        return 0;
     }
 
 

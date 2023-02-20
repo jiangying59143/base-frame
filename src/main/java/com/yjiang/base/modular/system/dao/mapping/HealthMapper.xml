@@ -7,11 +7,13 @@
         <id column="id" property="id" />
         <result column="title" property="title" />
         <result column="answers" property="answers" />
+        <result column="create_date" property="createDate" />
+        <result column="update_date" property="updateDate" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, title, answers
+        id, title, answers,create_date,update_date
     </sql>
 
 </mapper>

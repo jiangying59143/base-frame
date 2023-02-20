@@ -1,7 +1,7 @@
 package com.yjiang.base.modular.system.dao;
 
-import com.yjiang.base.modular.system.model.HealthUsers;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.yjiang.base.modular.system.model.HealthUsers;
 
 /**
  * <p>
@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.mapper.BaseMapper;
  * </p>
  *
  * @author jiangying
- * @since 2020-05-30
+ * @since 2022-09-06
  */
 public interface HealthUsersMapper extends BaseMapper<HealthUsers> {
 

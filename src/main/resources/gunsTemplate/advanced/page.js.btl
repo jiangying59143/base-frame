@@ -16,9 +16,9 @@ ${context.bizEnBigName}.initColumn = function () {
         {field: 'selectItem', radio: true},
         <% for(item in table.fields!){ %>
         <% if(itemLP.last != true){ %>
-            {title: '${item.comment}', field: '${item.propertyName}', visible: true, align: 'center', valign: 'middle'},
+            {title: '${item.propertyName}', field: '${item.propertyName}', visible: true, align: 'center', valign: 'middle'},
         <% }else{ %>
-            {title: '${item.comment}', field: '${item.propertyName}', visible: true, align: 'center', valign: 'middle'}
+            {title: '${item.propertyName}', field: '${item.propertyName}', visible: true, align: 'center', valign: 'middle'}
         <% }} %>
     ];
 };

@@ -20,9 +20,15 @@ webdriver:
   chrome:
     driver: driver/chromedriver.exe
 
+
+test:
+  person:
+    number: 1
+
 spring:
   profiles:
-    active: @spring.active@
+#    active: @spring.active@
+    active: local
   mvc:
     static-path-pattern: /static/**
     view:
@@ -44,7 +50,7 @@ spring:
     host: smtp.qq.com
     port: 465
     username: 907292671@qq.com
-    password: xxxxxxxxxxxxxxx
+    password: xxxxxxxxxxxxxx
     properties:
       mail:
         smtp:
@@ -58,15 +64,15 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
 
 log:
-  path: frame-logs
+  path: D://baseframe//log
 
 ---
 
 spring:
   profiles: local
   datasource:
-    url: jdbc:mysql://106.12.148.35:3306/mybase?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
-    username: jiangying
+    url: jdbc:mysql://127.0.0.1:3306/mybase?createDatabaseIfNotExist=true&autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
     password: jiangying
     filters: wall,mergeStat
 
@@ -106,8 +112,8 @@ spring:
 spring:
   profiles: produce
   datasource:
-    url: jdbc:mysql://106.12.148.35:3306/mybase?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
-    username: jiangying
+    url: jdbc:mysql://127.0.0.1:3306/mybase?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=CTT
+    username: root
     password: jiangying
     filters: wall,mergeStat
     driver-class-name: com.mysql.cj.jdbc.Driver

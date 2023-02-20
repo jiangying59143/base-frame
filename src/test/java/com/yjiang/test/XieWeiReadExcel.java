@@ -3,10 +3,13 @@ package com.yjiang.test;
 import com.yjiang.base.core.util.ChromeDriveUtils;
 import com.yjiang.base.core.util.PicRecognizeUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.json.JSONException;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -37,16 +40,22 @@ public class XieWeiReadExcel {
             familyProcess(driver);
             int i = 0;
             int count = 0;
+            Boolean isHuzhu = true;
             for (Map<String, String> map : list) {
-                if (map.get("count") != null && !"".equals(map.get("count"))) {
-                    count = (int) Double.parseDouble(map.get("count"));
+                if(StringUtils.isNotBlank(map.get("huzhu"))){
+                    isHuzhu = true;
                 }
-                if (i>0 && i >= count) {
-                    driver.findElementById("tj").click();
-                    break;
-                    //                familyProcess(driver);
+                if(BooleanUtils.isTrue(isHuzhu)) {
+                    if (map.get("count") != null && !"".equals(map.get("count"))) {
+                        count = (int) Double.parseDouble(map.get("count"));
+                    }
+                    if (i > 0 && i >= count) {
+                        driver.findElementById("tj").click();
+                        break;
+                        //                familyProcess(driver);
+                    }
                 }
-                personProcess(driver, map.get("name"), map.get("huzhu") != null && !"".equals(map.get("huzhu")), map.get("relation"), map.get("id"));
+                isHuzhu = personProcess(driver, map.get("name"), isHuzhu, map.get("relation"), map.get("id"));
                 i++;
             }
         }catch (Exception e){
@@ -72,8 +81,6 @@ public class XieWeiReadExcel {
         driver.findElementByXPath("//a[text()='成员登记']").click();
         driver.findElementByXPath("//div[@id='top']/h1").click();
     }
-
-
 
     public static void familyProcess(ChromeDriver driver){
         driver.switchTo().frame("mainframe");
@@ -107,20 +114,31 @@ public class XieWeiReadExcel {
         }
     }
 
-    public static void personProcess(ChromeDriver driver, String name, boolean isHuzhu, String relation, String id) throws IOException {
-        driver.findElementByXPath("//a[text()='新 增']").click();
-        driver.findElementById("memberName").sendKeys(name);
-        driver.findElementByXPath("//input[@name='isHuzhu'][@value='" + (isHuzhu ? 1 : 0) + "']").click();
-        Select jtgxs = new Select(driver.findElementById("jtgxs"));
-        jtgxs.selectByVisibleText(relation);
-        driver.findElementById("sfzhm").sendKeys(id);
-        driver.findElementById("cysx").click();
-        driver.findElementByXPath("//form[@id='cgxzxx']/div/ul/li[text()='持股信息']").click();
-        driver.findElementById("rkg").clear();
-        driver.findElementById("rkg").sendKeys("1");
-        driver.findElementById("cybc").click();
-        driver.findElementByXPath("//a[text()='新 增']");
-        ChromeDriveUtils.screenShotLong(driver, "谢圩五组", name, name);
+    public static Boolean personProcess(ChromeDriver driver, String name, boolean isHuzhu, String relation, String id) throws IOException {
+        try {
+            driver.findElementByXPath("//a[text()='新 增']").click();
+            driver.findElementById("memberName").sendKeys(name);
+            driver.findElementByXPath("//input[@name='isHuzhu'][@value='" + (isHuzhu ? 1 : 0) + "']").click();
+            Select jtgxs = new Select(driver.findElementById("jtgxs"));
+            jtgxs.selectByVisibleText(relation);
+            driver.findElementById("sfzhm").sendKeys(id);
+            driver.findElementById("cysx").click();
+            Alert alert = driver.switchTo().alert();
+            if (alert != null) {
+                alert.accept();
+                ChromeDriveUtils.screenShot(driver, "谢圩五组", name, name);
+                driver.findElementByXPath("//a[text()='关闭']").click();
+                driver.findElementByXPath("//a[text()='关闭']").click();
+                return null;
+            }
+            driver.findElementByXPath("//form[@id='cgxzxx']/div/ul/li[text()='持股信息']").click();
+            driver.findElementById("rkg").clear();
+            driver.findElementById("rkg").sendKeys("1");
+            driver.findElementById("cybc").click();
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 
     public static String getRandCode(ChromeDriver driver, String path) throws IOException, JSONException {
@@ -131,7 +149,7 @@ public class XieWeiReadExcel {
 
         FileUtils.copyFile(screenshot, screenshotLocation);
 
-        String s = PicRecognizeUtils.basicGeneralUrl(path);
+        String s = PicRecognizeUtils.accurateGeneral(path);
         return s;
     }
 

@@ -24,7 +24,7 @@ public class GunsCodeGenerator {
          * guns的生成器:
          *      guns的代码生成器可以生成controller,html页面,页面对应的js
          */
-        gunsGeneratorConfig.doGunsGeneration();
+//        gunsGeneratorConfig.doGunsGeneration();
     }
 
 }
