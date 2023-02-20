@@ -1,28 +1,16 @@
 package com.yjiang.base.core.common.controller;
 
-import okhttp3.*;
+import com.yjiang.base.core.shiro.ShiroKit;
+import com.yjiang.base.core.util.ChatGPTUtil;
 import org.json.JSONObject;
 import org.springframework.web.socket.*;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class MyWebSocketHandler implements WebSocketHandler {
-    private static final MediaType JSON
-            = MediaType.parse("application/json; charset=utf-8");
-
-    private static final String API_KEY = System.getenv("OPEN_API_KEY");;
-    private static final String API_URL = "https://api.openai.com/v1/engines/davinci-codex/completions";
-    private static final int maxTokens = 1000;
     private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
-    private static final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS) // 设置连接超时时间为10秒
-            .readTimeout(60, TimeUnit.SECONDS) // 设置读取数据超时时间为30秒
-            .writeTimeout(60, TimeUnit.SECONDS) // 设置发送数据超时时间为30秒
-            .build();
-
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -36,54 +24,31 @@ public class MyWebSocketHandler implements WebSocketHandler {
         if(!message.getPayload().toString().contains("{")){
             return;
         }
-
+        if(session.isOpen()){
+            ShiroKit.getUser();
+            session.sendMessage(message);
+        }else{
+            System.out.println("session is closed !!!!!!!!!!!!!!");
+        }
         JSONObject jsonMessage = new JSONObject();
-        jsonMessage.put("username", "chatGpt");
         try {
             JSONObject websocketMessage = new JSONObject(message.getPayload().toString());
             String msg = websocketMessage.getString("content");
-
+            jsonMessage.put("content", msg);
             System.out.println("WebSocket message received: " + msg);
-            JSONObject requestObject = new JSONObject();
-            requestObject.put("prompt", msg);
-            requestObject.put("max_tokens", maxTokens);
-
-            String json = requestObject.toString();
-
-            RequestBody body = RequestBody.create(JSON, json);
-            Request request = new Request.Builder()
-                    .url(API_URL)
-                    .addHeader("Authorization", "Bearer " + API_KEY)
-                    .post(body)
-                    .build();
-
-            System.out.println(json + " " + API_KEY);
-            Call call = client.newCall(request);
-            Response response = call.execute();
-
-            if (response.isSuccessful()) {
-                JSONObject responseObject = new JSONObject(response.body().string());
-                String text = responseObject.getJSONArray("choices")
-                        .getJSONObject(0)
-                        .getString("text");
-                jsonMessage.put("content", text);
-                System.out.println(text);
-            } else {
-                jsonMessage.put("content", "Request failed with status code: " + response.code());
-                session.sendMessage(new TextMessage("Request failed with status code: " + response.code()));
-                System.out.println("Request failed with status code: " + response.code());
-                System.out.println("Error message: " + response.body().string());
-            }
+            String chatResp = ChatGPTUtil.sendMsg(msg, 1000);
+            jsonMessage.put("content", chatResp);
+            System.out.println("chatGPT response: " + chatResp);
         }catch (Exception e){
-            jsonMessage.put("content", "system error");
+            jsonMessage.put("content", "ERR:" + e.getMessage());
             e.printStackTrace();
         }
 
-        for (WebSocketSession s : sessions) {
-            if (s.isOpen()) {
-                s.sendMessage(message);
-                s.sendMessage(new TextMessage(jsonMessage.toString()));
-            }
+        if(session.isOpen()){
+            jsonMessage.put("username", "chatGPT");
+            session.sendMessage(new TextMessage(jsonMessage.toString()));
+        }else{
+            System.out.println("session is closed !!!!!!!!!!!!!!");
         }
     }
 

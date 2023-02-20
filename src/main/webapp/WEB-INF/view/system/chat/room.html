@@ -1,46 +1,45 @@
 @layout("/common/_container.html"){
-    <div id="chat-box"></div>
-    <div>
-        <label>Username: </label>
-        <input type="text" id="username">
+<div class="chat-content" id="chat-box"></div>
+<form onsubmit="return false;">
+    <div class="input-box">
+        <input type="hidden" id="username" value="${shiro.getUser().name}">
+        <input type="text" id="message" placeholder="请输入消息" autocomplete="off"
+               onkeydown="if(event.keyCode==13){send();}">
+        <input type="submit" value="发送" onclick="send()">
     </div>
-    <div>
-        <label>Message: </label>
-        <input type="text" id="message">
-        <button onclick="send()">Send</button>
-    </div>
-    <script>
-        var ws = new WebSocket("ws://" + window.location.host + "/websocket");
+</form>
+<script>
+    var ws = new WebSocket("ws://" + window.location.host + "/websocket");
 
-        ws.onopen = function (event) {
-            console.log("WebSocket connected.");
-            ws.send("Hello, WebSocket!");
+    ws.onopen = function (event) {
+        console.log("WebSocket connected.");
+        ws.send("Hello, WebSocket!");
+    };
+
+    ws.onmessage = function (event) {
+        console.log("WebSocket message received: " + event.data);
+        var message = JSON.parse(event.data);
+        var chatBox = $("#chat-box");
+        chatBox.append("<p>" + message.username + ": " + message.content + "</p>");
+    };
+
+    ws.onclose = function (event) {
+        console.log("WebSocket closed.");
+    };
+
+    ws.onerror = function (event) {
+        console.log("WebSocket error: " + event.data);
+    };
+
+    function send() {
+        var message = $("#message").val();
+        var username = $("#username").val();
+        var data = {
+            "username": username,
+            "content": message
         };
-
-        ws.onmessage = function (event) {
-            console.log("WebSocket message received: " + event.data);
-            var message = JSON.parse(event.data);
-            var chatBox = $("#chat-box");
-            chatBox.append("<p>" + message.username + ": " + message.content + "</p>");
-        };
-
-        ws.onclose = function (event) {
-            console.log("WebSocket closed.");
-        };
-
-        ws.onerror = function (event) {
-            console.log("WebSocket error: " + event.data);
-        };
-
-        function send() {
-            var username = $("#username").val();
-            var message = $("#message").val();
-            var data = {
-                "username": username,
-                "content": message
-            };
-            ws.send(JSON.stringify(data));
-            $("#message").val("");
-        }
-    </script>
+        ws.send(JSON.stringify(data));
+        $("#message").val("");
+    }
+</script>
 @}

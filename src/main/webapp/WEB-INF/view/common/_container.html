@@ -57,6 +57,32 @@
             overflow: hidden; /* 内容超出宽度时隐藏超出部分的内容 */
             text-overflow: ellipsis; /* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用*/
         }
+
+        /* 聊天室内容样式 */
+        .chat-content {
+            border: 1px solid #ccc;
+            height: 600px;
+            margin-bottom: 10px;
+            overflow: auto;
+            padding: 10px;
+            width: 800px;
+        }
+
+        /* 输入框样式 */
+        .input-box {
+            display: flex;
+            margin-bottom: 10px;
+            width: 400px;
+        }
+
+        .input-box input[type="text"] {
+            flex: 1;
+            margin-right: 10px;
+        }
+
+        .input-box input[type="submit"] {
+            width: 80px;
+        }
     </style>
 
     <script type="text/javascript">
