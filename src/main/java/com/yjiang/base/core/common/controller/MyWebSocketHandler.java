@@ -7,6 +7,7 @@ import org.springframework.web.socket.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class MyWebSocketHandler implements WebSocketHandler {
     private static final MediaType JSON
@@ -16,7 +17,11 @@ public class MyWebSocketHandler implements WebSocketHandler {
     private static final String API_URL = "https://api.openai.com/v1/engines/davinci-codex/completions";
     private static final int maxTokens = 1000;
     private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient.Builder()
+            .connectTimeout(15, TimeUnit.SECONDS) // 设置连接超时时间为10秒
+            .readTimeout(30, TimeUnit.SECONDS) // 设置读取数据超时时间为30秒
+            .writeTimeout(30, TimeUnit.SECONDS) // 设置发送数据超时时间为30秒
+            .build();
 
 
     @Override
@@ -52,6 +57,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
                     .post(body)
                     .build();
 
+            System.out.println(json + " " + API_KEY);
             Response response = client.newCall(request).execute();
 
             if (response.isSuccessful()) {
