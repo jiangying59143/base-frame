@@ -1,12 +1,23 @@
 package com.yjiang.base.core.common.controller;
 
+import okhttp3.*;
+import org.json.JSONObject;
 import org.springframework.web.socket.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MyWebSocketHandler implements WebSocketHandler {
+    private static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
+
+    private static final String API_KEY = System.getenv("OPEN_API_KEY");;
+    private static final String API_URL = "https://api.openai.com/v1/engines/davinci-codex/completions";
+    private static final int maxTokens = 1000;
     private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+    private static final OkHttpClient client = new OkHttpClient();
+
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -15,11 +26,56 @@ public class MyWebSocketHandler implements WebSocketHandler {
     }
 
     @Override
-    public void handleMessage(WebSocketSession session, WebSocketMessage message) throws Exception {
+    public void handleMessage(WebSocketSession session, WebSocketMessage message) throws IOException {
         System.out.println("WebSocket message received: " + message.getPayload());
+        if(!message.getPayload().toString().contains("{")){
+            return;
+        }
+
+        JSONObject jsonMessage = new JSONObject();
+        jsonMessage.put("username", "chatGpt");
+        try {
+            JSONObject websocketMessage = new JSONObject(message.getPayload().toString());
+            String msg = websocketMessage.getString("content");
+
+            System.out.println("WebSocket message received: " + msg);
+            JSONObject requestObject = new JSONObject();
+            requestObject.put("prompt", msg);
+            requestObject.put("max_tokens", maxTokens);
+
+            String json = requestObject.toString();
+
+            RequestBody body = RequestBody.create(JSON, json);
+            Request request = new Request.Builder()
+                    .url(API_URL)
+                    .addHeader("Authorization", "Bearer " + API_KEY)
+                    .post(body)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+
+            if (response.isSuccessful()) {
+                JSONObject responseObject = new JSONObject(response.body().string());
+                String text = responseObject.getJSONArray("choices")
+                        .getJSONObject(0)
+                        .getString("text");
+                jsonMessage.put("content", text);
+                System.out.println(text);
+            } else {
+                jsonMessage.put("content", "Request failed with status code: " + response.code());
+                session.sendMessage(new TextMessage("Request failed with status code: " + response.code()));
+                System.out.println("Request failed with status code: " + response.code());
+                System.out.println("Error message: " + response.body().string());
+            }
+        }catch (Exception e){
+            jsonMessage.put("content", "system error");
+            e.printStackTrace();
+        }
+
         for (WebSocketSession s : sessions) {
             if (s.isOpen()) {
                 s.sendMessage(message);
+                s.sendMessage(new TextMessage(jsonMessage.toString()));
             }
         }
     }

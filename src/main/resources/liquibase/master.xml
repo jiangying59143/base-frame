@@ -16,4 +16,6 @@
 	<include file="liquibase/changelog/Health.xml"/>
     <include file="liquibase/changelog/Health_init.xml"/>
 	<include file="liquibase/changelog/HealthAnswer.xml"/>
+    <include file="liquibase/changelog/chat.xml"/>
+	<include file="liquibase/changelog/ChatMessage.xml"/>
 </databaseChangeLog>

@@ -39,6 +39,10 @@ public class SessionHolderInterceptor extends BaseController {
 
     @Around("cutService()")
     public Object sessionKit(ProceedingJoinPoint point) throws Throwable {
+        if(super.getHttpServletRequest() == null){
+            return point.proceed();
+        }
+
         HttpSessionContext.put(super.getHttpServletRequest().getSession());
         try {
             return point.proceed();
