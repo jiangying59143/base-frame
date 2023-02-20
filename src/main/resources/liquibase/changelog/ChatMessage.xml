@@ -1,0 +1,102 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="generator" id="fe3fca1c-3a0a-433d-8f3e-b3024801a8ec">
+        <insert tableName="sys_menu">
+            <column name="code" value="chatMessage"/>
+            <column name="pcode" value="0"/>
+            <column name="pcodes" value="[0],"/>
+            <column name="name" value="chatMessage"/>
+            <column name="icon" value="fa-user"/>
+            <column name="url" value="/chatMessage"/>
+            <column name="num" valueNumeric="180"/>
+            <column name="levels" valueNumeric="1"/>
+            <column name="ismenu" valueNumeric="1"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="8cf30e2e-a88e-4fd3-b6fb-985b31d2a7b9">
+        <insert tableName="sys_menu">
+            <column name="code" value="chatMessage_list"/>
+            <column name="pcode" value="chatMessage"/>
+            <column name="pcodes" value="[0],[chatMessage],"/>
+            <column name="name" value="chatMessage列表"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/chatMessage/list"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="495d18c1-596e-4bc2-8d10-5e19df235547">
+        <insert tableName="sys_menu">
+            <column name="code" value="chatMessage_add"/>
+            <column name="pcode" value="chatMessage"/>
+            <column name="pcodes" value="[0],[chatMessage],"/>
+            <column name="name" value="chatMessage添加"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/chatMessage/add"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="07c19e95-5923-4d92-aecb-10cf0baa31ae">
+        <insert tableName="sys_menu">
+            <column name="code" value="chatMessage_update"/>
+            <column name="pcode" value="chatMessage"/>
+            <column name="pcodes" value="[0],[chatMessage],"/>
+            <column name="name" value="chatMessage更新"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/chatMessage/update"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="b8a172a8-1fff-4a8b-b108-9812f6490eca">
+        <insert tableName="sys_menu">
+            <column name="code" value="chatMessage_delete"/>
+            <column name="pcode" value="chatMessage"/>
+            <column name="pcodes" value="[0],[chatMessage],"/>
+            <column name="name" value="chatMessage删除"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/chatMessage/delete"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="449a15f7-685d-4d1e-a9f5-a7412f5d52ca">
+        <insert tableName="sys_menu">
+            <column name="code" value="chatMessage_detail"/>
+            <column name="pcode" value="chatMessage"/>
+            <column name="pcodes" value="[0],[chatMessage],"/>
+            <column name="name" value="chatMessage详情"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/chatMessage/detail"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
