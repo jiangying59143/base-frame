@@ -18,9 +18,9 @@ public class MyWebSocketHandler implements WebSocketHandler {
     private static final int maxTokens = 1000;
     private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     private static final OkHttpClient client = new OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS) // 设置连接超时时间为10秒
-            .readTimeout(30, TimeUnit.SECONDS) // 设置读取数据超时时间为30秒
-            .writeTimeout(30, TimeUnit.SECONDS) // 设置发送数据超时时间为30秒
+            .connectTimeout(60, TimeUnit.SECONDS) // 设置连接超时时间为10秒
+            .readTimeout(60, TimeUnit.SECONDS) // 设置读取数据超时时间为30秒
+            .writeTimeout(60, TimeUnit.SECONDS) // 设置发送数据超时时间为30秒
             .build();
 
 
@@ -58,7 +58,8 @@ public class MyWebSocketHandler implements WebSocketHandler {
                     .build();
 
             System.out.println(json + " " + API_KEY);
-            Response response = client.newCall(request).execute();
+            Call call = client.newCall(request);
+            Response response = call.execute();
 
             if (response.isSuccessful()) {
                 JSONObject responseObject = new JSONObject(response.body().string());
