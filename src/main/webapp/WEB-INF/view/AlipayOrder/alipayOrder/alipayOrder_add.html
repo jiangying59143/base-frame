@@ -1,0 +1,32 @@
+@layout("/common/_container.html"){
+<div class="ibox float-e-margins">
+    <div class="ibox-content">
+        <div class="form-horizontal">
+
+            <div class="row">
+                <div class="col-sm-6 b-r">
+                            <#input id="orderNo" name="orderNo" underline="true"/>
+                            <#input id="totalAmount" name="totalAmount" underline="true"/>
+                            <#input id="subject" name="subject" underline="true"/>
+                            <#input id="body" name="body"/>
+                </div>
+
+                <div class="col-sm-6">
+                            <#input id="status" name="status" underline="true"/>
+                            <#input id="createTime" name="createTime" underline="true"/>
+                            <#input id="updateTime" name="updateTime" underline="true"/>
+                </div>
+            </div>
+
+            <div class="row btn-group-m-t">
+                <div class="col-sm-10">
+                    <#button btnCss="info" name="提交" id="ensure" icon="fa-check" clickFun="AlipayOrderInfoDlg.addSubmit()"/>
+                    <#button btnCss="danger" name="取消" id="cancel" icon="fa-eraser" clickFun="AlipayOrderInfoDlg.close()"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="${ctxPath}/static/modular/AlipayOrder/alipayOrder/alipayOrder_info.js"></script>
+@}

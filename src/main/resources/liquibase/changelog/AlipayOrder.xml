@@ -1,0 +1,102 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+    <changeSet author="generator" id="03601170-0cb7-427c-80a8-b7786dfa0c37">
+        <insert tableName="sys_menu">
+            <column name="code" value="alipayOrder"/>
+            <column name="pcode" value="0"/>
+            <column name="pcodes" value="[0],"/>
+            <column name="name" value="order"/>
+            <column name="icon" value="fa-user"/>
+            <column name="url" value="/alipayOrder"/>
+            <column name="num" valueNumeric="200"/>
+            <column name="levels" valueNumeric="1"/>
+            <column name="ismenu" valueNumeric="1"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="e60066d5-0e76-4093-8081-349bd10e081c">
+        <insert tableName="sys_menu">
+            <column name="code" value="alipayOrder_list"/>
+            <column name="pcode" value="alipayOrder"/>
+            <column name="pcodes" value="[0],[alipayOrder],"/>
+            <column name="name" value="order列表"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/alipayOrder/list"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="59e3e83d-a05c-4ad6-b8f4-99ac502ddc5b">
+        <insert tableName="sys_menu">
+            <column name="code" value="alipayOrder_add"/>
+            <column name="pcode" value="alipayOrder"/>
+            <column name="pcodes" value="[0],[alipayOrder],"/>
+            <column name="name" value="order添加"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/alipayOrder/add"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="0aa7f748-48a6-426b-85be-9671642874c6">
+        <insert tableName="sys_menu">
+            <column name="code" value="alipayOrder_update"/>
+            <column name="pcode" value="alipayOrder"/>
+            <column name="pcodes" value="[0],[alipayOrder],"/>
+            <column name="name" value="order更新"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/alipayOrder/update"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="cd46b999-881f-474c-b8ab-cf3b3fbc0e34">
+        <insert tableName="sys_menu">
+            <column name="code" value="alipayOrder_delete"/>
+            <column name="pcode" value="alipayOrder"/>
+            <column name="pcodes" value="[0],[alipayOrder],"/>
+            <column name="name" value="order删除"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/alipayOrder/delete"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="generator" id="eae6531c-e0ea-4aac-84a3-8d106f3fe127">
+        <insert tableName="sys_menu">
+            <column name="code" value="alipayOrder_detail"/>
+            <column name="pcode" value="alipayOrder"/>
+            <column name="pcodes" value="[0],[alipayOrder],"/>
+            <column name="name" value="order详情"/>
+            <column name="icon" value=""/>
+            <column name="url" value="/alipayOrder/detail"/>
+            <column name="num" valueNumeric="1"/>
+            <column name="levels" valueNumeric="2"/>
+            <column name="ismenu" valueNumeric="0"/>
+            <column name="tips"/>
+            <column name="status" valueNumeric="1"/>
+            <column name="isopen" valueNumeric="0"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

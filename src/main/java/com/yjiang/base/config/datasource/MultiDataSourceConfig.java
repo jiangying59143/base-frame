@@ -51,7 +51,7 @@ public class MultiDataSourceConfig {
      * druid配置
      */
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource")
+//    @ConfigurationProperties(prefix = "spring.datasource")
     public DruidProperties druidProperties() {
         return new DruidProperties();
     }

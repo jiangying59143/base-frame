@@ -53,6 +53,12 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 
         <!--代码生成器-->
         <!--<dependency>
@@ -292,13 +298,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.plexpt</groupId>
-            <artifactId>chatgpt</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
@@ -308,10 +307,21 @@
             <artifactId>json</artifactId>
             <version>20201115</version>
         </dependency>
+
         <dependency>
-            <groupId>io.github.asleepyfish</groupId>
-            <artifactId>chatgpt</artifactId>
-            <version>1.0.3</version>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.35.45.ALL</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.3</version>
         </dependency>
     </dependencies>
 
@@ -320,10 +330,8 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <proc>none</proc>
                 </configuration>
             </plugin>
             <plugin>

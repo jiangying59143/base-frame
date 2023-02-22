@@ -18,4 +18,10 @@
 	<include file="liquibase/changelog/HealthAnswer.xml"/>
     <include file="liquibase/changelog/chat.xml"/>
 	<include file="liquibase/changelog/ChatMessage.xml"/>
+
+    <changeSet author="yjiang" id="order_init">
+        <comment>order init</comment>
+        <sqlFile path="sql/order.sql"/>
+    </changeSet>
+	<include file="liquibase/changelog/AlipayOrder.xml"/>
 </databaseChangeLog>
