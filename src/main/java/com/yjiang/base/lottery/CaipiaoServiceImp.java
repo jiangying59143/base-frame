@@ -87,7 +87,7 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		ballPicMap.put("https://www.cjcp.com.cn/js/kj_js_css/img/20180820032902133669.png",33);
 	}
 
-	@Scheduled(cron="0 21,25,30,35 21 ? * TUE,THU,SUN")
+//	@Scheduled(cron="0 21,25,30,35 21 ? * TUE,THU,SUN")
 	public void initLatestRecord() {
 		System.out.println("initLatestRecord启动啦，=================");
 		Elements tds = getTds();
@@ -114,7 +114,7 @@ public class CaipiaoServiceImp implements CaipiaoService {
 		}
 	}
 
-	@Scheduled(cron="0 0/30 * * * ?")
+//	@Scheduled(cron="0 0/30 * * * ?")
 	public void updateLatestRecord() {
 		System.out.println("updateLatestRecord启动啦，=================");
 		Elements tds = getTds();

@@ -44,16 +44,7 @@ public class ChatGPTUtil {
             String text = responseObject.getJSONArray("choices")
                     .getJSONObject(0)
                     .getString("text");
-            text = text.replaceAll("\n", "<br>")
-                    .replaceAll("\t", "    ");
-            responseStr.append("<html>")
-                    .append("<body>")
-                    .append("<p>")
-                    .append(text)
-                    .append("</p>")
-                    .append("</body>")
-                    .append("</html>");
-            System.out.println(text);
+            responseStr.append(text);
         } else {
             responseStr.append("Request failed with status code: ");
             responseStr.append(response.code());

@@ -36,7 +36,7 @@ public class MyWebSocketHandler implements WebSocketHandler {
             String msg = websocketMessage.getString("content");
             jsonMessage.put("content", msg);
             System.out.println("WebSocket message received: " + msg);
-            String chatResp = ChatGPTUtil.sendMsg(msg, 1000);
+            String chatResp = ChatGPTUtil.sendMsg(msg, 3000);
             jsonMessage.put("content", chatResp);
             System.out.println("chatGPT response: " + chatResp);
         }catch (Exception e){
