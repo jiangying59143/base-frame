@@ -29,6 +29,11 @@ alipaysand:
   charset: utf-8
   signType: RSA2
 
+chatgpt:
+  apiKey:
+  apiUrl: https://api.openai.com/v1/engines/davinci-codex/completions
+  mediaType: application/json; charset=utf-8
+  timeout: 60
 
 test:
   person:
@@ -36,8 +41,7 @@ test:
 
 spring:
   profiles:
-#    active: @spring.active@
-    active: local
+    active: @spring.active@
   mvc:
     static-path-pattern: /static/**
     view:
