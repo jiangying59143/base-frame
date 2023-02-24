@@ -33,3 +33,7 @@ _GmapUtil_
     
 _location_info.js_
     _`$("#map").html("<img src='https://restapi.amap.com/v3/staticmap?markers=mid,0xFF0000,A:" + ui.item.value[0] + "," + ui.item.value[1] +"&key=xxxxx'/>");`_
+
+**打包命令**
+mvn package -Pproduce -Dmaven.test.skip=true --settings C:\Users\yjiang\.m2\settings.xml
+java -jar demo.jar --server.port=80 --chatgpt.apiKey=%OPEN_API_KEY%

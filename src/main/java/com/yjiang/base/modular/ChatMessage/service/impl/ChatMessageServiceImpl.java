@@ -6,7 +6,6 @@ import com.yjiang.base.modular.system.dao.ChatMessageMapper;
 import com.yjiang.base.modular.ChatMessage.service.IChatMessageService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import lombok.extern.slf4j.XSlf4j;
 import okhttp3.*;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
@@ -24,7 +23,6 @@ import java.io.IOException;
  * @since 2023-02-20
  */
 @Service
-@Slf4j
 public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatMessage> implements IChatMessageService {
 
     @Autowired
@@ -50,7 +48,6 @@ public class ChatMessageServiceImpl extends ServiceImpl<ChatMessageMapper, ChatM
                 .post(body)
                 .build();
 
-        log.info(json + " " + apiKey);
         Call call = chatClient.newCall(request);
         Response response = call.execute();
 
